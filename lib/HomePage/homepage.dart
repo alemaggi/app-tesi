@@ -1,4 +1,4 @@
-import 'package:app_tesi/Login/login.dart';
+import 'package:app_tesi/Services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable_card/expandable_card.dart';
 
@@ -52,6 +52,8 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+
     return Scaffold(
       appBar: _buildBar(context),
       drawer: Drawer(
@@ -79,27 +81,12 @@ class _HomepageState extends State<Homepage> {
                 color: Color.fromRGBO(255, 0, 87, 1),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.apps),
-              title: Text('Qualcosa'),
-            ),
-            ListTile(
-              leading: Icon(Icons.whatshot),
-              title: Text("Qualcos' altro"),
-            ),
-            ListTile(
-              leading: Icon(Icons.account_balance),
-              title: Text("Qualcos' altro ancora"),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Torna indietro"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Login()),
-                );
+            FlatButton.icon(
+              onPressed: () async {
+                await _auth.signout();
               },
+              icon: Icon(Icons.exit_to_app),
+              label: Text("Logout"),
             ),
           ],
         ),

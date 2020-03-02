@@ -1,4 +1,5 @@
 import 'package:app_tesi/HomePage/homepage.dart';
+import 'package:app_tesi/Services/auth.dart';
 import 'package:app_tesi/Signup/signup.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,13 @@ class _LoginState extends State<Login> {
   //Form key --> Serve per validare gli input e procedere con il login
   final _formKey = GlobalKey<FormState>();
 
+  //Per autenticazione
+  final AuthService _auth = AuthService();
+
   bool isLogin = true;
+
+  String _email;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +46,8 @@ class _LoginState extends State<Login> {
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.1,
-                              bottom: MediaQuery.of(context).size.width * 0.08),
+                              top: MediaQuery.of(context).size.width * 0.05,
+                              bottom: MediaQuery.of(context).size.width * 0.02),
                           width: MediaQuery.of(context).size.width * 0.8,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
@@ -69,6 +76,13 @@ class _LoginState extends State<Login> {
                                     hintText: "Email",
                                     prefixIcon: Icon(Icons.email),
                                   ),
+                                  validator: (val) =>
+                                      val.isEmpty ? 'Enter an email' : null,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _email = val;
+                                    });
+                                  },
                                 ),
                                 Container(
                                   height:
@@ -82,6 +96,14 @@ class _LoginState extends State<Login> {
                                     hintText: "Password",
                                     prefixIcon: Icon(Icons.lock),
                                   ),
+                                  validator: (val) => val.length < 6
+                                      ? 'Enter a valid password'
+                                      : null,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _password = val;
+                                    });
+                                  },
                                 ),
                               ],
                             ),
@@ -101,12 +123,13 @@ class _LoginState extends State<Login> {
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold),
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Homepage()),
-                              );
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                print(_email);
+                                print(_password);
+                              } else {
+                                print("Some fields are not valid");
+                              }
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
@@ -185,7 +208,20 @@ class _LoginState extends State<Login> {
                         ),
                         Container(
                           child: FlatButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              dynamic result = await _auth.signInAnon();
+                              if (result != null) {
+                                print("Signed in");
+                                print(result.uid);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage()),
+                                );
+                              } else {
+                                print("Error Sigin in anon");
+                              }
+                            },
                             child: Text(
                               "Continue Without an Account",
                               style: TextStyle(

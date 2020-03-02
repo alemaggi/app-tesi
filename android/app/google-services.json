@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "619064002116",
+    "firebase_url": "https://app-tesi-16e05.firebaseio.com",
+    "project_id": "app-tesi-16e05",
+    "storage_bucket": "app-tesi-16e05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619064002116:android:5c30704f8c017a51975e11",
+        "android_client_info": {
+          "package_name": "com.example.app_tesi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "619064002116-863uio3elsmd0735c3k4miiccmrn2fhv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwO9Qn01jk_GXpPkC9OUt9ZRt5aZIHkSQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "619064002116-863uio3elsmd0735c3k4miiccmrn2fhv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

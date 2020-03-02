@@ -1,4 +1,7 @@
+import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Login/login.dart';
+import 'package:app_tesi/Services/auth.dart';
+import 'package:app_tesi/Wrapper/wrapperForFirstPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +13,13 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup> {
   final _signupFormKey = GlobalKey<FormState>();
+  //Per autenticazione
+  final AuthService _auth = AuthService();
+
+  String _email;
+  String _password;
+  String _confirmPassword;
+  String error = "";
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +68,13 @@ class _SignupState extends State<Signup> {
                       hintText: "Email",
                       prefixIcon: Icon(Icons.email),
                     ),
+                    validator: (val) =>
+                        val.length < 6 ? 'Enter a valid email' : null,
+                    onChanged: (val) {
+                      setState(() {
+                        _email = val;
+                      });
+                    },
                   ),
                   Container(
                     height: MediaQuery.of(context).size.width * 0.05,
@@ -70,6 +87,13 @@ class _SignupState extends State<Signup> {
                       hintText: "Password",
                       prefixIcon: Icon(Icons.lock),
                     ),
+                    validator: (val) =>
+                        val.length < 6 ? 'Enter a valid password' : null,
+                    onChanged: (val) {
+                      setState(() {
+                        _password = val;
+                      });
+                    },
                   ),
                   Container(
                     height: MediaQuery.of(context).size.width * 0.05,
@@ -82,6 +106,13 @@ class _SignupState extends State<Signup> {
                       hintText: "Confirm Password",
                       prefixIcon: Icon(Icons.lock),
                     ),
+                    validator: (val) =>
+                        val.length < 6 ? 'Enter a valid password' : null,
+                    onChanged: (val) {
+                      setState(() {
+                        _confirmPassword = val;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -101,7 +132,30 @@ class _SignupState extends State<Signup> {
                     fontSize: 22,
                     fontWeight: FontWeight.bold),
               ),
-              onPressed: () {},
+              onPressed: () async {
+                if (_signupFormKey.currentState.validate()) {
+                  if (_password == _confirmPassword) {
+                    print(_email);
+                    print(_password);
+                    dynamic result = await _auth.registerWithEmailAndPassword(
+                        _email, _password);
+                    if (result == null) {
+                      setState(() {
+                        error = 'supply a valid email and password';
+                      });
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Homepage()),
+                      );
+                    }
+                  } else {
+                    print("Le password non metchano");
+                  }
+                } else {
+                  print("Some fields are not valid");
+                }
+              },
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(10.0),
                 side: BorderSide(
@@ -146,30 +200,15 @@ class _SignupState extends State<Signup> {
               ],
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.width * 0.12,
-            margin: EdgeInsets.only(
-              top: MediaQuery.of(context).size.width * 0.03,
-            ),
+          Center(
             child: FlatButton(
-              color: Color.fromRGBO(255, 0, 87, 1),
-              child: Text(
-                "Go Back (Poi lo togliamo)", //TODO: Toglerlo
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Login()),
                 );
               },
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(10.0),
-              ),
+              child: Text("I already have an account"),
             ),
           ),
         ],
