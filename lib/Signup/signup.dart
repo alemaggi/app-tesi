@@ -1,7 +1,7 @@
-import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Login/login.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,6 +11,15 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  _setNewUserIntoFirestore(String userEmail, String uid) async {
+    Firestore.instance.runTransaction((transaction) async {
+      await transaction
+          .set(Firestore.instance.collection("users").document(uid), {
+        'email': userEmail,
+      });
+    });
+  }
+
   final _signupFormKey = GlobalKey<FormState>();
   //Per autenticazione
   final AuthService _auth = AuthService();
@@ -142,6 +151,8 @@ class _SignupState extends State<Signup> {
                       setState(() {
                         error = 'supply a valid email and password';
                       });
+                    } else {
+                      _setNewUserIntoFirestore(_email, result.uid);
                     }
                   } else {
                     print("Le password non metchano");

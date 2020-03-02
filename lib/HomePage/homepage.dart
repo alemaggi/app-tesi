@@ -17,6 +17,8 @@ class _HomepageState extends State<Homepage> {
   List filteredNames = new List();
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('Search Example');
+  final _addFoodToFridgeKey = GlobalKey<FormState>();
+  String _nomeAlimentoDaAggiungereAlF;
 
   Widget _buildBar(BuildContext context) {
     return new AppBar(
@@ -109,11 +111,36 @@ class _HomepageState extends State<Homepage> {
           children: <Widget>[
             Column(
               children: <Widget>[
-                Text(
-                  "Qui inserisci la roba",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
+                Container(
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.width * 0.01),
+                  child: Text(
+                    "Aggiungi elementi al tuo frigo",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+                Form(
+                  key: _addFoodToFridgeKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        keyboardType: TextInputType.text,
+                        controller: null, //TODO: Fare controller
+                        decoration: InputDecoration(
+                          hintText: "Alimento da aggiungere",
+                        ),
+                        validator: (val) =>
+                            val.isEmpty ? 'Inserisci un alimento' : null,
+                        onChanged: (val) {
+                          setState(() {
+                            _nomeAlimentoDaAggiungereAlF = val;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],
