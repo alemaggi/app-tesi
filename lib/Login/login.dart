@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
 
   String _email;
   String _password;
+  String error;
 
   @override
   Widget build(BuildContext context) {
@@ -125,10 +126,15 @@ class _LoginState extends State<Login> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                print(_email);
-                                print(_password);
-                              } else {
-                                print("Some fields are not valid");
+                                dynamic result =
+                                    await _auth.signinWithEmailAndPassword(
+                                        _email, _password);
+                                if (result == null) {
+                                  setState(() {
+                                    error =
+                                        'Could not signin with those credential';
+                                  });
+                                }
                               }
                             },
                             shape: RoundedRectangleBorder(

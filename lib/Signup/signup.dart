@@ -1,7 +1,6 @@
 import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Login/login.dart';
 import 'package:app_tesi/Services/auth.dart';
-import 'package:app_tesi/Wrapper/wrapperForFirstPage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -143,11 +142,6 @@ class _SignupState extends State<Signup> {
                       setState(() {
                         error = 'supply a valid email and password';
                       });
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Homepage()),
-                      );
                     }
                   } else {
                     print("Le password non metchano");
