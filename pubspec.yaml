@@ -26,6 +26,7 @@ dependencies:
   cloud_firestore: ^0.13.4
   firebase_auth: 0.15.4
   provider: ^4.0.4
+  google_sign_in: ^4.1.4
 dependency_overrides:
   firebase_core: 0.4.4
 

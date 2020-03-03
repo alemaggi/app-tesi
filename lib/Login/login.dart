@@ -153,27 +153,27 @@ class _LoginState extends State<Login> {
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              FlatButton.icon(
-                                label: Text('Login with\n' + 'Facebook'),
-                                onPressed: () {},
-                                icon: FaIcon(
-                                  FontAwesomeIcons.facebook,
-                                  size: 32,
-                                ),
-                              ),
-                              FlatButton.icon(
-                                label: Text('Login with\n' + 'Google'),
-                                onPressed: () {},
-                                icon: FaIcon(
-                                  FontAwesomeIcons.googlePlus,
-                                  size: 32,
-                                ),
-                              ),
-                            ],
+                        Center(
+                          child: FlatButton.icon(
+                            label: Text('Login with\n' + 'Google'),
+                            onPressed: () async {
+                              dynamic result = await _auth.signInWithGoogle();
+                              if (result != null) {
+                                print("Signed in");
+                                print(result.uid);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Homepage()),
+                                );
+                              } else {
+                                print("Error Sigin in anon");
+                              }
+                            },
+                            icon: FaIcon(
+                              FontAwesomeIcons.googlePlus,
+                              size: 32,
+                            ),
                           ),
                         ),
                         Container(

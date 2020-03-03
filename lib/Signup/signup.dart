@@ -180,31 +180,6 @@ class _SignupState extends State<Signup> {
               ),
             ),
           ),
-          Container(
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.width * 0.02),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                FlatButton.icon(
-                  label: Text('Signup with\n' + 'Facebook'),
-                  onPressed: () {},
-                  icon: FaIcon(
-                    FontAwesomeIcons.facebook,
-                    size: 32,
-                  ),
-                ),
-                FlatButton.icon(
-                  label: Text('Signup with\n' + 'Google'),
-                  onPressed: () {},
-                  icon: FaIcon(
-                    FontAwesomeIcons.googlePlus,
-                    size: 32,
-                  ),
-                ),
-              ],
-            ),
-          ),
           Center(
             child: FlatButton(
               onPressed: () {
