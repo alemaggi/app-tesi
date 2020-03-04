@@ -2,6 +2,7 @@ import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:app_tesi/Signup/signup.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -11,6 +12,31 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  _setNewUserIntoFirestoreWhenUsingGoogleLogin(
+      String userEmail, String uid) async {
+    //Devo controlloare se l'utete ha già effettuato un accesso quindi controllo se ho la sua emial in 'user'
+    Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: userEmail)
+        .snapshots()
+        .listen((data) {
+      if (data != null) {
+        Firestore.instance.runTransaction((transaction) async {
+          await transaction
+              .set(Firestore.instance.collection("users").document(uid), {
+            'email': userEmail,
+            'name': 'Anonimo',
+            'surnname': 'Anonimo',
+            'profilePicUrl':
+                'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
+          });
+        });
+      } else {
+        print("Lo abbiamo gia nel DB");
+      }
+    });
+  }
+
   //Form key --> Serve per validare gli input e procedere con il login
   final _formKey = GlobalKey<FormState>();
 
@@ -134,6 +160,12 @@ class _LoginState extends State<Login> {
                                     error =
                                         'Could not signin with those credential';
                                   });
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage()),
+                                  );
                                 }
                               }
                             },
@@ -161,13 +193,16 @@ class _LoginState extends State<Login> {
                               if (result != null) {
                                 print("Signed in");
                                 print(result.uid);
+                                print(result.email);
+                                _setNewUserIntoFirestoreWhenUsingGoogleLogin(
+                                    result.email, result.uid);
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Homepage()),
                                 );
                               } else {
-                                print("Error Sigin in anon");
+                                print("Error Sigin in with google");
                               }
                             },
                             icon: FaIcon(

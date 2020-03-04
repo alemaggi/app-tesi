@@ -1,4 +1,7 @@
+import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Services/auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable_card/expandable_card.dart';
 
@@ -21,7 +24,7 @@ class _HomepageState extends State<Homepage> {
   String _nomeAlimentoDaAggiungereAlF;
 
   Widget _buildBar(BuildContext context) {
-    return new AppBar(
+    return AppBar(
       backgroundColor: Color.fromRGBO(255, 0, 87, 1),
       centerTitle: true,
       title: _appBarTitle,
@@ -55,44 +58,9 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
-
     return Scaffold(
       appBar: _buildBar(context),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text(
-                "Alessandro Maggi",
-                style: TextStyle(fontSize: 18, color: Colors.black),
-              ),
-              accountEmail: Text(
-                "alessandromaggi@gmail.com",
-                style: TextStyle(fontSize: 18, color: Colors.black),
-              ),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.black,
-                child: Text(
-                  "A",
-                  style: TextStyle(
-                      fontSize: 40.0, color: Color.fromRGBO(255, 0, 87, 1)),
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 0, 87, 1),
-              ),
-            ),
-            FlatButton.icon(
-              onPressed: () async {
-                await _auth.signout();
-              },
-              icon: Icon(Icons.exit_to_app),
-              label: Text("Logout"),
-            ),
-          ],
-        ),
-      ),
+      drawer: NavDrawer(),
       body: ExpandableCardPage(
         page: Center(
           child: Text(
@@ -149,5 +117,89 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
+}
+
+/*
+* Side menu qui sotto
+*/
+class NavDrawer extends StatefulWidget {
+  @override
+  _NavDrawerState createState() => _NavDrawerState();
+}
+
+class _NavDrawerState extends State<NavDrawer> {
+  var _url;
+  String _name;
+  String _surname;
+  String _email;
+  bool isLoaded = false;
+  var user;
+
+  _getUserInfo() async {
+    user = await FirebaseAuth.instance.currentUser();
+    var userQuery = Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: user.email)
+        .limit(1);
+    userQuery.getDocuments().then(
+      (data) {
+        if (data.documents.length > 0) {
+          print(user.email);
+          setState(() {
+            _name = data.documents[0].data['name'];
+            _surname = data.documents[0].data['surname'];
+            _email = user.email;
+            _url = data.documents[0].data['profilePicUrl'];
+            isLoaded = true;
+          });
+        }
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    _getUserInfo();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final AuthService _auth = AuthService();
+    return isLoaded
+        ? Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                UserAccountsDrawerHeader(
+                  currentAccountPicture: CircleAvatar(
+                    backgroundImage: NetworkImage(_url),
+                  ),
+                  accountName: Text(_name + " " + _surname),
+                  accountEmail: Text(_email),
+                ),
+                ListTile(
+                  title: Text('Profile'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Profile()),
+                    )
+                  },
+                ),
+                ListTile(
+                  title: Text('LogOut'),
+                  onTap: () async {
+                    await _auth.signout();
+                  },
+                ),
+              ],
+            ),
+          )
+        : CircularProgressIndicator(
+            value: null,
+            strokeWidth: 7.0,
+          );
   }
 }
