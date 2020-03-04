@@ -200,6 +200,7 @@ class _NavDrawerState extends State<NavDrawer> {
         : CircularProgressIndicator(
             value: null,
             strokeWidth: 7.0,
+            valueColor: AlwaysStoppedAnimation(Colors.transparent),
           );
   }
 }

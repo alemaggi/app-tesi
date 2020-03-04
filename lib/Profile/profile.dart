@@ -114,9 +114,14 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           )
-        : CircularProgressIndicator(
-            value: null,
-            strokeWidth: 7.0,
+        : Container(
+            height: 20,
+            width: 20,
+            margin: EdgeInsets.all(5),
+            child: CircularProgressIndicator(
+              strokeWidth: 6.0,
+              valueColor: AlwaysStoppedAnimation(Colors.transparent),
+            ),
           );
   }
 }
