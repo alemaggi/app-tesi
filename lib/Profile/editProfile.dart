@@ -18,6 +18,41 @@ class _EditProfileState extends State<EditProfile> {
 
   final _formKey = GlobalKey<FormState>();
 
+  var user;
+  //Se l'utente ha già cambiato nome e cognome li prendo e autofillo il form in modo che possa non cambiarli
+  //e non debba riscriverli
+  _getUserInfo() async {
+    user = await FirebaseAuth.instance.currentUser();
+    var userQuery = Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: user.email)
+        .limit(1);
+    userQuery.getDocuments().then(
+      (data) {
+        if (data.documents.length > 0) {
+          if (data.documents[0].data['name'] != 'Anonimo' &&
+              data.documents[0].data['surname'] != 'Anonimo' &&
+              data.documents[0].data['profilePicUrl'] != null) {
+            setState(() {
+              _name = data.documents[0].data['name'];
+              _surname = data.documents[0].data['surname'];
+              //TODO: Mettere l'immagine del profilo che possa anche non essere modificata dall' utente
+            });
+          } else {
+            _name = null;
+            _surname = null;
+          }
+        }
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    _getUserInfo();
+    super.initState();
+  }
+
   //Per il caricamento dell' immagine del profilo
   File _image;
   String _uploadedFileURL;
@@ -49,6 +84,7 @@ class _EditProfileState extends State<EditProfile> {
     storageReference.getDownloadURL().then((fileURL) {
       setState(() {
         _uploadedFileURL = fileURL;
+        print(_uploadedFileURL);
       });
     });
   }
@@ -99,10 +135,10 @@ class _EditProfileState extends State<EditProfile> {
                       keyboardType: TextInputType.text,
                       controller: null, //TODO: Fare controller
                       decoration: InputDecoration(
-                        hintText: "Name",
+                        hintText: (_name != null) ? _name : 'Your Name',
                       ),
                       validator: (val) =>
-                          val.isEmpty ? 'Enter your name' : null,
+                          val == null ? 'Enter your name' : null,
                       onChanged: (val) {
                         setState(() {
                           _name = val;
@@ -116,10 +152,10 @@ class _EditProfileState extends State<EditProfile> {
                       keyboardType: TextInputType.text,
                       controller: null, //TODO: Fare controller
                       decoration: InputDecoration(
-                        hintText: "Surname",
+                        hintText: (_name != null) ? _surname : 'Your Surname',
                       ),
                       validator: (val) =>
-                          val.isEmpty ? 'Enter your surname' : null,
+                          val == null ? 'Enter your surname' : null,
                       onChanged: (val) {
                         setState(() {
                           _surname = val;
@@ -144,9 +180,22 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   _image != null
-                      ? Image.asset(
-                          _image.path,
-                          height: 150,
+                      ? Column(
+                          children: <Widget>[
+                            Image.asset(
+                              _image.path,
+                              height: 150,
+                            ),
+                            FlatButton(
+                              onPressed: uploadFile,
+                              child: Text(
+                                "Upload Image",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 22),
+                              ),
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                            ),
+                          ],
                         )
                       : Container(
                           child: Text("No image selected"),
@@ -189,7 +238,6 @@ class _EditProfileState extends State<EditProfile> {
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () async {
-                  uploadFile();
                   FirebaseUser user = await FirebaseAuth.instance.currentUser();
                   var userID = user.uid;
                   if (userID != null) {
