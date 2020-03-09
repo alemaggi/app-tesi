@@ -1,3 +1,4 @@
+import 'package:app_tesi/Fridge/myFridge.dart';
 import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -108,6 +109,34 @@ class _HomepageState extends State<Homepage> {
                           });
                         },
                       ),
+                      Container(
+                        margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                        color: Colors.white,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: FlatButton(
+                          onPressed: () async {
+                            if (_addFoodToFridgeKey.currentState.validate()) {
+                              var list = List<String>();
+                              list.add(_nomeAlimentoDaAggiungereAlF);
+                              Firestore.instance
+                                  .collection('users')
+                                  .document('DCby8PyNHoRI64PQPXrIUAEkKAh2')
+                                  .updateData({
+                                "myFridge": FieldValue.arrayUnion(list)
+                              });
+                            }
+                          },
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -185,6 +214,15 @@ class _NavDrawerState extends State<NavDrawer> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => Profile()),
+                    )
+                  },
+                ),
+                ListTile(
+                  title: Text('Il Mio Frigorifero'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyFridge()),
                     )
                   },
                 ),

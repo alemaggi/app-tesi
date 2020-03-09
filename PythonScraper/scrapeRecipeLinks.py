@@ -2,12 +2,15 @@ from bs4 import BeautifulSoup
 import requests as rq
 import re
 import csv
+from recipe_scrapers import scrape_me
 
 baseUrl = 'https://www.giallozafferano.it/ricette-cat/Antipasti/'
 
 #lista contenente i link alle pagine con le singole ricette
 urlList = []
 urlList.append(baseUrl)
+
+recipeLinks = []
 
 #genero gli url delle pagine (Per ora mi fermo a 4)
 for i in  range(2, 5):
@@ -29,9 +32,23 @@ def estrapola_a_class(source):
     if div_list:
         for div in div_list:
             a = div.find('a').attrs['href']
+            recipeLinks.append(a)
             print(a)
 
 #scraping di tuttle pagine dei tornei
 for page_link in urlList:
     source = estrapola_source(page_link)
     estrapola_a_class(source)
+
+print("------------------------------------------------------------------------------------------")
+
+
+for link in recipeLinks:
+    scraper = scrape_me(link)
+
+    print(scraper.title())
+    print(scraper.total_time())
+    print(scraper.yields())
+    print(scraper.ingredients())
+    print(scraper.instructions())
+    print("------------------------------------------------------------------------------------------")
