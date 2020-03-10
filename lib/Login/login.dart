@@ -26,9 +26,10 @@ class _LoginState extends State<Login> {
               .set(Firestore.instance.collection("users").document(uid), {
             'email': userEmail,
             'name': 'Anonimo',
-            'surnname': 'Anonimo',
+            'surname': 'Anonimo',
             'profilePicUrl':
                 'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
+            'myFridge': [],
           });
         });
       } else {

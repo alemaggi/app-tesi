@@ -122,10 +122,12 @@ class _HomepageState extends State<Homepage> {
                               list.add(_nomeAlimentoDaAggiungereAlF);
                               Firestore.instance
                                   .collection('users')
-                                  .document('DCby8PyNHoRI64PQPXrIUAEkKAh2')
+                                  .document(
+                                      'Mu89QsGEKZhyijbvgvcFtaVr2243') //TODO: Toglierlo hard coded
                                   .updateData({
                                 "myFridge": FieldValue.arrayUnion(list)
                               });
+                              //TODO: Far chiudere la card quando viene premuto il bottone
                             }
                           },
                           child: Text(
@@ -205,7 +207,9 @@ class _NavDrawerState extends State<NavDrawer> {
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(_url),
                   ),
-                  accountName: Text(_name + " " + _surname),
+                  accountName: Text(
+                    _name + " " + _surname,
+                  ),
                   accountEmail: Text(_email),
                 ),
                 ListTile(

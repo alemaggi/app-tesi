@@ -10,10 +10,7 @@ class MyFridge extends StatefulWidget {
 class _MyFridgeState extends State<MyFridge> {
   var user;
 
-  String _fridgeElementOne;
-  String _fridgeElementTwo;
-  String _fridgeElementThree;
-
+  List<dynamic> ingredients;
   bool isLoaded = false;
 
   _getUserInfo() async {
@@ -27,10 +24,8 @@ class _MyFridgeState extends State<MyFridge> {
         if (data.documents.length > 0) {
           print(user.email);
           setState(() {
-            print(_fridgeElementOne);
-            _fridgeElementOne = data.documents[0].data['myFridge'][0];
-            _fridgeElementTwo = data.documents[0].data['myFridge'][1];
-            _fridgeElementThree = data.documents[0].data['myFridge'][2];
+            ingredients = data.documents[0].data['myFridge'];
+            print(ingredients);
             isLoaded = true;
           });
         }
@@ -58,35 +53,25 @@ class _MyFridgeState extends State<MyFridge> {
       ),
       body: isLoaded
           ? Container(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.1,
-                    child: Text(
-                      _fridgeElementOne,
-                      style: TextStyle(fontSize: 22),
+              child: ListView.builder(
+                itemCount: ingredients.length,
+                itemBuilder: (BuildContext ctxt, int index) {
+                  return Container(
+                    padding: EdgeInsets.all(5),
+                    child: Center(
+                      child: new Text(
+                        ingredients[index],
+                        style: TextStyle(fontSize: 22),
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.1,
-                    child: Text(
-                      _fridgeElementTwo,
-                      style: TextStyle(fontSize: 22),
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.1,
-                    child: Text(
-                      _fridgeElementThree,
-                      style: TextStyle(fontSize: 22),
-                    ),
-                  ),
-                ],
+                  );
+                },
               ),
             )
-          : CircularProgressIndicator(),
+          : CircularProgressIndicator(
+              strokeWidth: 6.0,
+              valueColor: AlwaysStoppedAnimation(Colors.transparent),
+            ),
     );
   }
 }
