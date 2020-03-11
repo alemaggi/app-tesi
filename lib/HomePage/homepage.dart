@@ -1,5 +1,6 @@
 import 'package:app_tesi/Fridge/myFridge.dart';
 import 'package:app_tesi/Profile/profile.dart';
+import 'package:app_tesi/Recipe/allRecipeTemplate.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -227,6 +228,16 @@ class _NavDrawerState extends State<NavDrawer> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => MyFridge()),
+                    )
+                  },
+                ),
+                ListTile(
+                  title: Text('Tutte le ricette'),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllRecipeTemplate()),
                     )
                   },
                 ),
