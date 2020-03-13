@@ -61,59 +61,62 @@ class _MyFridgeState extends State<MyFridge> {
                 child: ListView.builder(
                   itemCount: ingredients.length,
                   itemBuilder: (BuildContext ctxt, int index) {
-                    return Container(
-                      decoration: new BoxDecoration(
-                        borderRadius: new BorderRadius.only(
-                          topLeft: const Radius.circular(10.0),
-                          topRight: const Radius.circular(10.0),
-                          bottomLeft: const Radius.circular(10.0),
-                          bottomRight: const Radius.circular(10.0),
+                    return Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Container(
+                        decoration: new BoxDecoration(
+                          borderRadius: new BorderRadius.only(
+                            topLeft: const Radius.circular(10.0),
+                            topRight: const Radius.circular(10.0),
+                            bottomLeft: const Radius.circular(10.0),
+                            bottomRight: const Radius.circular(10.0),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 200),
+                              blurRadius:
+                                  5.0, // has the effect of softening the shadow
+                              spreadRadius:
+                                  0.5, // has the effect of extending the shadow
+                              offset: Offset(
+                                2.0, // horizontal, move right 10
+                                2.0, // vertical, move down 10
+                              ),
+                            ),
+                          ],
+                          color: Colors.white,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 0, 200),
-                            blurRadius:
-                                5.0, // has the effect of softening the shadow
-                            spreadRadius:
-                                0.5, // has the effect of extending the shadow
-                            offset: Offset(
-                              2.0, // horizontal, move right 10
-                              2.0, // vertical, move down 10
+                        margin: EdgeInsets.only(top: 5, bottom: 5),
+                        padding: EdgeInsets.all(5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(left: 10),
+                              child: Text(
+                                ingredients[index],
+                                style: TextStyle(fontSize: 22),
+                              ),
                             ),
-                          ),
-                        ],
-                        color: Colors.white,
-                      ),
-                      margin: EdgeInsets.only(top: 5, bottom: 5),
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(left: 10),
-                            child: Text(
-                              ingredients[index],
-                              style: TextStyle(fontSize: 22),
-                            ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            color: Colors.red,
-                            onPressed: () async {
-                              var list = List<String>();
-                              list.add(ingredients[index]);
-                              final db = Firestore.instance;
-                              await db
-                                  .collection('users')
-                                  .document(
-                                      'DCby8PyNHoRI64PQPXrIUAEkKAh2') //TODO: Toglierlo hard coded
-                                  .updateData({
-                                "myFridge": FieldValue.arrayRemove(list)
-                              });
-                              initState(); //TODO: Soluzione brutta e temporanea
-                            },
-                          )
-                        ],
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              color: Colors.red,
+                              onPressed: () async {
+                                var list = List<String>();
+                                list.add(ingredients[index]);
+                                final db = Firestore.instance;
+                                await db
+                                    .collection('users')
+                                    .document(
+                                        'DCby8PyNHoRI64PQPXrIUAEkKAh2') //TODO: Toglierlo hard coded
+                                    .updateData({
+                                  "myFridge": FieldValue.arrayRemove(list)
+                                });
+                                initState(); //TODO: Soluzione brutta e temporanea
+                              },
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },
