@@ -36,7 +36,7 @@ class _EditProfileState extends State<EditProfile> {
             setState(() {
               _name = data.documents[0].data['name'];
               _surname = data.documents[0].data['surname'];
-              //TODO: Mettere l'immagine del profilo che possa anche non essere modificata dall' utente
+              //TODO: Mettere l'immagine del profilo che possa anche non essere modificata dall' utente (Se vogliamo)
             });
           } else {
             _name = null;

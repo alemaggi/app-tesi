@@ -17,9 +17,7 @@ class _MyFridgeState extends State<MyFridge> {
     user = await FirebaseAuth.instance.currentUser();
     var userQuery = Firestore.instance
         .collection('users')
-        .where('email',
-            isEqualTo:
-                'alessandromaggi1997@libero.it') //TODO: Togliere hard code
+        .where('email', isEqualTo: user.email)
         .limit(1);
     userQuery.getDocuments().then(
       (data) {
@@ -107,8 +105,7 @@ class _MyFridgeState extends State<MyFridge> {
                                 final db = Firestore.instance;
                                 await db
                                     .collection('users')
-                                    .document(
-                                        'DCby8PyNHoRI64PQPXrIUAEkKAh2') //TODO: Toglierlo hard coded
+                                    .document(user.uid)
                                     .updateData({
                                   "myFridge": FieldValue.arrayRemove(list)
                                 });

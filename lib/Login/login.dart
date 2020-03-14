@@ -99,7 +99,8 @@ class _LoginState extends State<Login> {
                               children: <Widget>[
                                 TextFormField(
                                   keyboardType: TextInputType.text,
-                                  controller: null, //TODO: Fare controller
+                                  controller:
+                                      null, //TODO: Fare controller in caso sera se no togliere
                                   decoration: InputDecoration(
                                     hintText: "Email",
                                     prefixIcon: Icon(Icons.email),
@@ -118,7 +119,8 @@ class _LoginState extends State<Login> {
                                 ),
                                 TextFormField(
                                   keyboardType: TextInputType.text,
-                                  controller: null, //TODO: Fare controller
+                                  controller:
+                                      null, //TODO: Fare controller in caso sera se no togliere
                                   obscureText: true,
                                   decoration: InputDecoration(
                                     hintText: "Password",

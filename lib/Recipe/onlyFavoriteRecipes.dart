@@ -116,7 +116,19 @@ class _OnlyFavoriteRecipesState extends State<OnlyFavoriteRecipes> {
                                   fontSize: 22,
                                 ),
                               ),
-                              Text("Durata: " + queryRecord.duration),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.timer,
+                                    size: 18,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    child:
+                                        Text("Durata: " + queryRecord.duration),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           IconButton(
@@ -140,6 +152,7 @@ class _OnlyFavoriteRecipesState extends State<OnlyFavoriteRecipes> {
                                   MaterialPageRoute(
                                     builder: (context) => SingleRecipe(
                                       documentId: documnetId,
+                                      favoriteRecipes: favoriteRecipes,
                                     ),
                                   ),
                                 );

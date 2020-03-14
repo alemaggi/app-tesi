@@ -1,11 +1,15 @@
-import 'package:app_tesi/Wrapper/wrapperForRecipeFilter.dart';
+import 'package:app_tesi/Recipe/wrapperForIngredientsOrRecipes/wrapperForIngredientsOrRecipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SingleRecipe extends StatefulWidget {
   final String documentId;
+  final List<dynamic> favoriteRecipes;
 
-  SingleRecipe({Key key, @required this.documentId}) : super(key: key);
+  SingleRecipe(
+      {Key key, @required this.documentId, @required this.favoriteRecipes})
+      : super(key: key);
   @override
   _SingleRecipeState createState() => _SingleRecipeState();
 }
@@ -15,9 +19,12 @@ String _duration;
 List<dynamic> _ingredients;
 List<dynamic> _preparation;
 bool _isLoaded = false;
+bool _showIngredients = true;
+var user;
 
 class _SingleRecipeState extends State<SingleRecipe> {
   _getRecipe() async {
+    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('recipes')
         .document(widget.documentId)
@@ -54,6 +61,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             //TODO: Sistemare problema quando si apre la pagina
+            _showIngredients = true;
             Navigator.pop(context);
           },
         ),
@@ -62,79 +70,100 @@ class _SingleRecipeState extends State<SingleRecipe> {
       body: _isLoaded
           ? Container(
               width: double.infinity,
+              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    _title,
-                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Tempo di preparazione: " + _duration,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "Ingredienti",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        _title,
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
                   ),
                   Container(
-                    height: 100, //TODO: Soluzione vera
-                    child: ListView.builder(
-                      itemCount: _ingredients.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return Container(
-                          margin: EdgeInsets.only(top: 5, bottom: 5),
-                          padding: EdgeInsets.all(5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(left: 10),
-                                child: Text(
-                                  _ingredients[index],
-                                  style: TextStyle(fontSize: 22),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.03),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.timer,
+                          color: Colors.black,
+                          size: 32,
+                        ),
+                        Container(
+                            width: MediaQuery.of(context).size.width * 0.01),
+                        Text(
+                          _duration + " minuti",
+                          style: TextStyle(
+                              fontSize: 26, fontWeight: FontWeight.w600),
+                        )
+                      ],
                     ),
                   ),
-                  Text(
-                    "Passaggi Preparazione",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
                   Container(
-                    height: 200, //TODO: Soluzione vera da troavre
-                    child: ListView.builder(
-                      itemCount: _preparation.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: 35,
-                              width: MediaQuery.of(context).size.width,
-                              margin: EdgeInsets.only(top: 5, bottom: 5),
-                              padding: EdgeInsets.all(5),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    ((index + 1).toString() +
-                                        ". " +
-                                        _preparation[index]),
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                ),
-                              ),
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.1),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        OutlineButton(
+                          borderSide: BorderSide(
+                              width: 2.0,
+                              color:
+                                  _showIngredients ? Colors.red : Colors.black),
+                          child: Text(
+                            'Ingredienti',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  _showIngredients ? Colors.red : Colors.black,
                             ),
-                          ],
-                        );
-                      },
+                          ),
+                          onPressed: (() {
+                            if (!_showIngredients) {
+                              setState(() {
+                                _showIngredients = !_showIngredients;
+                              });
+                            }
+                          }),
+                        ),
+                        OutlineButton(
+                          borderSide: BorderSide(
+                              width: 2.0,
+                              color:
+                                  _showIngredients ? Colors.black : Colors.red),
+                          child: Text(
+                            'Preparazione',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  _showIngredients ? Colors.black : Colors.red,
+                            ),
+                          ),
+                          onPressed: (() {
+                            if (_showIngredients) {
+                              setState(() {
+                                _showIngredients = !_showIngredients;
+                              });
+                            }
+                          }),
+                        ),
+                      ],
                     ),
+                  ),
+                  Container(
+                    height: 300, //TODO: Togliere altezza hard coded
+                    child: WrapperForIngredientsOrRecipes(
+                        ingredients: _ingredients,
+                        preparation: _preparation,
+                        showIngredients: _showIngredients),
                   ),
                 ],
               ),
@@ -144,6 +173,34 @@ class _SingleRecipeState extends State<SingleRecipe> {
               valueColor: AlwaysStoppedAnimation(Colors.transparent),
               value: 0,
             ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        elevation: 6,
+        child: Icon(
+          Icons.favorite,
+          color: (widget.favoriteRecipes.contains(widget.documentId))
+              ? Colors.red
+              : Color.fromRGBO(230, 219, 221, 100),
+          size: 36,
+        ),
+        onPressed: (widget.favoriteRecipes.contains(widget.documentId))
+            ? () async {
+                var list = List<String>();
+                list.add(widget.documentId);
+                final db = Firestore.instance;
+                await db.collection('users').document(user.uid).updateData(
+                    {"favoriteRecipes": FieldValue.arrayRemove(list)});
+                initState(); //TODO: Soluzione brutta e temporanea --> Funziona a livello di DB ma non di UI
+              }
+            : () async {
+                var list = List<String>();
+                list.add(widget.documentId);
+                final db = Firestore.instance;
+                await db.collection('users').document(user.uid).updateData(
+                    {"favoriteRecipes": FieldValue.arrayUnion(list)});
+                initState(); //TODO: Soluzione brutta e temporanea --> Funziona a livello di DB ma non di UI
+              },
+      ),
     );
   }
 }

@@ -37,7 +37,7 @@ class _HomepageState extends State<Homepage> {
     user = await FirebaseAuth.instance.currentUser();
     var userQuery = Firestore.instance
         .collection('users')
-        .where('email', isEqualTo: user.email) //TODO: Togliere hard code
+        .where('email', isEqualTo: user.email)
         .limit(1);
     userQuery.getDocuments().then(
       (data) {
@@ -112,7 +112,6 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
     return Scaffold(
       appBar: _buildBar(context),
       drawer: NavDrawer(),
@@ -227,7 +226,7 @@ class _HomepageState extends State<Homepage> {
                           ),
                         ),
                       ),
-                      (!_listOfIngredientsToAdd.isEmpty)
+                      (_listOfIngredientsToAdd.isNotEmpty)
                           ? Container(
                               margin: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.width * 0.1,
@@ -236,7 +235,7 @@ class _HomepageState extends State<Homepage> {
                               width: MediaQuery.of(context).size.width * 0.8,
                               child: FlatButton(
                                 onPressed: () async {
-                                  if (!_listOfIngredientsToAdd.isEmpty) {
+                                  if (_listOfIngredientsToAdd.isNotEmpty) {
                                     var list = List<String>();
 
                                     List<String> output = Iterable.generate(
@@ -250,8 +249,7 @@ class _HomepageState extends State<Homepage> {
                                     print(output);
                                     Firestore.instance
                                         .collection('users')
-                                        .document(
-                                            'DCby8PyNHoRI64PQPXrIUAEkKAh2') //TODO: Toglierlo hard coded
+                                        .document(user.uid)
                                         .updateData({
                                       "myFridge": FieldValue.arrayUnion(output)
                                     });

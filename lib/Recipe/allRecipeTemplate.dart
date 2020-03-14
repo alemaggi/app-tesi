@@ -1,5 +1,6 @@
 import 'package:app_tesi/Recipe/singleRecipe.dart';
 import 'package:app_tesi/Wrapper/wrapperForRecipeFilter.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,139 +16,38 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
   //I primi tre vediamo se farli o no
   bool soloPreferiti = false;
 
-  Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('recipes').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
+  var typeOfRecipeSelected =
+      0; //0 = Nessuno, 1 = Antipasti, 2 = Secondi, 3 = Dolci
+
+  //Questo mi serve per avere la lista delle ricette preferite
+  List<dynamic> favoriteRecipes;
+  bool isLoaded = false;
+  var user;
+
+  _getUserInfo() async {
+    user = await FirebaseAuth.instance.currentUser();
+    var userQuery = Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: user.email)
+        .limit(1);
+    userQuery.getDocuments().then(
+      (data) {
+        if (data.documents.length > 0) {
+          print(user.email);
+          setState(() {
+            favoriteRecipes = data.documents[0].data['favoriteRecipes'];
+            print(favoriteRecipes);
+            isLoaded = true;
+          });
+        }
       },
     );
   }
 
-  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-    return ListView(
-      padding: const EdgeInsets.only(top: 20.0),
-      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
-    );
-  }
-
-  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
-    final queryRecord = QueryRecord.fromSnapshot(data);
-    String documnetId = data.documentID;
-
-    return Container(
-      //key: ValueKey(queryRecord.playerEmail),
-      child: Column(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(15),
-            margin: EdgeInsets.only(top: 10),
-            width: MediaQuery.of(context).size.width * 0.9,
-            decoration: new BoxDecoration(
-              borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(10.0),
-                topRight: const Radius.circular(10.0),
-                bottomLeft: const Radius.circular(10.0),
-                bottomRight: const Radius.circular(10.0),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromRGBO(0, 0, 0, 200),
-                  blurRadius: 5.0, // has the effect of softening the shadow
-                  spreadRadius: 0.5, // has the effect of extending the shadow
-                  offset: Offset(
-                    2.0, // horizontal, move right 10
-                    2.0, // vertical, move down 10
-                  ),
-                ),
-              ],
-              color: Colors.white,
-            ),
-            child: Column(
-              //TODO: Togliere tutti i valori e le dimensioni hard coded
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          queryRecord.title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ),
-                        ),
-                        Text("Durata: " + queryRecord.duration),
-                      ],
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.favorite,
-                        color: queryRecord.isFavorite
-                            ? Colors.red
-                            : Color.fromRGBO(230, 219, 221, 100),
-                        size: 30,
-                      ),
-                      onPressed: queryRecord.isFavorite
-                          ? () async {
-                              final db = Firestore.instance;
-                              await db
-                                  .collection('recipes')
-                                  .document(documnetId)
-                                  .updateData({'isFavorite': false});
-                            }
-                          : () async {
-                              final db = Firestore.instance;
-                              await db
-                                  .collection('recipes')
-                                  .document(documnetId)
-                                  .updateData({'isFavorite': true});
-                            },
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      child: FlatButton(
-                        color: Color.fromRGBO(255, 0, 87, 1),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SingleRecipe(
-                                documentId: documnetId,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          "Vedi Ricetta Completa",
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  @override
+  void initState() {
+    _getUserInfo();
+    super.initState();
   }
 
   @override
@@ -171,28 +71,74 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 FlatButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  color: (typeOfRecipeSelected == 1)
+                      ? Color.fromRGBO(255, 0, 87, 1)
+                      : Color.fromRGBO(230, 219, 221, 100),
+                  onPressed: (typeOfRecipeSelected != 1)
+                      ? () {
+                          setState(() {
+                            typeOfRecipeSelected = 1;
+                          });
+                        }
+                      : () {
+                          setState(() {
+                            typeOfRecipeSelected = 0;
+                          });
+                        },
                   child: Text(
                     "Antipasti",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  color: (typeOfRecipeSelected == 2)
+                      ? Color.fromRGBO(255, 0, 87, 1)
+                      : Color.fromRGBO(230, 219, 221, 100),
+                  onPressed: () {
+                    setState(() {
+                      typeOfRecipeSelected = 2;
+                    });
+                  },
                   child: Text(
                     "Primi",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  color: (typeOfRecipeSelected == 3)
+                      ? Color.fromRGBO(255, 0, 87, 1)
+                      : Color.fromRGBO(230, 219, 221, 100),
+                  onPressed: () {
+                    setState(() {
+                      typeOfRecipeSelected = 3;
+                    });
+                  },
                   child: Text(
                     "Secondi",
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
                 FlatButton(
-                  onPressed: () {},
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(10.0),
+                  ),
+                  color: (typeOfRecipeSelected == 4)
+                      ? Color.fromRGBO(255, 0, 87, 1)
+                      : Color.fromRGBO(230, 219, 221, 100),
+                  onPressed: () {
+                    setState(() {
+                      typeOfRecipeSelected = 4;
+                    });
+                  },
                   child: Text(
                     "Dolci",
                     style: TextStyle(fontSize: 18),
@@ -224,7 +170,10 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                 ),
               ],
             ),
-            WrapperForRecipeFilter(soloPreferiti: soloPreferiti),
+            WrapperForRecipeFilter(
+              soloPreferiti: soloPreferiti,
+              typeOfRecipeSelected: typeOfRecipeSelected,
+            ),
           ],
         ),
       ),
