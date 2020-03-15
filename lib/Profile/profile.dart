@@ -55,20 +55,30 @@ class _ProfileState extends State<Profile> {
               leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Homepage()),
-                    );
+                    Navigator.pop(context);
                   }),
               actions: <Widget>[
                 IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EditProfile()),
-                      );
-                    })
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return EditProfile();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    );
+                  },
+                )
               ],
             ),
             body: Center(
@@ -121,6 +131,7 @@ class _ProfileState extends State<Profile> {
             child: CircularProgressIndicator(
               strokeWidth: 6.0,
               valueColor: AlwaysStoppedAnimation(Colors.transparent),
+              value: 0,
             ),
           );
   }

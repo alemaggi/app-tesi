@@ -349,8 +349,20 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Profile()),
-                    )
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return Profile();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    ),
                   },
                 ),
                 ListTile(
@@ -358,8 +370,20 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MyFridge()),
-                    )
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return MyFridge();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    ),
                   },
                 ),
                 ListTile(
@@ -367,9 +391,20 @@ class _NavDrawerState extends State<NavDrawer> {
                   onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                          builder: (context) => AllRecipeTemplate()),
-                    )
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return AllRecipeTemplate();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    ),
                   },
                 ),
                 ListTile(

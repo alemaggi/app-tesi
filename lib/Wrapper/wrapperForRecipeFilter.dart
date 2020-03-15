@@ -1,6 +1,9 @@
+import 'package:app_tesi/Recipe/GroupOfRecipesBasedOnCategory/onlyDessertRecipes.dart';
+import 'package:app_tesi/Recipe/GroupOfRecipesBasedOnCategory/onlyFavoriteRecipes.dart';
+import 'package:app_tesi/Recipe/GroupOfRecipesBasedOnCategory/onlyFirstRecipes.dart';
+import 'package:app_tesi/Recipe/GroupOfRecipesBasedOnCategory/onlySecondsRecipes.dart';
+import 'package:app_tesi/Recipe/GroupOfRecipesBasedOnCategory/onlyStarterRecipes.dart';
 import 'package:app_tesi/Recipe/allRecipe.dart';
-import 'package:app_tesi/Recipe/onlyFavoriteRecipes.dart';
-import 'package:app_tesi/Recipe/onlyStarterRecipes.dart';
 import 'package:flutter/material.dart';
 
 class WrapperForRecipeFilter extends StatelessWidget {
@@ -20,6 +23,15 @@ class WrapperForRecipeFilter extends StatelessWidget {
     }
     if (typeOfRecipeSelected == 1) {
       return OnlyStarterRecipes();
+    }
+    if (typeOfRecipeSelected == 2) {
+      return OnlyFirstRecipes();
+    }
+    if (typeOfRecipeSelected == 3) {
+      return OnlySecondRecipes();
+    }
+    if (typeOfRecipeSelected == 4) {
+      return OnlyDessertRecipes();
     } else {
       return AllRecipe();
     }

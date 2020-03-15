@@ -17,7 +17,7 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
   bool soloPreferiti = false;
 
   var typeOfRecipeSelected =
-      0; //0 = Nessuno, 1 = Antipasti, 2 = Secondi, 3 = Dolci
+      0; //0 = Nessuno, 1 = Antipasti, 2 = Primi, 3 = Secondi, 4 = Dolci
 
   //Questo mi serve per avere la lista delle ricette preferite
   List<dynamic> favoriteRecipes;
@@ -90,7 +90,12 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                         },
                   child: Text(
                     "Antipasti",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (typeOfRecipeSelected == 1)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                 ),
                 FlatButton(
@@ -107,7 +112,12 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   },
                   child: Text(
                     "Primi",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (typeOfRecipeSelected == 2)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                 ),
                 FlatButton(
@@ -124,7 +134,12 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   },
                   child: Text(
                     "Secondi",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (typeOfRecipeSelected == 3)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                 ),
                 FlatButton(
@@ -141,7 +156,12 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   },
                   child: Text(
                     "Dolci",
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: (typeOfRecipeSelected == 4)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                 ),
               ],

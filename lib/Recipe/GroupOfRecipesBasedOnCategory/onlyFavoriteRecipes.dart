@@ -183,9 +183,10 @@ class _OnlyFavoriteRecipesState extends State<OnlyFavoriteRecipes> {
   @override
   Widget build(BuildContext context) {
     return isLoaded
-        ? Container(
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: _buildBody(context),
+        ? Expanded(
+            child: Container(
+              child: _buildBody(context),
+            ),
           )
         : CircularProgressIndicator(
             strokeWidth: 6.0,

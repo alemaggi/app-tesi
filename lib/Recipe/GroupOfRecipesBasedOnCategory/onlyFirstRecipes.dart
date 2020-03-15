@@ -1,16 +1,17 @@
-import 'package:app_tesi/Recipe/singleRecipe.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class AllRecipe extends StatefulWidget {
+import '../singleRecipe.dart';
+
+class OnlyFirstRecipes extends StatefulWidget {
   @override
-  _AllRecipeState createState() => _AllRecipeState();
+  _OnlyFirstRecipesState createState() => _OnlyFirstRecipesState();
 }
 
-class _AllRecipeState extends State<AllRecipe> {
-  List<dynamic> favoriteRecipes;
+class _OnlyFirstRecipesState extends State<OnlyFirstRecipes> {
   bool isLoaded = false;
+  List<dynamic> favoriteRecipes;
   var user;
 
   _getUserInfo() async {
@@ -41,7 +42,10 @@ class _AllRecipeState extends State<AllRecipe> {
 
   Widget _buildBody(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('recipes').snapshots(),
+      stream: Firestore.instance
+          .collection('recipes')
+          .where('type', isEqualTo: 'Primo')
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
           return LinearProgressIndicator(
