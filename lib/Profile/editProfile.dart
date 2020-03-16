@@ -94,7 +94,10 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(255, 0, 87, 1),
-        title: Text("Edit Profile"),
+        title: Text(
+          "Edit Profile",
+          style: TextStyle(fontSize: 24),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -215,6 +218,13 @@ class _EditProfileState extends State<EditProfile> {
                             ),
                             onPressed: chooseFile,
                             color: Color.fromRGBO(255, 0, 87, 1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Color.fromRGBO(255, 0, 87, 1),
+                                width: 3,
+                              ),
+                            ),
                           )
                         : Container(),
                   ),

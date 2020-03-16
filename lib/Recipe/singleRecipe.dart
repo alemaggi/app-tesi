@@ -1,14 +1,18 @@
-import 'package:app_tesi/Recipe/wrapperForIngredientsOrRecipes/wrapperForIngredientsOrRecipes.dart';
+import 'package:app_tesi/Wrapper/wrapperForIngredientsOrRecipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SingleRecipe extends StatefulWidget {
   final String documentId;
+  final String title;
   final List<dynamic> favoriteRecipes;
 
   SingleRecipe(
-      {Key key, @required this.documentId, @required this.favoriteRecipes})
+      {Key key,
+      @required this.documentId,
+      @required this.title,
+      @required this.favoriteRecipes})
       : super(key: key);
   @override
   _SingleRecipeState createState() => _SingleRecipeState();
@@ -18,6 +22,7 @@ String _title;
 String _duration;
 List<dynamic> _ingredients;
 List<dynamic> _preparation;
+String _imageLink;
 bool _isLoaded = false;
 bool _showIngredients = true;
 var user;
@@ -36,6 +41,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
           _duration = data['duration'];
           _ingredients = data['ingredients'];
           _preparation = data['preparation'];
+          _imageLink = data['imageLink'];
           _isLoaded = true;
         });
 
@@ -57,6 +63,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -65,7 +72,10 @@ class _SingleRecipeState extends State<SingleRecipe> {
             Navigator.pop(context);
           },
         ),
-        title: Text("Ricetta"),
+        title: Text(
+          widget.title,
+          style: TextStyle(fontSize: 24),
+        ),
       ),
       body: _isLoaded
           ? Container(
@@ -84,6 +94,20 @@ class _SingleRecipeState extends State<SingleRecipe> {
                         ),
                       )
                     ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.width * 0.02,
+                        bottom: MediaQuery.of(context).size.width * 0.02),
+                    height: MediaQuery.of(context).size.height * 0.2,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(_imageLink),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      color: Colors.redAccent,
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(
@@ -114,15 +138,17 @@ class _SingleRecipeState extends State<SingleRecipe> {
                         OutlineButton(
                           borderSide: BorderSide(
                               width: 2.0,
-                              color:
-                                  _showIngredients ? Colors.red : Colors.black),
+                              color: _showIngredients
+                                  ? Color.fromRGBO(255, 0, 87, 1)
+                                  : Colors.black),
                           child: Text(
                             'Ingredienti',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w600,
-                              color:
-                                  _showIngredients ? Colors.red : Colors.black,
+                              color: _showIngredients
+                                  ? Color.fromRGBO(255, 0, 87, 1)
+                                  : Colors.black,
                             ),
                           ),
                           onPressed: (() {
@@ -135,16 +161,19 @@ class _SingleRecipeState extends State<SingleRecipe> {
                         ),
                         OutlineButton(
                           borderSide: BorderSide(
-                              width: 2.0,
-                              color:
-                                  _showIngredients ? Colors.black : Colors.red),
+                            width: 2.0,
+                            color: _showIngredients
+                                ? Colors.black
+                                : Color.fromRGBO(255, 0, 87, 1),
+                          ),
                           child: Text(
                             'Preparazione',
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w600,
-                              color:
-                                  _showIngredients ? Colors.black : Colors.red,
+                              color: _showIngredients
+                                  ? Colors.black
+                                  : Color.fromRGBO(255, 0, 87, 1),
                             ),
                           ),
                           onPressed: (() {

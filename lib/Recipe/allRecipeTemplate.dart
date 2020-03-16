@@ -1,8 +1,8 @@
-import 'package:app_tesi/Recipe/singleRecipe.dart';
-import 'package:app_tesi/Wrapper/wrapperForRecipeFilter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'onlyOneCategoryRecipe.dart';
 
 class AllRecipeTemplate extends StatefulWidget {
   @override
@@ -54,13 +54,17 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Text("Tutte Le Ricette"),
+        title: Text(
+          "Tutte Le Ricette",
+          style: TextStyle(fontSize: 24),
+        ),
       ),
       body: Container(
         margin: EdgeInsets.only(top: 5),
@@ -105,11 +109,17 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   color: (typeOfRecipeSelected == 2)
                       ? Color.fromRGBO(255, 0, 87, 1)
                       : Color.fromRGBO(230, 219, 221, 100),
-                  onPressed: () {
-                    setState(() {
-                      typeOfRecipeSelected = 2;
-                    });
-                  },
+                  onPressed: (typeOfRecipeSelected != 2)
+                      ? () {
+                          setState(() {
+                            typeOfRecipeSelected = 2;
+                          });
+                        }
+                      : () {
+                          setState(() {
+                            typeOfRecipeSelected = 0;
+                          });
+                        },
                   child: Text(
                     "Primi",
                     style: TextStyle(
@@ -127,11 +137,17 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   color: (typeOfRecipeSelected == 3)
                       ? Color.fromRGBO(255, 0, 87, 1)
                       : Color.fromRGBO(230, 219, 221, 100),
-                  onPressed: () {
-                    setState(() {
-                      typeOfRecipeSelected = 3;
-                    });
-                  },
+                  onPressed: (typeOfRecipeSelected != 3)
+                      ? () {
+                          setState(() {
+                            typeOfRecipeSelected = 3;
+                          });
+                        }
+                      : () {
+                          setState(() {
+                            typeOfRecipeSelected = 0;
+                          });
+                        },
                   child: Text(
                     "Secondi",
                     style: TextStyle(
@@ -149,11 +165,17 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                   color: (typeOfRecipeSelected == 4)
                       ? Color.fromRGBO(255, 0, 87, 1)
                       : Color.fromRGBO(230, 219, 221, 100),
-                  onPressed: () {
-                    setState(() {
-                      typeOfRecipeSelected = 4;
-                    });
-                  },
+                  onPressed: (typeOfRecipeSelected != 4)
+                      ? () {
+                          setState(() {
+                            typeOfRecipeSelected = 4;
+                          });
+                        }
+                      : () {
+                          setState(() {
+                            typeOfRecipeSelected = 0;
+                          });
+                        },
                   child: Text(
                     "Dolci",
                     style: TextStyle(
@@ -170,19 +192,28 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 FlatButton(
-                  color: soloPreferiti
+                  color: (typeOfRecipeSelected == 5)
                       ? Color.fromRGBO(255, 0, 87, 1)
                       : Color.fromRGBO(230, 219, 221, 100),
-                  onPressed: () {
-                    setState(() {
-                      soloPreferiti = !soloPreferiti;
-                    });
-                  },
+                  onPressed: (typeOfRecipeSelected != 5)
+                      ? () {
+                          setState(() {
+                            typeOfRecipeSelected = 5;
+                          });
+                        }
+                      : () {
+                          setState(() {
+                            typeOfRecipeSelected = 0;
+                          });
+                        },
                   child: Text(
                     "Mostra Solo Preferiti",
                     style: TextStyle(
-                        fontSize: 18,
-                        color: soloPreferiti ? Colors.white : Colors.black),
+                      fontSize: 18,
+                      color: (typeOfRecipeSelected == 5)
+                          ? Colors.white
+                          : Colors.black,
+                    ),
                   ),
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(10.0),
@@ -190,32 +221,10 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                 ),
               ],
             ),
-            WrapperForRecipeFilter(
-              soloPreferiti: soloPreferiti,
-              typeOfRecipeSelected: typeOfRecipeSelected,
-            ),
+            OnlyOneCategoryRecipe(categoryToShow: typeOfRecipeSelected),
           ],
         ),
       ),
     );
   }
-}
-
-class QueryRecord {
-  final String title;
-  final String duration;
-  final bool isFavorite;
-
-  final DocumentReference reference;
-
-  QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
-      : title = map['title'],
-        duration = map['duration'],
-        isFavorite = map['isFavorite'];
-
-  QueryRecord.fromSnapshot(DocumentSnapshot snapshot)
-      : this.fromMap(snapshot.data, reference: snapshot.reference);
-
-  @override
-  String toString() => "QueryRecord<$title:$duration:$isFavorite>";
 }

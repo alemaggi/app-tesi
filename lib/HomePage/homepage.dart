@@ -56,7 +56,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _getUserFridge();
-    _searchForPossibleRecipes();
+    // _searchForPossibleRecipes(ingredients);
     super.initState();
   }
 
@@ -92,18 +92,11 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
-  void _searchForPossibleRecipes() {
-    List<dynamic> ingredients = [
-      'Carote',
-      'Piselli',
-      'Insalata',
-      'Pollo',
-      'Pomodori'
-    ];
-    List<dynamic> _ingredientiDiUnaRicetta = ['Carote', 'Piselli', 'Insalata'];
+  void _searchForPossibleRecipes(List<dynamic> ingredienti) {
+    List<dynamic> _ingredientiDiUnaRicetta = ["Carote", "Piselli", "insalata"];
 
     for (var i = 0; i < _ingredientiDiUnaRicetta.length; i++) {
-      if (!ingredients.contains(_ingredientiDiUnaRicetta[i])) {
+      if (!ingredienti.contains(_ingredientiDiUnaRicetta[i])) {
         print("Non posso fare sta ricetta");
       }
     }
@@ -140,7 +133,8 @@ class _HomepageState extends State<Homepage> {
                     "Aggiungi elementi al tuo frigo",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -192,6 +186,8 @@ class _HomepageState extends State<Homepage> {
                         controller: _controller,
                         decoration: InputDecoration(
                           hintText: "Alimento da aggiungere",
+                          hintStyle:
+                              TextStyle(color: Colors.white, fontSize: 18),
                         ),
                         validator: (val) =>
                             val.isEmpty ? 'Inserisci un alimento' : null,
@@ -217,6 +213,13 @@ class _HomepageState extends State<Homepage> {
                               });
                             }
                           },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(10.0),
+                            side: BorderSide(
+                              color: Colors.white,
+                              width: 3,
+                            ),
+                          ),
                           child: Text(
                             "Add Element To List",
                             style: TextStyle(
@@ -256,6 +259,7 @@ class _HomepageState extends State<Homepage> {
                                     setState(() {
                                       _listOfIngredientsToAdd.clear();
                                     });
+
                                     //TODO: Far chiudere la card quando viene premuto il bottone
                                   }
                                 },
@@ -336,6 +340,9 @@ class _NavDrawerState extends State<NavDrawer> {
               padding: EdgeInsets.zero,
               children: <Widget>[
                 UserAccountsDrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Color.fromRGBO(255, 0, 87, 1),
+                  ),
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(_url),
                   ),

@@ -51,7 +51,10 @@ class _ProfileState extends State<Profile> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: Color.fromRGBO(255, 0, 87, 1),
-              title: Text("Profile"),
+              title: Text(
+                "Profile",
+                style: TextStyle(fontSize: 24),
+              ),
               leading: IconButton(
                   icon: Icon(Icons.arrow_back),
                   onPressed: () {
