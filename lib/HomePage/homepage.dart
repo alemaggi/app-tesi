@@ -1,6 +1,7 @@
 import 'package:app_tesi/Fridge/myFridge.dart';
 import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Recipe/allRecipeTemplate.dart';
+import 'package:app_tesi/Recipe/singleRecipe.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +23,7 @@ class _HomepageState extends State<Homepage> {
   List names = new List();
   List filteredNames = new List();
   Icon _searchIcon = new Icon(Icons.search);
-  Widget _appBarTitle = new Text('Search Example');
+  Widget _appBarTitle = new Text('Le ricette che puoi fare subito');
   final _addFoodToFridgeKey = GlobalKey<FormState>();
   String _nomeAlimentoDaAggiungereAlF;
   var user;
@@ -56,9 +57,165 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _getUserFridge();
-    // _searchForPossibleRecipes(ingredients);
     super.initState();
   }
+
+  bool checkIfRecipeIsDoable(
+      List<dynamic> userIngredients, List<dynamic> recipeIngredients) {
+    for (var i = 0; i < recipeIngredients.length; i++) {
+      if (!userIngredients.contains(recipeIngredients[i])) {
+        print("Non posso fare sta ricetta");
+        return false;
+      }
+    }
+    print("Posso fare sta ricetta");
+    return true;
+  }
+
+  //Display delle ricette
+  Widget _buildBody(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('recipes').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return LinearProgressIndicator(
+            backgroundColor: Colors.transparent,
+          );
+        return _buildList(context, snapshot.data.documents);
+      },
+    );
+  }
+
+  Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
+    return ListView(
+      padding: const EdgeInsets.only(top: 20.0),
+      children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+    );
+  }
+
+  Widget _buildListItem(BuildContext context, DocumentSnapshot data) {
+    final queryRecord = QueryRecord.fromSnapshot(data);
+    String documnetId = data.documentID;
+
+    return (checkIfRecipeIsDoable(ingredients, queryRecord.ingredients))
+        ? Container(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.all(15),
+                  margin: EdgeInsets.only(top: 10),
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: new BoxDecoration(
+                    borderRadius: new BorderRadius.only(
+                      topLeft: const Radius.circular(10.0),
+                      topRight: const Radius.circular(10.0),
+                      bottomLeft: const Radius.circular(10.0),
+                      bottomRight: const Radius.circular(10.0),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 200),
+                        blurRadius:
+                            5.0, // has the effect of softening the shadow
+                        spreadRadius:
+                            0.5, // has the effect of extending the shadow
+                        offset: Offset(
+                          2.0, // horizontal, move right 10
+                          2.0, // vertical, move down 10
+                        ),
+                      ),
+                    ],
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).size.width * 0.02),
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(queryRecord.imageLink),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                queryRecord.title,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                ),
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.timer,
+                                    size: 18,
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 5),
+                                    child:
+                                        Text("Durata: " + queryRecord.duration),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            child: FlatButton(
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SingleRecipe(
+                                      documentId: documnetId,
+                                      title: queryRecord.title,
+                                      favoriteRecipes: null,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "Vedi Ricetta Completa",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        : Container(
+            height: 0,
+          );
+  }
+  //FINE DISPLAY RICETTE
 
   Widget _buildBar(BuildContext context) {
     return AppBar(
@@ -85,22 +242,11 @@ class _HomepageState extends State<Homepage> {
         );
       } else {
         this._searchIcon = Icon(Icons.search);
-        this._appBarTitle = Text('Search Example');
+        this._appBarTitle = Text('Le ricette che puoi fare subito');
         filteredNames = names;
         _filter.clear();
       }
     });
-  }
-
-  void _searchForPossibleRecipes(List<dynamic> ingredienti) {
-    List<dynamic> _ingredientiDiUnaRicetta = ["Carote", "Piselli", "insalata"];
-
-    for (var i = 0; i < _ingredientiDiUnaRicetta.length; i++) {
-      if (!ingredienti.contains(_ingredientiDiUnaRicetta[i])) {
-        print("Non posso fare sta ricetta");
-      }
-    }
-    print("Posso fare sta ricetta");
   }
 
   @override
@@ -109,15 +255,15 @@ class _HomepageState extends State<Homepage> {
       appBar: _buildBar(context),
       drawer: NavDrawer(),
       body: ExpandableCardPage(
-        page: Center(
-          child: Text(
-            "Lista di ricette",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 44,
-            ),
-          ),
-        ),
+        page: isLoaded
+            ? Container(
+                child: _buildBody(context),
+              )
+            : CircularProgressIndicator(
+                strokeWidth: 6.0,
+                valueColor: AlwaysStoppedAnimation(Colors.transparent),
+                value: 0,
+              ),
         expandableCard: ExpandableCard(
           backgroundColor: Color.fromRGBO(255, 0, 87, 1),
           minHeight: MediaQuery.of(context).size.height * 0.18,
@@ -201,8 +347,8 @@ class _HomepageState extends State<Homepage> {
                         margin: EdgeInsets.only(
                           top: MediaQuery.of(context).size.width * 0.1,
                         ),
-                        color: Colors.white,
                         width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.width * 0.12,
                         child: FlatButton(
                           onPressed: () {
                             if (_addFoodToFridgeKey.currentState.validate()) {
@@ -213,17 +359,18 @@ class _HomepageState extends State<Homepage> {
                               });
                             }
                           },
+                          color: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(10.0),
                             side: BorderSide(
-                              color: Colors.white,
+                              color: Color.fromRGBO(255, 0, 87, 1),
                               width: 3,
                             ),
                           ),
                           child: Text(
                             "Add Element To List",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 24,
                               color: Color.fromRGBO(255, 0, 87, 1),
                             ),
                           ),
@@ -234,9 +381,17 @@ class _HomepageState extends State<Homepage> {
                               margin: EdgeInsets.only(
                                 top: MediaQuery.of(context).size.width * 0.1,
                               ),
-                              color: Colors.white,
                               width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.width * 0.12,
                               child: FlatButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: new BorderRadius.circular(10.0),
+                                  side: BorderSide(
+                                    color: Color.fromRGBO(255, 0, 87, 1),
+                                    width: 3,
+                                  ),
+                                ),
+                                color: Colors.white,
                                 onPressed: () async {
                                   if (_listOfIngredientsToAdd.isNotEmpty) {
                                     var list = List<String>();
@@ -266,7 +421,7 @@ class _HomepageState extends State<Homepage> {
                                 child: Text(
                                   "Submit",
                                   style: TextStyle(
-                                    fontSize: 22,
+                                    fontSize: 24,
                                     color: Color.fromRGBO(255, 0, 87, 1),
                                   ),
                                 ),
@@ -429,4 +584,25 @@ class _NavDrawerState extends State<NavDrawer> {
             valueColor: AlwaysStoppedAnimation(Colors.transparent),
           );
   }
+}
+
+class QueryRecord {
+  final String title;
+  final String imageLink;
+  final String duration;
+  final List<dynamic> ingredients;
+
+  final DocumentReference reference;
+
+  QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
+      : title = map['title'],
+        duration = map['duration'],
+        imageLink = map['imageLink'],
+        ingredients = map['ingredients'];
+
+  QueryRecord.fromSnapshot(DocumentSnapshot snapshot)
+      : this.fromMap(snapshot.data, reference: snapshot.reference);
+
+  @override
+  String toString() => "QueryRecord<$title:$duration:$imageLink:$ingredients>";
 }

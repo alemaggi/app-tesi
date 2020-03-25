@@ -1,4 +1,3 @@
-import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Profile/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -109,8 +108,8 @@ class _ProfileState extends State<Profile> {
                   Container(
                     margin: EdgeInsets.only(
                         bottom: MediaQuery.of(context).size.width * 0.05),
-                    width: MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.width * 0.5,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.width * 0.4,
                     child: CircleAvatar(
                       backgroundImage: NetworkImage(_url),
                     ),
