@@ -27,12 +27,15 @@ class _HomepageState extends State<Homepage> {
   final _addFoodToFridgeKey = GlobalKey<FormState>();
   String _nomeAlimentoDaAggiungereAlF;
   var user;
+  List<dynamic> favoriteRecipes;
   List<dynamic> ingredients;
   List<String> _listOfIngredientsToAdd = [];
   final TextEditingController _controller = new TextEditingController();
   bool isLoaded = false;
 
   List<dynamic> recipes;
+  List<dynamic> allergens;
+  bool showRecipeWithAllergens;
 
   _getUserFridge() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -46,7 +49,31 @@ class _HomepageState extends State<Homepage> {
           print(user.email);
           setState(() {
             ingredients = data.documents[0].data['myFridge'];
+            allergens = data.documents[0].data['allergens'];
+            showRecipeWithAllergens =
+                data.documents[0].data['showRecipeWithAllergens'];
             print(ingredients);
+            print(allergens);
+            isLoaded = true;
+          });
+        }
+      },
+    );
+  }
+
+  _getUserInfo() async {
+    user = await FirebaseAuth.instance.currentUser();
+    var userQuery = Firestore.instance
+        .collection('users')
+        .where('email', isEqualTo: user.email)
+        .limit(1);
+    userQuery.getDocuments().then(
+      (data) {
+        if (data.documents.length > 0) {
+          print(user.email);
+          setState(() {
+            favoriteRecipes = data.documents[0].data['favoriteRecipes'];
+            print("Preferiti: " + favoriteRecipes.toString());
             isLoaded = true;
           });
         }
@@ -57,6 +84,7 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _getUserFridge();
+    _getUserInfo();
     super.initState();
   }
 
@@ -70,6 +98,33 @@ class _HomepageState extends State<Homepage> {
     }
     print("Posso fare sta ricetta");
     return true;
+  }
+
+  bool checkIfRecipeContainsAllergens(
+      List<dynamic> userAllergenes, List<dynamic> recipeIngredients) {
+    for (var i = 0; i < recipeIngredients.length; i++) {
+      if (userAllergenes.contains(recipeIngredients[i])) {
+        print("Non posso fare sta ricetta senza morire");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool checkIfRecipeCanBeOutputted(List<dynamic> userIngredients,
+      List<dynamic> recipeIngredients, List<dynamic> userAllergenes) {
+    if (showRecipeWithAllergens == true) {
+      return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
+    }
+    //Se non voglio vedere le ricette che mi farebbero morire
+    else {
+      //Controllo se sta ricetta la posso fare senza morire
+      if (checkIfRecipeContainsAllergens(allergens, recipeIngredients)) {
+        //Se posso farla senza morire guardo se ho gli ingredienti per farla
+        return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
+      } else
+        return false;
+    }
   }
 
   //Display delle ricette
@@ -97,7 +152,8 @@ class _HomepageState extends State<Homepage> {
     final queryRecord = QueryRecord.fromSnapshot(data);
     String documnetId = data.documentID;
 
-    return (checkIfRecipeIsDoable(ingredients, queryRecord.ingredients))
+    return checkIfRecipeCanBeOutputted(
+            ingredients, queryRecord.ingredients, allergens)
         ? Container(
             child: Column(
               children: <Widget>[
@@ -173,6 +229,42 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ],
                           ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.favorite,
+                              color: (favoriteRecipes.contains(documnetId))
+                                  ? Colors.red
+                                  : Color.fromRGBO(230, 219, 221, 100),
+                              size: 30,
+                            ),
+                            onPressed: (favoriteRecipes.contains(documnetId))
+                                ? () async {
+                                    var list = List<String>();
+                                    list.add(documnetId);
+                                    final db = Firestore.instance;
+                                    await db
+                                        .collection('users')
+                                        .document(user.uid)
+                                        .updateData({
+                                      "favoriteRecipes":
+                                          FieldValue.arrayRemove(list)
+                                    });
+                                    initState(); //TODO: Soluzione brutta e temporanea
+                                  }
+                                : () async {
+                                    var list = List<String>();
+                                    list.add(documnetId);
+                                    final db = Firestore.instance;
+                                    await db
+                                        .collection('users')
+                                        .document(user.uid)
+                                        .updateData({
+                                      "favoriteRecipes":
+                                          FieldValue.arrayUnion(list)
+                                    });
+                                    initState(); //TODO: Soluzione brutta e temporanea
+                                  },
+                          ),
                         ],
                       ),
                       Row(
@@ -188,7 +280,7 @@ class _HomepageState extends State<Homepage> {
                                     builder: (context) => SingleRecipe(
                                       documentId: documnetId,
                                       title: queryRecord.title,
-                                      favoriteRecipes: null,
+                                      favoriteRecipes: favoriteRecipes,
                                     ),
                                   ),
                                 );
@@ -249,193 +341,207 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
+  Future<void> _refreshRecipes() async {
+    initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildBar(context),
       drawer: NavDrawer(),
-      body: ExpandableCardPage(
-        page: isLoaded
-            ? Container(
-                child: _buildBody(context),
-              )
-            : CircularProgressIndicator(
-                strokeWidth: 6.0,
-                valueColor: AlwaysStoppedAnimation(Colors.transparent),
-                value: 0,
-              ),
-        expandableCard: ExpandableCard(
-          backgroundColor: Color.fromRGBO(255, 0, 87, 1),
-          minHeight: MediaQuery.of(context).size.height * 0.18,
-          maxHeight: MediaQuery.of(context).size.height * 0.7,
-          hasRoundedCorners: true,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).size.width * 0.01),
-                  child: Text(
-                    "Aggiungi elementi al tuo frigo",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+      body: RefreshIndicator(
+        onRefresh: _refreshRecipes,
+        child: ExpandableCardPage(
+          page: isLoaded
+              ? Container(
+                  child: _buildBody(context),
+                )
+              : CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  valueColor: AlwaysStoppedAnimation(Colors.transparent),
+                  value: 0,
+                ),
+          expandableCard: ExpandableCard(
+            backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+            minHeight: MediaQuery.of(context).size.height * 0.18,
+            maxHeight: MediaQuery.of(context).size.height * 0.7,
+            hasRoundedCorners: true,
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.width * 0.01),
+                    child: Text(
+                      "Aggiungi elementi al tuo frigo",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
-                  height: 95,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _listOfIngredientsToAdd.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          child: Card(
-                            color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(left: 15),
-                                  child: Center(
-                                      child: Text(
-                                    _listOfIngredientsToAdd[index].toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 26.0),
-                                  )),
-                                ),
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _listOfIngredientsToAdd.removeAt(index);
-                                      });
-                                    }),
-                              ],
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-                Form(
-                  key: _addFoodToFridgeKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: _controller,
-                        decoration: InputDecoration(
-                          hintText: "Alimento da aggiungere",
-                          hintStyle:
-                              TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        validator: (val) =>
-                            val.isEmpty ? 'Inserisci un alimento' : null,
-                        onChanged: (val) {
-                          setState(() {
-                            _nomeAlimentoDaAggiungereAlF = val;
-                          });
-                        },
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.12,
-                        child: FlatButton(
-                          onPressed: () {
-                            if (_addFoodToFridgeKey.currentState.validate()) {
-                              setState(() {
-                                _listOfIngredientsToAdd
-                                    .add(_nomeAlimentoDaAggiungereAlF);
-                                _controller.clear();
-                              });
-                            }
-                          },
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(10.0),
-                            side: BorderSide(
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                              width: 3,
-                            ),
-                          ),
-                          child: Text(
-                            "Add Element To List",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                            ),
-                          ),
-                        ),
-                      ),
-                      (_listOfIngredientsToAdd.isNotEmpty)
-                          ? Container(
-                              margin: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.width * 0.1,
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.width * 0.12,
-                              child: FlatButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: new BorderRadius.circular(10.0),
-                                  side: BorderSide(
-                                    color: Color.fromRGBO(255, 0, 87, 1),
-                                    width: 3,
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+                    height: 95,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _listOfIngredientsToAdd.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            child: Card(
+                              color: Colors.transparent,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(left: 15),
+                                    child: Center(
+                                        child: Text(
+                                      _listOfIngredientsToAdd[index].toString(),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 26.0),
+                                    )),
                                   ),
-                                ),
-                                color: Colors.white,
-                                onPressed: () async {
-                                  if (_listOfIngredientsToAdd.isNotEmpty) {
-                                    var list = List<String>();
-
-                                    List<String> output = Iterable.generate(
-                                            math.max(list.length,
-                                                _listOfIngredientsToAdd.length))
-                                        .expand((i) sync* {
-                                      if (i < list.length) yield list[i];
-                                      if (i < _listOfIngredientsToAdd.length)
-                                        yield _listOfIngredientsToAdd[i];
-                                    }).toList();
-                                    print(output);
-                                    Firestore.instance
-                                        .collection('users')
-                                        .document(user.uid)
-                                        .updateData({
-                                      "myFridge": FieldValue.arrayUnion(output)
-                                    });
-                                    setState(() {
-                                      _listOfIngredientsToAdd.clear();
-                                    });
-
-                                    //TODO: Far chiudere la card quando viene premuto il bottone
-                                  }
-                                },
-                                child: Text(
-                                  "Submit",
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                    color: Color.fromRGBO(255, 0, 87, 1),
-                                  ),
-                                ),
+                                  IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          _listOfIngredientsToAdd
+                                              .removeAt(index);
+                                        });
+                                      }),
+                                ],
                               ),
-                            )
-                          : Container(
-                              height: 0,
                             ),
-                    ],
+                          );
+                        }),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  Form(
+                    key: _addFoodToFridgeKey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          keyboardType: TextInputType.text,
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            hintText: "Alimento da aggiungere",
+                            hintStyle:
+                                TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                          validator: (val) =>
+                              val.isEmpty ? 'Inserisci un alimento' : null,
+                          onChanged: (val) {
+                            setState(() {
+                              _nomeAlimentoDaAggiungereAlF = val;
+                            });
+                          },
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.width * 0.1,
+                          ),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width * 0.12,
+                          child: FlatButton(
+                            onPressed: () {
+                              if (_addFoodToFridgeKey.currentState.validate()) {
+                                setState(() {
+                                  _listOfIngredientsToAdd
+                                      .add(_nomeAlimentoDaAggiungereAlF);
+                                  _controller.clear();
+                                });
+                              }
+                            },
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Color.fromRGBO(255, 0, 87, 1),
+                                width: 3,
+                              ),
+                            ),
+                            child: Text(
+                              "Add Element To List",
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Color.fromRGBO(255, 0, 87, 1),
+                              ),
+                            ),
+                          ),
+                        ),
+                        (_listOfIngredientsToAdd.isNotEmpty)
+                            ? Container(
+                                margin: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.width * 0.1,
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.12,
+                                child: FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.0),
+                                    side: BorderSide(
+                                      color: Color.fromRGBO(255, 0, 87, 1),
+                                      width: 3,
+                                    ),
+                                  ),
+                                  color: Colors.white,
+                                  onPressed: () async {
+                                    if (_listOfIngredientsToAdd.isNotEmpty) {
+                                      var list = List<String>();
+
+                                      List<String> output = Iterable.generate(
+                                              math.max(
+                                                  list.length,
+                                                  _listOfIngredientsToAdd
+                                                      .length))
+                                          .expand((i) sync* {
+                                        if (i < list.length) yield list[i];
+                                        if (i < _listOfIngredientsToAdd.length)
+                                          yield _listOfIngredientsToAdd[i];
+                                      }).toList();
+                                      print(output);
+                                      Firestore.instance
+                                          .collection('users')
+                                          .document(user.uid)
+                                          .updateData({
+                                        "myFridge":
+                                            FieldValue.arrayUnion(output)
+                                      });
+                                      setState(() {
+                                        _listOfIngredientsToAdd.clear();
+                                      });
+
+                                      //TODO: Far chiudere la card quando viene premuto il bottone
+                                    }
+                                  },
+                                  child: Text(
+                                    "Submit",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: Color.fromRGBO(255, 0, 87, 1),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 0,
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -505,6 +611,27 @@ class _NavDrawerState extends State<NavDrawer> {
                     _name + " " + _surname,
                   ),
                   accountEmail: Text(_email),
+                ),
+                ListTile(
+                  title: Text("Home"),
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return Homepage();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    ),
+                  },
                 ),
                 ListTile(
                   title: Text('Profile'),
