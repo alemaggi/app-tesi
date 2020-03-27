@@ -2,6 +2,7 @@ import 'package:app_tesi/Profile/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math' as math;
 
 class Profile extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class _ProfileState extends State<Profile> {
   final _addAllergensKey = GlobalKey<FormState>();
   List<String> _listOfAllergensToAdd = [];
   String _allergenName;
+  final TextEditingController _controller = new TextEditingController();
 
   _getUserInfo() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -53,93 +55,8 @@ class _ProfileState extends State<Profile> {
     super.initState();
   }
 
-  //Widget to add allergens to the list
-  Widget _buildAddAllergenesDialog(BuildContext context) {
-    return new AlertDialog(
-      title: const Text('Inserisci i tuoi allergeni'),
-      content: new Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Form(
-            key: _addAllergensKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: null, //TODO: FARLO
-                  decoration: InputDecoration(
-                    hintText: "Alimento da aggiungere",
-                    hintStyle: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  validator: (val) =>
-                      val.isEmpty ? 'Inserisci un alimento' : null,
-                  onChanged: (val) {
-                    setState(() {
-                      _allergenName = val;
-                    });
-                  },
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.width * 0.1,
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.width * 0.12,
-                  child: FlatButton(
-                    onPressed: () {},
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(10.0),
-                      side: BorderSide(
-                        color: Color.fromRGBO(255, 0, 87, 1),
-                        width: 3,
-                      ),
-                    ),
-                    child: Text(
-                      "Add Element To List",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Color.fromRGBO(255, 0, 87, 1),
-                      ),
-                    ),
-                  ),
-                ),
-                (_listOfAllergensToAdd.isNotEmpty)
-                    ? Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.12,
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(10.0),
-                            side: BorderSide(
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                              width: 3,
-                            ),
-                          ),
-                          color: Colors.white,
-                          onPressed: () {},
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 0,
-                      ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  Future<void> _refreshRecipes() async {
+    initState();
   }
 
   @override
@@ -269,72 +186,75 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   Center(
-                    child: Container(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      child: ListView.builder(
-                        itemCount: _allergens.length,
-                        itemBuilder: (BuildContext ctxt, int index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Container(
-                              decoration: new BoxDecoration(
-                                borderRadius: new BorderRadius.only(
-                                  topLeft: const Radius.circular(10.0),
-                                  topRight: const Radius.circular(10.0),
-                                  bottomLeft: const Radius.circular(10.0),
-                                  bottomRight: const Radius.circular(10.0),
+                    child: RefreshIndicator(
+                      onRefresh: _refreshRecipes,
+                      child: Container(
+                        height: 300,
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: ListView.builder(
+                          itemCount: _allergens.length,
+                          itemBuilder: (BuildContext ctxt, int index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                decoration: new BoxDecoration(
+                                  borderRadius: new BorderRadius.only(
+                                    topLeft: const Radius.circular(10.0),
+                                    topRight: const Radius.circular(10.0),
+                                    bottomLeft: const Radius.circular(10.0),
+                                    bottomRight: const Radius.circular(10.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Color.fromRGBO(0, 0, 0, 200),
+                                      blurRadius:
+                                          5.0, // has the effect of softening the shadow
+                                      spreadRadius:
+                                          0.5, // has the effect of extending the shadow
+                                      offset: Offset(
+                                        2.0, // horizontal, move right 10
+                                        2.0, // vertical, move down 10
+                                      ),
+                                    ),
+                                  ],
+                                  color: Colors.white,
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromRGBO(0, 0, 0, 200),
-                                    blurRadius:
-                                        5.0, // has the effect of softening the shadow
-                                    spreadRadius:
-                                        0.5, // has the effect of extending the shadow
-                                    offset: Offset(
-                                      2.0, // horizontal, move right 10
-                                      2.0, // vertical, move down 10
+                                margin: EdgeInsets.only(top: 5, bottom: 5),
+                                padding: EdgeInsets.all(5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        _allergens[index],
+                                        style: TextStyle(fontSize: 22),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                                color: Colors.white,
+                                    IconButton(
+                                      icon: Icon(Icons.delete),
+                                      color: Colors.red,
+                                      onPressed: () async {
+                                        var list = List<String>();
+                                        list.add(_allergens[index]);
+                                        final db = Firestore.instance;
+                                        await db
+                                            .collection('users')
+                                            .document(user.uid)
+                                            .updateData({
+                                          "allergens":
+                                              FieldValue.arrayRemove(list)
+                                        });
+                                        initState(); //TODO: Soluzione brutta e temporanea
+                                      },
+                                    )
+                                  ],
+                                ),
                               ),
-                              margin: EdgeInsets.only(top: 5, bottom: 5),
-                              padding: EdgeInsets.all(5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(left: 10),
-                                    child: Text(
-                                      _allergens[index],
-                                      style: TextStyle(fontSize: 22),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    color: Colors.red,
-                                    onPressed: () async {
-                                      var list = List<String>();
-                                      list.add(_allergens[index]);
-                                      final db = Firestore.instance;
-                                      await db
-                                          .collection('users')
-                                          .document(user.uid)
-                                          .updateData({
-                                        "allergens":
-                                            FieldValue.arrayRemove(list)
-                                      });
-                                      initState(); //TODO: Soluzione brutta e temporanea
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -351,11 +271,10 @@ class _ProfileState extends State<Profile> {
               ),
               onPressed: () {
                 showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      _buildAddAllergenesDialog(context),
-                );
-                // Perform some action
+                    context: context,
+                    builder: (_) {
+                      return MyDialog();
+                    });
               },
             ),
           )
@@ -369,5 +288,179 @@ class _ProfileState extends State<Profile> {
               value: 0,
             ),
           );
+  }
+}
+
+class MyDialog extends StatefulWidget {
+  @override
+  _MyDialogState createState() => new _MyDialogState();
+}
+
+class _MyDialogState extends State<MyDialog> {
+  final _addAllergensKey = GlobalKey<FormState>();
+  List<String> _listOfAllergensToAdd = [];
+  String _allergenName;
+  final TextEditingController _controller = new TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Aggiungi Allergeni',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      content: Column(
+        children: <Widget>[
+          Container(
+            width: double.maxFinite,
+            height: 45.0,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: _listOfAllergensToAdd.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 30,
+                  child: Card(
+                    color: Colors.transparent,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: Center(
+                              child: Text(
+                            _listOfAllergensToAdd[index].toString(),
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 26.0),
+                          )),
+                        ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _listOfAllergensToAdd.removeAt(index);
+                              });
+                            }),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Form(
+            key: _addAllergensKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: _controller,
+                  decoration: InputDecoration(
+                    hintText: "Alimento da aggiungere",
+                    hintStyle: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  validator: (val) =>
+                      val.isEmpty ? 'Inserisci un alimento' : null,
+                  onChanged: (val) {
+                    setState(() {
+                      _allergenName = val;
+                    });
+                  },
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.width * 0.1,
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.width * 0.12,
+                  child: FlatButton(
+                    onPressed: () {
+                      if (_addAllergensKey.currentState.validate()) {
+                        setState(() {
+                          _listOfAllergensToAdd.add(_allergenName);
+                          _controller.clear();
+                        });
+                      }
+                    },
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: new BorderRadius.circular(10.0),
+                      side: BorderSide(
+                        color: Color.fromRGBO(255, 0, 87, 1),
+                        width: 3,
+                      ),
+                    ),
+                    child: Text(
+                      "Add Element To List",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Color.fromRGBO(255, 0, 87, 1),
+                      ),
+                    ),
+                  ),
+                ),
+                (_listOfAllergensToAdd.isNotEmpty)
+                    ? Container(
+                        margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        height: MediaQuery.of(context).size.width * 0.12,
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(10.0),
+                            side: BorderSide(
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                              width: 3,
+                            ),
+                          ),
+                          color: Colors.white,
+                          onPressed: () async {
+                            if (_listOfAllergensToAdd.isNotEmpty) {
+                              var list = List<String>();
+                              var user =
+                                  await FirebaseAuth.instance.currentUser();
+                              List<String> output = Iterable.generate(math.max(
+                                      list.length,
+                                      _listOfAllergensToAdd.length))
+                                  .expand((i) sync* {
+                                if (i < list.length) yield list[i];
+                                if (i < _listOfAllergensToAdd.length)
+                                  yield _listOfAllergensToAdd[i];
+                              }).toList();
+                              print(output);
+                              Firestore.instance
+                                  .collection('users')
+                                  .document(user.uid)
+                                  .updateData({
+                                "allergens": FieldValue.arrayUnion(output)
+                              });
+                              setState(() {
+                                _listOfAllergensToAdd.clear();
+                              });
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              fontSize: 24,
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 0,
+                      ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
