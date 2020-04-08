@@ -2,6 +2,7 @@ import 'package:app_tesi/Wrapper/wrapperForIngredientsOrRecipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class SingleRecipe extends StatefulWidget {
   final String documentId;
@@ -59,6 +60,15 @@ class _SingleRecipeState extends State<SingleRecipe> {
     super.initState();
   }
 
+  void share(BuildContext context, String link) {
+    final RenderBox box = context.findRenderObject();
+    final String text = "${link}";
+
+    Share.share(text,
+        subject: "Prova questa ricetta",
+        sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +95,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
                         _title,
@@ -92,7 +103,15 @@ class _SingleRecipeState extends State<SingleRecipe> {
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
                         ),
-                      )
+                      ),
+                      IconButton(
+                          icon: Icon(
+                            Icons.share,
+                            size: 28,
+                          ),
+                          onPressed: () {
+                            share(context, _imageLink);
+                          }),
                     ],
                   ),
                   Container(
@@ -125,7 +144,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                           _duration + " minuti",
                           style: TextStyle(
                               fontSize: 26, fontWeight: FontWeight.w600),
-                        )
+                        ),
                       ],
                     ),
                   ),

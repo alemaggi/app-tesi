@@ -31,11 +31,33 @@ def estrapola_a_class(source):
             a = div.find('a').attrs['href']
             recipeLinks.append(a)
             
+#Prendo le calorie di ogni ricetta
+def estrapola_calorie(source):
+    soup = BeautifulSoup(source, 'html.parser')
+    div_list = soup.find_all("div", class_='gz-text-calories-total')
+    if div_list:
+        for span in div_list:
+            s = span.find('span').get_text()
+            return s
+
+#Prendo altre informazioni per ogni ricetta
+def estrapola_informazioni(source):
+    soup = BeautifulSoup(source, 'html.parser')
+    div_list = soup.find_all("div", class_="gz-list-featured-data")
+    span_list = soup.find_all("span", class_='gz-name-featured-data')
+    if span_list:
+        informazioni = []
+        for span in span_list:
+            s = span.find('strong').get_text()
+            informazioni.append(s)
+        return informazioni
+
 
 #scraping di tuttle pagine
 for page_link in urlList:
     source = estrapola_source(page_link)
     estrapola_a_class(source)
+    
 
 print("------------------------------------------------------------------------------------------")
 
@@ -44,14 +66,18 @@ data = {}
 data['ricette'] = []
 for link in recipeLinks:
     scraper = scrape_me(link)
+    info = estrapola_informazioni(estrapola_source(link))
     data['ricette'].append({
         'title': scraper.title(),
         'duration' : scraper.total_time(),
         'type': 'Antipasto',
+        'calories': estrapola_calorie(estrapola_source(link)),
+        'difficulty': info[0],
+        'doses': info[3],
         'ingredients': [scraper.ingredients()],
         'prepration': [scraper.instructions()],
         'imageLink': scraper.image(),
     })
 
-with open('data.txt', 'w') as outfile:
+with open('data.json', 'w') as outfile:
     json.dump(data, outfile, indent=4)

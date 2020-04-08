@@ -2,6 +2,8 @@ import 'package:app_tesi/Login/login.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class Signup extends StatefulWidget {
   @override
@@ -19,6 +21,9 @@ class _SignupState extends State<Signup> {
         'profilePicUrl':
             'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
         'myFridge': [],
+        'allergens': [],
+        'favoriteRecipes': [],
+        'showRecipeWithAllergens': false,
       });
     });
   }
@@ -26,7 +31,6 @@ class _SignupState extends State<Signup> {
   final _signupFormKey = GlobalKey<FormState>();
   //Per autenticazione
   final AuthService _auth = AuthService();
-
   String _email;
   String _password;
   String _confirmPassword;
@@ -156,6 +160,7 @@ class _SignupState extends State<Signup> {
                       });
                     } else {
                       _setNewUserIntoFirestore(_email, result.uid);
+                      send_mail();
                     }
                   } else {
                     print("Le password non metchano");
@@ -197,5 +202,35 @@ class _SignupState extends State<Signup> {
         ],
       ),
     );
+  }
+
+//Funzione send_mail quando uno si registra:
+  void send_mail() async {
+    String username = "sauceforyou2019@gmail.com"; //Your Email;
+    String password = "spinaxomis"; //Your Email's password;
+
+    final smtpServer = gmail(username, password);
+    // Creating the Gmail server
+
+    // Create our email message.
+    final message = Message()
+      ..from = Address(username)
+      ..recipients.add(_email) //recipent email
+      ..subject = 'Benvenuto nel nostro servizio' //subject of the email
+      ..text =
+          'Ti ringraziamo di aver scelto di iscriverti alla nostra applicazione, di seguito troverai un riepilogo dei dati inseriti: \n\nemail: ' +
+              _email +
+              ' \npassword: ' +
+              _password; //body of the email
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' +
+          sendReport.toString()); //print if the email is sent
+    } on MailerException catch (e) {
+      print('Message not sent. \n' +
+          e.toString()); //print if the email is not sent
+      // e.toString() will show why the email is not sending
+    }
   }
 }
