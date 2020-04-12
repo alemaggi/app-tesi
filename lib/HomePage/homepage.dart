@@ -7,7 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable_card/expandable_card.dart';
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'dart:math' as math;
+import 'food.dart';
 
 import 'package:dio/dio.dart';
 
@@ -17,6 +19,9 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  AutoCompleteTextField searchTextField;
+  TextEditingController controller = new TextEditingController();
+  GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
   String _searchText = "";
@@ -30,7 +35,6 @@ class _HomepageState extends State<Homepage> {
   List<dynamic> favoriteRecipes;
   List<dynamic> ingredients;
   List<String> _listOfIngredientsToAdd = [];
-  final TextEditingController _controller = new TextEditingController();
   bool isLoaded = false;
 
   List<dynamic> recipes;
@@ -423,26 +427,55 @@ class _HomepageState extends State<Homepage> {
                           );
                         }),
                   ),
-                  Form(
+                  Container(
                     key: _addFoodToFridgeKey,
                     child: Column(
                       children: <Widget>[
-                        TextFormField(
-                          keyboardType: TextInputType.text,
-                          controller: _controller,
-                          decoration: InputDecoration(
-                            hintText: "Alimento da aggiungere",
-                            hintStyle:
-                                TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                          validator: (val) =>
-                              val.isEmpty ? 'Inserisci un alimento' : null,
-                          onChanged: (val) {
-                            setState(() {
-                              _nomeAlimentoDaAggiungereAlF = val;
-                            });
-                          },
-                        ),
+                        new Column(children: <Widget>[
+                          searchTextField = AutoCompleteTextField<Alimento>(
+                            style: new TextStyle(
+                                color: Colors.black, fontSize: 16.0),
+                            submitOnSuggestionTap: true,
+                            controller: controller,
+                            decoration: new InputDecoration(
+                                suffixIcon: Container(
+                                  width: 85.0,
+                                  height: 60.0,
+                                ),
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                                filled: true,
+                                hintText: 'Inserisci un alimento'),
+                            itemBuilder: (context, item) {
+                              return Row(
+                                children: <Widget>[
+                                  Text(
+                                    item.nome,
+                                    style: TextStyle(fontSize: 16.0),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.all(15.0),
+                                  ),
+                                ],
+                              );
+                            },
+                            itemFilter: (item, query) {
+                              return item.nome
+                                  .toLowerCase()
+                                  .startsWith(query.toLowerCase());
+                            },
+                            itemSorter: (a, b) {
+                              return a.nome.compareTo(b.nome);
+                            },
+                            itemSubmitted: (item) {
+                              setState(() => searchTextField
+                                  .textField.controller.text = item.nome);
+                            },
+                            key: key,
+                            suggestions: foodList,
+                            clearOnSubmit: false,
+                          )
+                        ]),
                         Container(
                           margin: EdgeInsets.only(
                             top: MediaQuery.of(context).size.width * 0.1,
@@ -451,12 +484,22 @@ class _HomepageState extends State<Homepage> {
                           height: MediaQuery.of(context).size.width * 0.12,
                           child: FlatButton(
                             onPressed: () {
-                              if (_addFoodToFridgeKey.currentState.validate()) {
-                                setState(() {
-                                  _listOfIngredientsToAdd
-                                      .add(_nomeAlimentoDaAggiungereAlF);
-                                  _controller.clear();
-                                });
+                              if (ingrCheckList.isEmpty) {
+                                loadElementstoCheckList();
+                              }
+                              if (searchTextField
+                                  .textField.controller.text.isNotEmpty) {
+                                String s =
+                                    searchTextField.textField.controller.text;
+                                s = s[0].toUpperCase() + s.substring(1);
+                                if (ingrCheckList.contains(s)) {
+                                  _nomeAlimentoDaAggiungereAlF = s;
+                                  setState(() {
+                                    _listOfIngredientsToAdd
+                                        .add(_nomeAlimentoDaAggiungereAlF);
+                                    controller.clear();
+                                  });
+                                }
                               }
                             },
                             color: Colors.white,
@@ -509,6 +552,7 @@ class _HomepageState extends State<Homepage> {
                                           yield _listOfIngredientsToAdd[i];
                                       }).toList();
                                       print(output);
+                                      print(user.uid);
                                       Firestore.instance
                                           .collection('users')
                                           .document(user.uid)
@@ -519,7 +563,6 @@ class _HomepageState extends State<Homepage> {
                                       setState(() {
                                         _listOfIngredientsToAdd.clear();
                                       });
-
                                       //TODO: Far chiudere la card quando viene premuto il bottone
                                     }
                                   },
@@ -732,4 +775,27 @@ class QueryRecord {
 
   @override
   String toString() => "QueryRecord<$title:$duration:$imageLink:$ingredients>";
+}
+
+class AutoComplete extends StatefulWidget {
+  @override
+  _AutoCompleteState createState() => new _AutoCompleteState();
+}
+
+class _AutoCompleteState extends State<AutoComplete> {
+  _AutoCompleteState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Auto Complete List Demo'),
+        ),
+        body: new Center(
+            child: new Column(children: <Widget>[
+          new Column(children: <Widget>[
+            //AutoCompleteTextField code here
+          ]),
+        ])));
+  }
 }
