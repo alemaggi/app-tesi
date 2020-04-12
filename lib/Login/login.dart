@@ -30,6 +30,8 @@ class _LoginState extends State<Login> {
             'profilePicUrl':
                 'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
             'myFridge': [],
+            'allegens': [],
+            'showRecipeWithAllergens': true,
           });
         });
       } else {
@@ -50,6 +52,8 @@ class _LoginState extends State<Login> {
   String _password;
   String error;
 
+  bool showPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -69,207 +73,219 @@ class _LoginState extends State<Login> {
                 ),
               ),
               child: isLogin
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.05,
-                              bottom: MediaQuery.of(context).size.width * 0.02),
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "Welcome",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
+                  ? SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.width * 0.05,
+                                bottom:
+                                    MediaQuery.of(context).size.width * 0.02),
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  controller:
-                                      null, //TODO: Fare controller in caso sera se no togliere
-                                  decoration: InputDecoration(
-                                    hintText: "Email",
-                                    prefixIcon: Icon(Icons.email),
+                                Text(
+                                  "Welcome",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  validator: (val) =>
-                                      val.isEmpty ? 'Enter an email' : null,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _email = val;
-                                    });
-                                  },
-                                ),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                ),
-                                TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  controller:
-                                      null, //TODO: Fare controller in caso sera se no togliere
-                                  obscureText: true,
-                                  decoration: InputDecoration(
-                                    hintText: "Password",
-                                    prefixIcon: Icon(Icons.lock),
-                                  ),
-                                  validator: (val) => val.length < 6
-                                      ? 'Enter a valid password'
-                                      : null,
-                                  onChanged: (val) {
-                                    setState(() {
-                                      _password = val;
-                                    });
-                                  },
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.width * 0.12,
-                          margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width * 0.1,
-                          ),
-                          child: FlatButton(
-                            child: Text(
-                              "Sign In",
-                              style: TextStyle(
-                                  color: Color.fromRGBO(255, 0, 87, 1),
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                dynamic result =
-                                    await _auth.signinWithEmailAndPassword(
-                                        _email, _password);
-                                if (result == null) {
-                                  setState(() {
-                                    error =
-                                        'Could not signin with those credential';
-                                  });
-                                }
-                              }
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                color: Color.fromRGBO(255, 0, 87, 1),
-                                width: 3,
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  TextFormField(
+                                    keyboardType: TextInputType.emailAddress,
+                                    controller:
+                                        null, //TODO: Fare controller in caso sera se no togliere
+                                    decoration: InputDecoration(
+                                      hintText: "Email",
+                                      prefixIcon: Icon(Icons.email),
+                                    ),
+                                    validator: (val) =>
+                                        val.isEmpty ? 'Enter an email' : null,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _email = val;
+                                      });
+                                    },
+                                  ),
+                                  Container(
+                                    height: MediaQuery.of(context).size.width *
+                                        0.05,
+                                  ),
+                                  TextFormField(
+                                    keyboardType: TextInputType.text,
+                                    controller:
+                                        null, //TODO: Fare controller in caso sera se no togliere
+                                    obscureText: showPassword ? false : true,
+                                    decoration: InputDecoration(
+                                      suffixIcon: IconButton(
+                                          icon: showPassword
+                                              ? Icon(Icons.visibility_off)
+                                              : Icon(Icons.remove_red_eye),
+                                          onPressed: () {
+                                            setState(() {
+                                              showPassword = !showPassword;
+                                            });
+                                          }),
+                                      hintText: "Password",
+                                      prefixIcon: Icon(Icons.lock),
+                                    ),
+                                    validator: (val) => val.length < 6
+                                        ? 'Enter a valid password'
+                                        : null,
+                                    onChanged: (val) {
+                                      setState(() {
+                                        _password = val;
+                                      });
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                        FlatButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ),
-                        Center(
-                          child: FlatButton.icon(
-                            label: Text('Login with\n' + 'Google'),
-                            onPressed: () async {
-                              dynamic result = await _auth.signInWithGoogle();
-                              if (result != null) {
-                                print("Signed in");
-                                print(result.uid);
-                                print(result.email);
-                                _setNewUserIntoFirestoreWhenUsingGoogleLogin(
-                                    result.email, result.uid);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage()),
-                                );
-                              } else {
-                                print("Error Sigin in with google");
-                              }
-                            },
-                            icon: FaIcon(
-                              FontAwesomeIcons.googlePlus,
-                              size: 32,
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            height: MediaQuery.of(context).size.width * 0.12,
+                            margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                            child: FlatButton(
+                              child: Text(
+                                "Sign In",
+                                style: TextStyle(
+                                    color: Color.fromRGBO(255, 0, 87, 1),
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  dynamic result =
+                                      await _auth.signinWithEmailAndPassword(
+                                          _email, _password);
+                                  if (result == null) {
+                                    setState(() {
+                                      error =
+                                          'Could not signin with those credential';
+                                    });
+                                  }
+                                }
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                                side: BorderSide(
+                                  color: Color.fromRGBO(255, 0, 87, 1),
+                                  width: 3,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.width * 0.12,
-                          margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width * 0.04,
-                          ),
-                          child: FlatButton(
-                            color: Color.fromRGBO(255, 0, 87, 1),
+                          FlatButton(
+                            onPressed: () {},
                             child: Text(
-                              "Create an Account",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                isLogin = false;
-                              });
-                            },
-                            shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(10.0),
+                              "Forgot Password?",
+                              style: TextStyle(color: Colors.grey),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.04),
-                          child: Text(
-                            "Or",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
+                          Center(
+                            child: FlatButton.icon(
+                              label: Text('Login with\n' + 'Google'),
+                              onPressed: () async {
+                                dynamic result = await _auth.signInWithGoogle();
+                                if (result != null) {
+                                  print("Signed in");
+                                  print("UID: " + result.uid);
+                                  print(result.email);
+                                  _setNewUserIntoFirestoreWhenUsingGoogleLogin(
+                                      result.email, result.uid);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage()),
+                                  );
+                                } else {
+                                  print("Error Sigin in with google");
+                                }
+                              },
+                              icon: FaIcon(
+                                FontAwesomeIcons.googlePlus,
+                                size: 32,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: FlatButton(
-                            onPressed: () async {
-                              dynamic result = await _auth.signInAnon();
-                              if (result != null) {
-                                print("Signed in");
-                                print(result.uid);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Homepage()),
-                                );
-                              } else {
-                                print("Error Sigin in anon");
-                              }
-                            },
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            height: MediaQuery.of(context).size.width * 0.12,
+                            margin: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.width * 0.04,
+                            ),
+                            child: FlatButton(
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                              child: Text(
+                                "Create an Account",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  isLogin = false;
+                                });
+                              },
+                              shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.width * 0.04),
                             child: Text(
-                              "Continue Without an Account",
+                              "Or",
                               style: TextStyle(
                                 color: Colors.grey,
-                                fontSize: 18,
+                                fontSize: 14,
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                          Container(
+                            child: FlatButton(
+                              onPressed: () async {
+                                dynamic result = await _auth.signInAnon();
+                                if (result != null) {
+                                  print("Signed in");
+                                  print(result.uid);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage()),
+                                  );
+                                } else {
+                                  print("Error Sigin in anon");
+                                }
+                              },
+                              child: Text(
+                                "Continue Without an Account",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     )
                   : Signup(),
             ),

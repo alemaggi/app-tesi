@@ -36,6 +36,9 @@ class _SignupState extends State<Signup> {
   String _confirmPassword;
   String error = "";
 
+  bool showPassword = false;
+  bool showConfirmPassword = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,7 +57,7 @@ class _SignupState extends State<Signup> {
           Container(
             margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.width * 0.1,
-                bottom: MediaQuery.of(context).size.width * 0.08),
+                bottom: MediaQuery.of(context).size.width * 0.05),
             width: MediaQuery.of(context).size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -77,7 +80,7 @@ class _SignupState extends State<Signup> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    keyboardType: TextInputType.text,
+                    keyboardType: TextInputType.emailAddress,
                     controller: null, //TODO: Fare controller
                     decoration: InputDecoration(
                       hintText: "Email",
@@ -99,6 +102,15 @@ class _SignupState extends State<Signup> {
                     controller: null, //TODO: Fare controller
                     obscureText: true,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          icon: showPassword
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            setState(() {
+                              showPassword = !showPassword;
+                            });
+                          }),
                       hintText: "Password",
                       prefixIcon: Icon(Icons.lock),
                     ),
@@ -118,6 +130,15 @@ class _SignupState extends State<Signup> {
                     controller: null, //TODO: Fare controller
                     obscureText: true,
                     decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          icon: showConfirmPassword
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.remove_red_eye),
+                          onPressed: () {
+                            setState(() {
+                              showConfirmPassword = !showConfirmPassword;
+                            });
+                          }),
                       hintText: "Confirm Password",
                       prefixIcon: Icon(Icons.lock),
                     ),
