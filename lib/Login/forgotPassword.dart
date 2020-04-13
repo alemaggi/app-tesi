@@ -103,7 +103,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   "Send",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 28,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold),
                 ),
                 onPressed: () async {
@@ -127,7 +127,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 "Go Back",
                 style: TextStyle(
                   color: Colors.grey,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
               ),
             ),

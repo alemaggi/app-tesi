@@ -61,44 +61,43 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    return isLoaded
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: Color.fromRGBO(255, 0, 87, 1),
-              title: Text(
-                "Profile",
-                style: TextStyle(fontSize: 24),
-              ),
-              leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.edit),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        pageBuilder: (context, animation1, animation2) {
-                          return EditProfile();
-                        },
-                        transitionsBuilder:
-                            (context, animation1, animation2, child) {
-                          return FadeTransition(
-                            opacity: animation1,
-                            child: child,
-                          );
-                        },
-                        transitionDuration: Duration(milliseconds: 20),
-                      ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+        title: Text(
+          "Profile",
+          style: TextStyle(fontSize: 24),
+        ),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation1, animation2) {
+                    return EditProfile();
+                  },
+                  transitionsBuilder: (context, animation1, animation2, child) {
+                    return FadeTransition(
+                      opacity: animation1,
+                      child: child,
                     );
                   },
-                )
-              ],
-            ),
-            body: Center(
+                  transitionDuration: Duration(milliseconds: 20),
+                ),
+              );
+            },
+          )
+        ],
+      ),
+      body: isLoaded
+          ? Center(
               child: Column(
                 children: <Widget>[
                   Container(
@@ -260,34 +259,37 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.white,
-              elevation: 6,
-              child: Icon(
-                Icons.add,
-                color: Color.fromRGBO(255, 0, 87, 1),
-                size: 36,
+            )
+          : Center(
+              child: Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  valueColor: AlwaysStoppedAnimation(
+                    Color.fromRGBO(255, 0, 87, 1),
+                  ),
+                ),
               ),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (_) {
-                      return MyDialog();
-                    });
-              },
             ),
-          )
-        : Container(
-            height: 20,
-            width: 20,
-            margin: EdgeInsets.all(5),
-            child: CircularProgressIndicator(
-              strokeWidth: 6.0,
-              valueColor: AlwaysStoppedAnimation(Colors.transparent),
-              value: 0,
-            ),
-          );
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        elevation: 6,
+        child: Icon(
+          Icons.add,
+          color: Color.fromRGBO(255, 0, 87, 1),
+          size: 36,
+        ),
+        onPressed: () {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return MyDialog();
+              });
+        },
+      ),
+    );
   }
 }
 

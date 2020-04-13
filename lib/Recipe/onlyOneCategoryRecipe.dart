@@ -170,6 +170,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
             padding: EdgeInsets.all(15),
             margin: EdgeInsets.only(top: 10),
             width: MediaQuery.of(context).size.width * 0.9,
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
             decoration: new BoxDecoration(
               borderRadius: new BorderRadius.only(
                 topLeft: const Radius.circular(10.0),
@@ -319,6 +320,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
             child: Column(
               children: <Widget>[
                 Container(
+                  constraints: BoxConstraints(minWidth: 100, maxWidth: 475),
                   padding: EdgeInsets.all(15),
                   margin: EdgeInsets.only(top: 10),
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -486,10 +488,18 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                                   : _buildBodyFavorite(context),
             ),
           )
-        : CircularProgressIndicator(
-            strokeWidth: 6.0,
-            valueColor: AlwaysStoppedAnimation(Colors.transparent),
-            value: 0,
+        : Center(
+            child: Container(
+              height: 100,
+              width: 100,
+              margin: EdgeInsets.all(5),
+              child: CircularProgressIndicator(
+                strokeWidth: 6.0,
+                valueColor: AlwaysStoppedAnimation(
+                  Color.fromRGBO(255, 0, 87, 1),
+                ),
+              ),
+            ),
           );
   }
 }

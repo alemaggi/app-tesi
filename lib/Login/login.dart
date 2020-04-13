@@ -172,7 +172,7 @@ class _LoginState extends State<Login> {
                                 "Sign In",
                                 style: TextStyle(
                                     color: Color.fromRGBO(255, 0, 87, 1),
-                                    fontSize: 28,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () async {
@@ -251,7 +251,7 @@ class _LoginState extends State<Login> {
                                 "Create an Account",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 28,
+                                    fontSize: 26,
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {

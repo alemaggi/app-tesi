@@ -121,9 +121,18 @@ class _MyFridgeState extends State<MyFridge> {
                 ),
               ),
             )
-          : CircularProgressIndicator(
-              strokeWidth: 6.0,
-              valueColor: AlwaysStoppedAnimation(Colors.transparent),
+          : Center(
+              child: Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  valueColor: AlwaysStoppedAnimation(
+                    Color.fromRGBO(255, 0, 87, 1),
+                  ),
+                ),
+              ),
             ),
     );
   }

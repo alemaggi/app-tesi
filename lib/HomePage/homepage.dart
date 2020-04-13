@@ -363,10 +363,18 @@ class _HomepageState extends State<Homepage> {
               ? Container(
                   child: _buildBody(context),
                 )
-              : CircularProgressIndicator(
-                  strokeWidth: 6.0,
-                  valueColor: AlwaysStoppedAnimation(Colors.transparent),
-                  value: 0,
+              : Center(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(5),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 6.0,
+                      valueColor: AlwaysStoppedAnimation(
+                        Color.fromRGBO(255, 0, 87, 1),
+                      ),
+                    ),
+                  ),
                 ),
           expandableCard: ExpandableCard(
             backgroundColor: Color.fromRGBO(255, 0, 87, 1),
@@ -381,103 +389,112 @@ class _HomepageState extends State<Homepage> {
                       "Aggiungi elementi al tuo frigo",
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                     padding:
                         EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
                     height: 95,
                     child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _listOfIngredientsToAdd.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            child: Card(
-                              color: Colors.transparent,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Container(
-                                    margin: EdgeInsets.only(left: 15),
-                                    child: Center(
-                                        child: Text(
-                                      _listOfIngredientsToAdd[index].toString(),
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 26.0),
-                                    )),
-                                  ),
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _listOfIngredientsToAdd
-                                              .removeAt(index);
-                                        });
-                                      }),
-                                ],
-                              ),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _listOfIngredientsToAdd.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          child: Card(
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(left: 15),
+                                  child: Center(
+                                      child: Text(
+                                    _listOfIngredientsToAdd[index].toString(),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 26.0),
+                                  )),
+                                ),
+                                IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _listOfIngredientsToAdd.removeAt(index);
+                                      });
+                                    }),
+                              ],
                             ),
-                          );
-                        }),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                   Container(
                     key: _addFoodToFridgeKey,
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 475),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        new Column(children: <Widget>[
-                          searchTextField = AutoCompleteTextField<Alimento>(
-                            suggestionsAmount: 4,
-                            style: new TextStyle(
-                                color: Colors.black, fontSize: 16.0),
-                            submitOnSuggestionTap: true,
-                            controller: controller,
-                            decoration: new InputDecoration(
-                                suffixIcon: Container(
-                                  width: 85.0,
-                                  height: 60.0,
-                                ),
+                        new Column(
+                          children: <Widget>[
+                            searchTextField = AutoCompleteTextField<Alimento>(
+                              suggestionsAmount: 4,
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.0,
+                              ),
+                              submitOnSuggestionTap: true,
+                              controller: controller,
+                              decoration: new InputDecoration(
                                 contentPadding:
-                                    EdgeInsets.fromLTRB(10.0, 30.0, 10.0, 20.0),
+                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 20.0),
                                 filled: true,
-                                hintText: 'Inserisci un alimento'),
-                            itemBuilder: (context, item) {
-                              return Row(
-                                children: <Widget>[
-                                  Text(
-                                    item.nome,
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(15.0),
-                                  ),
-                                ],
-                              );
-                            },
-                            itemFilter: (item, query) {
-                              return item.nome
-                                  .toLowerCase()
-                                  .startsWith(query.toLowerCase());
-                            },
-                            itemSorter: (a, b) {
-                              return a.nome.compareTo(b.nome);
-                            },
-                            itemSubmitted: (item) {
-                              setState(() => searchTextField
-                                  .textField.controller.text = item.nome);
-                            },
-                            key: key,
-                            suggestions: foodList,
-                            clearOnSubmit: false,
-                          )
-                        ]),
+                                hintText: 'Inserisci un alimento',
+                                hintStyle: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              itemBuilder: (context, item) {
+                                return Row(
+                                  children: <Widget>[
+                                    Text(
+                                      item.nome,
+                                      style: TextStyle(fontSize: 20.0),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(15.0),
+                                    ),
+                                  ],
+                                );
+                              },
+                              itemFilter: (item, query) {
+                                return item.nome
+                                    .toLowerCase()
+                                    .startsWith(query.toLowerCase());
+                              },
+                              itemSorter: (a, b) {
+                                return a.nome.compareTo(b.nome);
+                              },
+                              itemSubmitted: (item) {
+                                setState(() => searchTextField
+                                    .textField.controller.text = item.nome);
+                              },
+                              key: key,
+                              suggestions: foodList,
+                              clearOnSubmit: false,
+                            )
+                          ],
+                        ),
                         Container(
+                          constraints:
+                              BoxConstraints(minWidth: 100, maxWidth: 500),
                           margin: EdgeInsets.only(
                             top: MediaQuery.of(context).size.width * 0.1,
                           ),
@@ -522,6 +539,8 @@ class _HomepageState extends State<Homepage> {
                         ),
                         (_listOfIngredientsToAdd.isNotEmpty)
                             ? Container(
+                                constraints: BoxConstraints(
+                                    minWidth: 100, maxWidth: 500),
                                 margin: EdgeInsets.only(
                                   top: MediaQuery.of(context).size.width * 0.1,
                                 ),
@@ -607,6 +626,7 @@ class _NavDrawerState extends State<NavDrawer> {
   String _email;
   bool isLoaded = false;
   var user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   _getUserInfo() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -638,7 +658,6 @@ class _NavDrawerState extends State<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthService _auth = AuthService();
     return isLoaded
         ? Drawer(
             child: ListView(
@@ -743,16 +762,25 @@ class _NavDrawerState extends State<NavDrawer> {
                 ListTile(
                   title: Text('LogOut'),
                   onTap: () async {
-                    await _auth.signout();
+                    print("ESCO");
+                    _auth.signOut();
                   },
                 ),
               ],
             ),
           )
-        : CircularProgressIndicator(
-            value: null,
-            strokeWidth: 7.0,
-            valueColor: AlwaysStoppedAnimation(Colors.transparent),
+        : Center(
+            child: Container(
+              height: 100,
+              width: 100,
+              margin: EdgeInsets.all(5),
+              child: CircularProgressIndicator(
+                strokeWidth: 6.0,
+                valueColor: AlwaysStoppedAnimation(
+                  Color.fromRGBO(255, 0, 87, 1),
+                ),
+              ),
+            ),
           );
   }
 }

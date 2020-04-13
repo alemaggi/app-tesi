@@ -100,8 +100,7 @@ class _SignupState extends State<Signup> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
-                    controller: null, //TODO: Fare controller
-                    obscureText: true,
+                    obscureText: !showPassword,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                           icon: showPassword
@@ -128,8 +127,7 @@ class _SignupState extends State<Signup> {
                   ),
                   TextFormField(
                     keyboardType: TextInputType.text,
-                    controller: null, //TODO: Fare controller
-                    obscureText: true,
+                    obscureText: !showConfirmPassword,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
                           icon: showConfirmPassword
@@ -168,7 +166,7 @@ class _SignupState extends State<Signup> {
                 "Sign Up",
                 style: TextStyle(
                     color: Color.fromRGBO(255, 0, 87, 1),
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold),
               ),
               onPressed: () async {

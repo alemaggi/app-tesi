@@ -115,6 +115,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     ],
                   ),
                   Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                     margin: EdgeInsets.only(
                         top: MediaQuery.of(context).size.width * 0.02,
                         bottom: MediaQuery.of(context).size.width * 0.02),
@@ -129,6 +130,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     ),
                   ),
                   Container(
+                    constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                     margin: EdgeInsets.only(
                         top: MediaQuery.of(context).size.width * 0.03),
                     child: Row(
@@ -216,10 +218,18 @@ class _SingleRecipeState extends State<SingleRecipe> {
                 ],
               ),
             )
-          : CircularProgressIndicator(
-              strokeWidth: 6.0,
-              valueColor: AlwaysStoppedAnimation(Colors.transparent),
-              value: 0,
+          : Center(
+              child: Container(
+                height: 100,
+                width: 100,
+                margin: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  strokeWidth: 6.0,
+                  valueColor: AlwaysStoppedAnimation(
+                    Color.fromRGBO(255, 0, 87, 1),
+                  ),
+                ),
+              ),
             ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
