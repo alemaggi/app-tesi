@@ -75,6 +75,7 @@ class _SignupState extends State<Signup> {
           ),
           Container(
             width: MediaQuery.of(context).size.width * 0.8,
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
             child: Form(
               key: _signupFormKey,
               child: Column(
@@ -155,6 +156,8 @@ class _SignupState extends State<Signup> {
             ),
           ),
           Container(
+            constraints:
+                BoxConstraints(minWidth: 100, maxWidth: 500, maxHeight: 75),
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.width * 0.12,
             margin: EdgeInsets.only(
@@ -165,7 +168,7 @@ class _SignupState extends State<Signup> {
                 "Sign Up",
                 style: TextStyle(
                     color: Color.fromRGBO(255, 0, 87, 1),
-                    fontSize: 22,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold),
               ),
               onPressed: () async {

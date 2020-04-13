@@ -162,6 +162,7 @@ class _HomepageState extends State<Homepage> {
             child: Column(
               children: <Widget>[
                 Container(
+                  constraints: BoxConstraints(minWidth: 100, maxWidth: 475),
                   padding: EdgeInsets.all(15),
                   margin: EdgeInsets.only(top: 10),
                   width: MediaQuery.of(context).size.width * 0.9,
@@ -352,6 +353,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false, //SERVE ?
       appBar: _buildBar(context),
       drawer: NavDrawer(),
       body: RefreshIndicator(
@@ -369,14 +371,12 @@ class _HomepageState extends State<Homepage> {
           expandableCard: ExpandableCard(
             backgroundColor: Color.fromRGBO(255, 0, 87, 1),
             minHeight: MediaQuery.of(context).size.height * 0.18,
-            maxHeight: MediaQuery.of(context).size.height * 0.7,
+            maxHeight: MediaQuery.of(context).size.height * 0.85,
             hasRoundedCorners: true,
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).size.width * 0.01),
                     child: Text(
                       "Aggiungi elementi al tuo frigo",
                       style: TextStyle(
@@ -433,6 +433,7 @@ class _HomepageState extends State<Homepage> {
                       children: <Widget>[
                         new Column(children: <Widget>[
                           searchTextField = AutoCompleteTextField<Alimento>(
+                            suggestionsAmount: 4,
                             style: new TextStyle(
                                 color: Colors.black, fontSize: 16.0),
                             submitOnSuggestionTap: true,

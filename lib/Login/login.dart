@@ -1,4 +1,5 @@
 import 'package:app_tesi/HomePage/homepage.dart';
+import 'package:app_tesi/Login/forgotPassword.dart';
 import 'package:app_tesi/Services/auth.dart';
 import 'package:app_tesi/Signup/signup.dart';
 import 'package:flutter/material.dart';
@@ -83,6 +84,8 @@ class _LoginState extends State<Login> {
                                 bottom:
                                     MediaQuery.of(context).size.width * 0.02),
                             width: MediaQuery.of(context).size.width * 0.8,
+                            constraints:
+                                BoxConstraints(minWidth: 100, maxWidth: 500),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
@@ -98,6 +101,8 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Container(
+                            constraints:
+                                BoxConstraints(minWidth: 100, maxWidth: 500),
                             width: MediaQuery.of(context).size.width * 0.8,
                             child: Form(
                               key: _formKey,
@@ -155,6 +160,8 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Container(
+                            constraints: BoxConstraints(
+                                minWidth: 100, maxWidth: 500, maxHeight: 75),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: MediaQuery.of(context).size.width * 0.12,
                             margin: EdgeInsets.only(
@@ -165,7 +172,7 @@ class _LoginState extends State<Login> {
                                 "Sign In",
                                 style: TextStyle(
                                     color: Color.fromRGBO(255, 0, 87, 1),
-                                    fontSize: 22,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () async {
@@ -191,7 +198,14 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           FlatButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ForgotPassword(),
+                                ),
+                              );
+                            },
                             child: Text(
                               "Forgot Password?",
                               style: TextStyle(color: Colors.grey),
@@ -224,6 +238,8 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Container(
+                            constraints: BoxConstraints(
+                                minWidth: 100, maxWidth: 500, maxHeight: 75),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: MediaQuery.of(context).size.width * 0.12,
                             margin: EdgeInsets.only(
@@ -235,7 +251,7 @@ class _LoginState extends State<Login> {
                                 "Create an Account",
                                 style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 22,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () {
