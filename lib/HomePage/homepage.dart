@@ -1,8 +1,8 @@
 import 'package:app_tesi/Fridge/myFridge.dart';
+import 'package:app_tesi/HomePage/ocrReader.dart';
 import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Recipe/allRecipeTemplate.dart';
 import 'package:app_tesi/Recipe/singleRecipe.dart';
-import 'package:app_tesi/Services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -537,6 +537,39 @@ class _HomepageState extends State<Homepage> {
                             ),
                           ),
                         ),
+                        Container(
+                          constraints:
+                              BoxConstraints(minWidth: 100, maxWidth: 500),
+                          margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.width * 0.1,
+                          ),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width * 0.12,
+                          child: FlatButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => OcrReader()),
+                              );
+                            },
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: Color.fromRGBO(255, 0, 87, 1),
+                                width: 3,
+                              ),
+                            ),
+                            child: Text(
+                              "Use OCR",
+                              style: TextStyle(
+                                fontSize: 24,
+                                color: Color.fromRGBO(255, 0, 87, 1),
+                              ),
+                            ),
+                          ),
+                        ),
                         (_listOfIngredientsToAdd.isNotEmpty)
                             ? Container(
                                 constraints: BoxConstraints(
@@ -762,7 +795,6 @@ class _NavDrawerState extends State<NavDrawer> {
                 ListTile(
                   title: Text('LogOut'),
                   onTap: () async {
-                    print("ESCO");
                     _auth.signOut();
                   },
                 ),

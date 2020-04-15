@@ -45,7 +45,7 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   //Per autenticazione
-  final AuthService _auth = AuthService();
+  AuthService _auth = AuthService();
 
   bool isLogin = true;
 
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                                         val.isEmpty ? 'Enter an email' : null,
                                     onChanged: (val) {
                                       setState(() {
-                                        _email = val;
+                                        _email = val.trim();
                                       });
                                     },
                                   ),

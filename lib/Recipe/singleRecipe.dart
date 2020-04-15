@@ -88,134 +88,137 @@ class _SingleRecipeState extends State<SingleRecipe> {
         ),
       ),
       body: _isLoaded
-          ? Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        _title,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.share,
-                            size: 28,
-                          ),
-                          onPressed: () {
-                            share(context, _imageLink);
-                          }),
-                    ],
-                  ),
-                  Container(
-                    constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.02,
-                        bottom: MediaQuery.of(context).size.width * 0.02),
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(_imageLink),
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      color: Colors.redAccent,
-                    ),
-                  ),
-                  Container(
-                    constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.03),
-                    child: Row(
+          ? Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
+                padding:
+                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.05),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Icon(
-                          Icons.timer,
-                          color: Colors.black,
-                          size: 32,
-                        ),
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.01),
                         Text(
-                          _duration + " minuti",
+                          _title,
                           style: TextStyle(
-                              fontSize: 26, fontWeight: FontWeight.w600),
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.share,
+                              size: 28,
+                            ),
+                            onPressed: () {
+                              share(context, _imageLink);
+                            }),
                       ],
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.1),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        OutlineButton(
-                          borderSide: BorderSide(
-                              width: 2.0,
-                              color: _showIngredients
-                                  ? Color.fromRGBO(255, 0, 87, 1)
-                                  : Colors.black),
-                          child: Text(
-                            'Ingredienti',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: _showIngredients
-                                  ? Color.fromRGBO(255, 0, 87, 1)
-                                  : Colors.black,
-                            ),
-                          ),
-                          onPressed: (() {
-                            if (!_showIngredients) {
-                              setState(() {
-                                _showIngredients = !_showIngredients;
-                              });
-                            }
-                          }),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.02,
+                          bottom: MediaQuery.of(context).size.width * 0.02),
+                      height: MediaQuery.of(context).size.height * 0.2,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(_imageLink),
                         ),
-                        OutlineButton(
-                          borderSide: BorderSide(
-                            width: 2.0,
-                            color: _showIngredients
-                                ? Colors.black
-                                : Color.fromRGBO(255, 0, 87, 1),
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                    Container(
+                      constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.03),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.timer,
+                            color: Colors.black,
+                            size: 32,
                           ),
-                          child: Text(
-                            'Preparazione',
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.01),
+                          Text(
+                            _duration + " minuti",
                             style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
+                                fontSize: 26, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.1),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          OutlineButton(
+                            borderSide: BorderSide(
+                                width: 2.0,
+                                color: _showIngredients
+                                    ? Color.fromRGBO(255, 0, 87, 1)
+                                    : Colors.black),
+                            child: Text(
+                              'Ingredienti',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color: _showIngredients
+                                    ? Color.fromRGBO(255, 0, 87, 1)
+                                    : Colors.black,
+                              ),
+                            ),
+                            onPressed: (() {
+                              if (!_showIngredients) {
+                                setState(() {
+                                  _showIngredients = !_showIngredients;
+                                });
+                              }
+                            }),
+                          ),
+                          OutlineButton(
+                            borderSide: BorderSide(
+                              width: 2.0,
                               color: _showIngredients
                                   ? Colors.black
                                   : Color.fromRGBO(255, 0, 87, 1),
                             ),
+                            child: Text(
+                              'Preparazione',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color: _showIngredients
+                                    ? Colors.black
+                                    : Color.fromRGBO(255, 0, 87, 1),
+                              ),
+                            ),
+                            onPressed: (() {
+                              if (_showIngredients) {
+                                setState(() {
+                                  _showIngredients = !_showIngredients;
+                                });
+                              }
+                            }),
                           ),
-                          onPressed: (() {
-                            if (_showIngredients) {
-                              setState(() {
-                                _showIngredients = !_showIngredients;
-                              });
-                            }
-                          }),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 300, //TODO: Togliere altezza hard coded
-                    child: WrapperForIngredientsOrRecipes(
-                        ingredients: _ingredients,
-                        preparation: _preparation,
-                        showIngredients: _showIngredients),
-                  ),
-                ],
+                    Container(
+                      height: 300, //TODO: Togliere altezza hard coded
+                      child: WrapperForIngredientsOrRecipes(
+                          ingredients: _ingredients,
+                          preparation: _preparation,
+                          showIngredients: _showIngredients),
+                    ),
+                  ],
+                ),
               ),
             )
           : Center(
@@ -248,7 +251,9 @@ class _SingleRecipeState extends State<SingleRecipe> {
                 final db = Firestore.instance;
                 await db.collection('users').document(user.uid).updateData(
                     {"favoriteRecipes": FieldValue.arrayRemove(list)});
-                initState(); //TODO: Soluzione brutta e temporanea --> Funziona a livello di DB ma non di UI
+                setState(() {
+                  widget.favoriteRecipes.remove(widget.documentId);
+                });
               }
             : () async {
                 var list = List<String>();
@@ -256,7 +261,9 @@ class _SingleRecipeState extends State<SingleRecipe> {
                 final db = Firestore.instance;
                 await db.collection('users').document(user.uid).updateData(
                     {"favoriteRecipes": FieldValue.arrayUnion(list)});
-                initState(); //TODO: Soluzione brutta e temporanea --> Funziona a livello di DB ma non di UI
+                setState(() {
+                  widget.favoriteRecipes.add(widget.documentId);
+                });
               },
       ),
     );

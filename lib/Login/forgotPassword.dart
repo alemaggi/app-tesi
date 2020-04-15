@@ -81,7 +81,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       validator: (val) => val.isEmpty ? 'Enter an email' : null,
                       onChanged: (val) {
                         setState(() {
-                          _email = val;
+                          _email = val.trim();
                         });
                       },
                     ),

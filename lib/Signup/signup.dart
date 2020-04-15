@@ -88,10 +88,10 @@ class _SignupState extends State<Signup> {
                       prefixIcon: Icon(Icons.email),
                     ),
                     validator: (val) =>
-                        val.length < 6 ? 'Enter a valid email' : null,
+                        val.isEmpty ? 'Enter a valid email' : null,
                     onChanged: (val) {
                       setState(() {
-                        _email = val;
+                        _email = val.trim();
                       });
                     },
                   ),

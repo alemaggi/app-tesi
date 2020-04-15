@@ -32,6 +32,7 @@ dependencies:
   share: ^0.6.3+6
   mailer: ^3.0.4
   autocomplete_textfield: ^1.7.3
+  firebase_ml_vision: ^0.9.3+8
 dependency_overrides:
   firebase_core: 0.4.4
 

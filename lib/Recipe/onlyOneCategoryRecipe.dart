@@ -320,7 +320,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
             child: Column(
               children: <Widget>[
                 Container(
-                  constraints: BoxConstraints(minWidth: 100, maxWidth: 475),
+                  constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                   padding: EdgeInsets.all(15),
                   margin: EdgeInsets.only(top: 10),
                   width: MediaQuery.of(context).size.width * 0.9,

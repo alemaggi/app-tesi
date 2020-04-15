@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   //Creo un oggetto user basato su un Firebase user
   User _userFromFirebaseUser(FirebaseUser user) {
@@ -85,18 +85,11 @@ class AuthService {
     }
   }
 
-  //Signout with google
-  void googleSignout() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
-
-    print("User Sign Out");
-  }
-
   //Sign out
   Future signout() async {
+    print("Dovrei uscire");
     try {
-      return await _auth.signOut();
+      return _auth.signOut();
     } catch (e) {
       print(e.toString());
       return null;
