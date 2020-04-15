@@ -1,8 +1,8 @@
+import 'package:app_tesi/Profile/addAllergens.dart';
 import 'package:app_tesi/Profile/editProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:math' as math;
 
 class Profile extends StatefulWidget {
   @override
@@ -18,11 +18,6 @@ class _ProfileState extends State<Profile> {
   bool isLoaded = false;
   var user;
   bool showRecipeImAllergicTo = false;
-
-  final _addAllergensKey = GlobalKey<FormState>();
-  List<String> _listOfAllergensToAdd = [];
-  String _allergenName;
-  final TextEditingController _controller = new TextEditingController();
 
   _getUserInfo() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -283,185 +278,12 @@ class _ProfileState extends State<Profile> {
         ),
         onPressed: () {
           showDialog(
-              context: context,
-              builder: (_) {
-                return MyDialog();
-              });
+            context: context,
+            builder: (_) {
+              return AddAllergens();
+            },
+          );
         },
-      ),
-    );
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  @override
-  _MyDialogState createState() => new _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
-  final _addAllergensKey = GlobalKey<FormState>();
-  List<String> _listOfAllergensToAdd = [];
-  String _allergenName;
-  final TextEditingController _controller = new TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        'Aggiungi Allergeni',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      content: Column(
-        children: <Widget>[
-          Container(
-            width: double.maxFinite,
-            height: 45.0,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _listOfAllergensToAdd.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  height: 30,
-                  child: Card(
-                    color: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(left: 15),
-                          child: Center(
-                              child: Text(
-                            _listOfAllergensToAdd[index].toString(),
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 26.0),
-                          )),
-                        ),
-                        IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _listOfAllergensToAdd.removeAt(index);
-                              });
-                            }),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          Form(
-            key: _addAllergensKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controller,
-                  decoration: InputDecoration(
-                    hintText: "Alimento da aggiungere",
-                    hintStyle: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  validator: (val) =>
-                      val.isEmpty ? 'Inserisci un alimento' : null,
-                  onChanged: (val) {
-                    setState(() {
-                      _allergenName = val;
-                    });
-                  },
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.width * 0.1,
-                  ),
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.width * 0.12,
-                  child: FlatButton(
-                    onPressed: () {
-                      if (_addAllergensKey.currentState.validate()) {
-                        setState(() {
-                          _listOfAllergensToAdd.add(_allergenName);
-                          _controller.clear();
-                        });
-                      }
-                    },
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(10.0),
-                      side: BorderSide(
-                        color: Color.fromRGBO(255, 0, 87, 1),
-                        width: 3,
-                      ),
-                    ),
-                    child: Text(
-                      "Add Element To List",
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Color.fromRGBO(255, 0, 87, 1),
-                      ),
-                    ),
-                  ),
-                ),
-                (_listOfAllergensToAdd.isNotEmpty)
-                    ? Container(
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.12,
-                        child: FlatButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(10.0),
-                            side: BorderSide(
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                              width: 3,
-                            ),
-                          ),
-                          color: Colors.white,
-                          onPressed: () async {
-                            if (_listOfAllergensToAdd.isNotEmpty) {
-                              var list = List<String>();
-                              var user =
-                                  await FirebaseAuth.instance.currentUser();
-                              List<String> output = Iterable.generate(math.max(
-                                      list.length,
-                                      _listOfAllergensToAdd.length))
-                                  .expand((i) sync* {
-                                if (i < list.length) yield list[i];
-                                if (i < _listOfAllergensToAdd.length)
-                                  yield _listOfAllergensToAdd[i];
-                              }).toList();
-                              print(output);
-                              Firestore.instance
-                                  .collection('users')
-                                  .document(user.uid)
-                                  .updateData({
-                                "allergens": FieldValue.arrayUnion(output)
-                              });
-                              setState(() {
-                                _listOfAllergensToAdd.clear();
-                              });
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: Text(
-                            "Submit",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Color.fromRGBO(255, 0, 87, 1),
-                            ),
-                          ),
-                        ),
-                      )
-                    : Container(
-                        height: 0,
-                      ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

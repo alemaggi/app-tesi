@@ -24,7 +24,6 @@ class _HomepageState extends State<Homepage> {
   GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
-  String _searchText = "";
   List names = new List();
   List filteredNames = new List();
   Icon _searchIcon = new Icon(Icons.search);
@@ -234,6 +233,21 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ],
                           ),
+                          (showRecipeWithAllergens == true &&
+                                  (checkIfRecipeContainsAllergens(
+                                          allergens, queryRecord.ingredients) ==
+                                      false))
+                              ? IconButton(
+                                  icon: Icon(Icons.explicit,
+                                      color: Colors.yellow, size: 30),
+                                  onPressed: () => showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AllergensInfo();
+                                    },
+                                  ),
+                                )
+                              : Container(),
                           IconButton(
                             icon: Icon(
                               Icons.favorite,
@@ -858,5 +872,48 @@ class _AutoCompleteState extends State<AutoComplete> {
             //AutoCompleteTextField code here
           ]),
         ])));
+  }
+}
+
+class AllergensInfo extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        'Attenzione',
+        style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+      ),
+      content: Container(
+        height: 150,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              "Attenzione questa ricetta contiene uno o più ingredienti che hai inserito nel tuo profilo come allergeni",
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontSize: 22,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: 20),
+              child: FlatButton(
+                color: Color.fromRGBO(255, 0, 87, 1),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Chiudi",
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
