@@ -43,7 +43,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: MediaQuery.of(context).size.height * 0.65,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -53,11 +53,12 @@ class _SignupState extends State<Signup> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.width * 0.1,
-                bottom: MediaQuery.of(context).size.width * 0.05),
+                bottom: MediaQuery.of(context).size.width * 0.01),
             width: MediaQuery.of(context).size.width * 0.8,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,

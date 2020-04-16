@@ -57,32 +57,38 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        color: Color.fromRGBO(255, 0, 87, 1),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.7,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          Container(
+            color: Color.fromRGBO(255, 0, 87, 1),
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: Center(
+              child: Container(color: Colors.white, width: 200, height: 200),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.65,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                  ),
                 ),
-              ),
-              child: isLogin
-                  ? SingleChildScrollView(
-                      child: Column(
+                child: isLogin
+                    ? Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.width * 0.05,
-                                bottom:
-                                    MediaQuery.of(context).size.width * 0.02),
+                              top: MediaQuery.of(context).size.width * 0.04,
+                            ),
                             width: MediaQuery.of(context).size.width * 0.8,
                             constraints:
                                 BoxConstraints(minWidth: 100, maxWidth: 500),
@@ -165,7 +171,7 @@ class _LoginState extends State<Login> {
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: MediaQuery.of(context).size.width * 0.12,
                             margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.1,
+                              top: MediaQuery.of(context).size.width * 0.08,
                             ),
                             child: FlatButton(
                               child: Text(
@@ -211,9 +217,9 @@ class _LoginState extends State<Login> {
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
-                          Center(
-                            child: FlatButton.icon(
-                              label: Text('Login with\n' + 'Google'),
+                          Container(
+                            child: OutlineButton(
+                              splashColor: Colors.grey,
                               onPressed: () async {
                                 dynamic result = await _auth.signInWithGoogle();
                                 if (result != null) {
@@ -231,9 +237,35 @@ class _LoginState extends State<Login> {
                                   print("Error Sigin in with google");
                                 }
                               },
-                              icon: FaIcon(
-                                FontAwesomeIcons.googlePlus,
-                                size: 32,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              highlightElevation: 0,
+                              borderSide: BorderSide(
+                                  width: 3,
+                                  color: Color.fromRGBO(255, 0, 87, 1)),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Image(
+                                        image: AssetImage(
+                                            "assets/google_logo.png"),
+                                        height: 25.0),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text(
+                                        'Sign in with Google',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Color.fromRGBO(255, 0, 87, 1),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -243,7 +275,7 @@ class _LoginState extends State<Login> {
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: MediaQuery.of(context).size.width * 0.12,
                             margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.04,
+                              top: MediaQuery.of(context).size.width * 0.03,
                             ),
                             child: FlatButton(
                               color: Color.fromRGBO(255, 0, 87, 1),
@@ -264,9 +296,10 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
+                          /*
                           Container(
                             margin: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.width * 0.04),
+                                top: MediaQuery.of(context).size.width * 0.02),
                             child: Text(
                               "Or",
                               style: TextStyle(
@@ -300,13 +333,14 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                           ),
+                          */
                         ],
-                      ),
-                    )
-                  : Signup(),
-            ),
-          ],
-        ),
+                      )
+                    : Signup(),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
