@@ -1,5 +1,5 @@
 {
-    "ricette": [
+    "recipes": [
         {
             "title": "Focaccia (f\u00fcgassa) alla genovese",
             "duration": 45,
@@ -8,21 +8,461 @@
             "difficulty": "Media",
             "doses": "6 persone",
             "ingredients": [
-                [
-                    "Farina Manitoba ( con W=280) 660 g",
-                    "Lievito di birra fresco 25 g",
-                    "Acqua a temperatura ambiente 440 g",
-                    "Sale fino 15 g",
-                    "Malto 1 cucchiaino",
-                    "Olio extravergine d'oliva 50 g",
-                    "Sale grosso q.b.",
-                    "Acqua 50 g"
-                ]
+                "Farina Manitoba ( con W=280) 660 g",
+                "Lievito di birra fresco 25 g",
+                "Acqua a temperatura ambiente 440 g",
+                "Sale fino 15 g",
+                "Malto 1 cucchiaino",
+                "Olio extravergine d'oliva 50 g",
+                "Sale grosso q.b.",
+                "Acqua 50 g",
+                "Olio extravergine d'oliva 50 g"
             ],
-            "prepration": [
+            "preparation": [
                 "Per preparare la focaccia alla versate la farina nella ciotola di una planetaria 1 e sbriciolate dentro il lievito fresco 2. Aggiungete met\u00e0 dell\u2019acqua 3 e azionate la planetaria.\nNon appena sar\u00e0 assorbita, ci vorranno circa 3 minuti, aggiungete a poco a poco la restante acqua mentre la planetaria \u00e8 in movimento 4. Quando sar\u00e0 completamente assorbita aggiungete il malto 5 e il sale 6.\nContinuate a lavorare fino a che l\u2019impasto non sar\u00e0 omogeneo 7, poi aggiungete a filo l\u2019olio 8. Non appena sar\u00e0 incorporato e l'impasto sar\u00e0 ben incordato al gancio spegnete la planetaria 9.\nBagnatevi le mani e trasferite l\u2019impasto sul piano da lavoro leggermente unto 10 e con l\u2019aiuto di un tarocco date all'impasto una forma tonda 11. Trasferite in una ciotola leggermente oliata 12,\ncoprite con pellicola 13 e lasciatelo lievitare per 3 ore 14. Una volta raddoppiato di volume trasferitelo sul piano da lavoro 15 e lavoratelo un po\u2019 con le mani.\nPoi dividete l'impasto in due 16 e pirlate le porzioni 17, in modo da ricavare 2 panetti. Serviranno per realizzare due focacce. Trasferite ciascuna porzione di impasto all\u2019interno di due teglie 35X28 cm leggermente unte 18. Lasciate riposare per 30 minuti, prima di stenderlo.\nPer farlo schiacciate l\u2019impasto con la punta delle dita partendo dal centro e portandolo verso i bordi della teglia 19 20. Unite acqua e olio in una brocca 21\ne mescolate con una forchetta per creare l'emulsione 22. Versate sull\u2019impasto l\u2019emulsione 23, tenendone un po\u2019 da parte, e distribuitelo sulla focaccia spargendolo su tutta la superficie delicatamente con le mani 24.\nPraticate i buchi facendo pressione soltanto con le tre dita centrali 25. A questo punto salate la superficie con sale grosso 26 e cuocete in forno statico preriscaldato a 210\u00b0 per 15 minuti 27.\nUna volta sfornata estraete la focaccia dalla teglia e lasciatela intiepidire sulla gratella 28. A questo punto spennellate con la restante salamoia la superficie per renderla lucida 30. La vostra focaccia genovese \u00e8 pronta per essere servita!"
             ],
             "imageLink": "https://www.giallozafferano.it/images/ricette/206/20653/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Piadina Romagnola",
+            "duration": 94,
+            "type": "Antipasto",
+            "calories": "488",
+            "difficulty": "Facile",
+            "doses": "6 pezzi",
+            "ingredients": [
+                "Farina 00 500 g",
+                "Strutto 125 g",
+                "Acqua a temperatura ambiente 170 g",
+                "Sale fino 15 g",
+                "Bicarbonato 1,5 cucchiaini"
+            ],
+            "preparation": [
+                "Per realizzare la piadina romagnola, preparate l\u2019impasto unendo in una ciotola la farina, il sale 1, lo strutto 2 e il bicarbonato 3.\nIniziate a impastare e aggiungete l\u2019acqua in 3 volte 4, poi trasferite il composto sul piano da lavoro 5 e continuate a lavorare fino ad ottenere un impasto omogeneo. Formate una palla, avvolgetela in un sacchetto per alimenti e lasciate riposare per 30 minuti 6.\nTrascorso il tempo di riposo, rimuovete l\u2019impasto dal sacchettino e formate un salsicciotto 7, poi dividetelo in 6 porzioni uguali 8. Date a ogni porzione di impasto la forma di una pallina lavorandola per circa 30 Antipasto in modo che diventi liscia e uniforme, poi avvolgetele nuovamente con un sacchetto per alimenti e lasciatele riposare per altri 30 minuti 9.\nTrascorso il tempo di riposo, infarinate leggermente il piano da lavoro 10 e tirate le palline con un mattarello fino a uno spessore di 2-3 mm 11. Scaldate bene una piastra e nel frattempo stendete ulteriormente le piadine, poi coppatele con un coppapasta del diametro di 22 cm 12.\nOra cuocete le piadine su un lato per 2 minuti, ruotandole continuamente con una mano per assicurare una cottura uniforme 13, poi giratele e cuocetele per 2 minuti anche sull\u2019altro lato 14, fino a che non risulteranno leggermente dorate. Una volta cotte, impilate le vostre piadine una sull\u2019altra e farcitele ancora calde 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/179/17984/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Taralli",
+            "duration": 110,
+            "type": "Antipasto",
+            "calories": "55",
+            "difficulty": "Media",
+            "doses": "60 pezzi",
+            "ingredients": [
+                "Farina 00 550 g",
+                "Vino bianco secco 200 g",
+                "Olio extravergine d'oliva 120 g",
+                "Sale fino 10 g"
+            ],
+            "preparation": [
+                "Per preparare i taralli cominciate impastando gli ingredienti in una ciotola o, se preferite, nella planetaria munita di gancio. Versate all\u2019interno la farina, il sale 1 e l\u2019olio 2 e date una breve mescolata fino ad ottenere un composto bricioloso 3.\nOra aggiungete il vino 4, amalgamate il tutto 5 e trasferite il composto sulla spianatoia lavorandolo a mano per una decina di minuti 6.\nTrascorso questo tempo, staccate dei pezzettini di impasto e modellateli con i polpastrelli per formare un bigolo 7 spesso 1 cm e lungo circa 12 cm 8. Quindi congiungete le punte ripiegando un'estremit\u00e0 sull\u2019altra in modo da ottenere una sorta di ciambellina. Tenete conto che con queste dosi e questo procedimento otterrete circa 60 pezzi 9. Nel frattempo mettete a bollire una pentola piena d'acqua.\nMan mano che li modellate, sistemate i taralli su un vassoio con carta forno 10. Quando avrete formato tutti i taralli immergete pochi pezzi alla volta nell'acqua bollente aiutandovi con una schiumarola 11. Non appena saliranno a galla saranno pronti per essere scolati su un vassoio foderato con un canovaccio pulito; proseguite con la cottura di tutti gli altri 12.\nTrasferite le ciambelline su una leccarda con carta forno 13 e cuocete in forno statico preriscaldato a 190\u00b0 per circa 40 minuti 14. Ecco pronti i vostri taralli, buon appetito 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/193/19361/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Crocchette di patate",
+            "duration": 75,
+            "type": "Antipasto",
+            "calories": "440",
+            "difficulty": "Facile",
+            "doses": "30 pezzi",
+            "ingredients": [
+                "Patate rosse 1 kg",
+                "Tuorli 30 g",
+                "Noce moscata q.b.",
+                "Pepe nero q.b.",
+                "Sale fino q.b.",
+                "Parmigiano Reggiano DOP grattugiato 100 g",
+                "Uova (2 medie) 130 g",
+                "Pangrattato q.b.",
+                "Olio di semi di arachide q.b."
+            ],
+            "preparation": [
+                "Per preparare le crocchette di patate lavate le patate sotto l\u2019acqua corrente per togliere residui di terra 1, ponetele a lessare in un tegame capiente versando acqua fino a coprire e senza sbucciarle 2: utilizzate patate il pi\u00f9 possibile della stessa dimensione cos\u00ec da uniformare la cottura. Ci vorranno circa 40 minuti se le bollite oppure la met\u00e0 del tempo circa con una pentola a pressione. Una volta pronte, lasciatele leggermente intiepidire (giusto quello che servir\u00e0 per poterle maneggiare) e poi sbucciatele 3.\nPassatele in uno schiacciapatate per ottenere una purea mentre sono ancora calde 4; in una ciotolina a parte sbattete i tuorli con pepe e sale (conseiderate che 30 g di tuorli corrispondono a 2 quelli di uova medie) 5 e poi aggiungeteli alla purea di patate 6\naromatizzate con la noce moscata grattugiata 7 e insaporite con il formaggio grattugiato 8, mescolate con un cucchiaio per amalgamare gli ingredienti fino ad ottenere un composto morbido e asciutto. Prendete una porzione di impasto del peso di circa 35 g 9 e formate le crocchette\ndando una forma a cilindo, con le due estremit\u00e0 leggermente schiacciate. Man mano che formate le crocchette adagiatele su un vassoio rivestito con carta da forno 10. Con la dose indicata otterrete circa 30 crocchette. Una volta ultimato l\u2019impasto impanate le crocchette: preparate due ciotole rispettivamente con le due uova sbattute e l'altra con il pangrattato. Passate le crocchette prima nell\u2019uovo 11 e poi nel pangrattato 12\nAdagiate le crocchette su un vassoio rivestito con carta da forno. Una volta terminate tutte le crocchette, scaldate abbondante olio di arachidi in un tegame non troppo grande fino a raggiungere i 180-190\u00b0 (si consiglia l'uso di un termometro da cucina per monitorare al meglio la temperatura) e poi tuffate all\u2019interno 3-4 crocchette alla volta per non fare abbassare la temperatura dell\u2019olio 13. Cuocete rigirandole con una schiumarola 14 fino a quando non saranno ben dorate su tutti i lati. Scolatele e mettetele a scolare dell\u2019olio in eccesso su di un piatto foderato con carta assorbente 15. Servite le crocchette di patate ancora calde!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/166/16678/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Arancini di riso",
+            "duration": 105,
+            "type": "Antipasto",
+            "calories": "628",
+            "difficulty": "Media",
+            "doses": "12 pezzi",
+            "ingredients": [
+                "Zafferano 1 bustina",
+                "Burro 30 g",
+                "Riso vialone nano 500 g",
+                "Sale fino 1 pizzico",
+                "Acqua 1,2 l",
+                "Caciocavallo stagionato da grattugiare 100 g",
+                "Sale fino q.b.",
+                "Pepe nero q.b.",
+                "Cipolle \u00bd",
+                "Burro 25 g",
+                "Maiale macinato 100 g",
+                "Olio extravergine d'oliva q.b.",
+                "Passata di pomodoro 200 ml",
+                "Pisellini 80 g",
+                "Caciocavallo fresco 50 g",
+                "Vino rosso 50 ml",
+                "Prosciutto cotto in una sola fetta 30 g",
+                "Mozzarella 60 g",
+                "Farina 00 200 g",
+                "Sale fino 1 pizzico",
+                "Acqua 300 ml",
+                "Pangrattato q.b.",
+                "Olio di semi q.b."
+            ],
+            "preparation": [
+                "Per preparare gli arancini di riso, iniziate lessando il riso in 1,2 l di acqua bollente salata 1, in modo da far si che, a cottura avvenuta, l'acqua sia stata completamente assorbita (questo permetter\u00e0 all'amido di rimanere tutto in pentola e otterrete un riso molto asciutto e compatto). Fate cuocere per circa 15 minuti, poi sciogliete lo zafferano in pochissima acqua calda e unitelo al riso ormai cotto 2. Unite anche il burro a pezzetti 3.\nUnite il formaggio grattugiato 4, mescolate bene per amalgamare il tutto, dopodich\u00e9 versate e livellate il riso su un vassoio ampio e basso 5 e copritelo con la pellicola, per farlo rafferddare completamente, la pellicola eviter\u00e0 che la superficie del riso si secchi. Lasciate riposare il riso per un paio di ore fuori dal frigorifero. Intanto dedicatevi al ripieno al rag\u00f9: mondate e affettate finemente la cipolla 6\nFate stufare la cipolla tritata in un tegame con 2 cucchiai d\u2019olio e il burro 7, poi unite la carne macinata 8; fatela rosolare a fuoco vivace, quindi aggiungete il vino 9 e lasciatelo sfumare.\nA questo punto aggiungete la passata di pomodoro 10, aggiustate di sale e di pepe a piacere e fate cuocere a fuoco lento coperto per almeno 20 minuti. A met\u00e0 cottura, aggiungete i piselli (11-12) (se necessario potete aggiungere pochissima acqua calda perch\u00e8 il rag\u00f9 dovr\u00e0 risultare ben rappreso e non liquido).\nMentre i piselli si cuociono tagliate a cubetti il caciocavallo 13, il prosciutto cotto 14 e la mozzarella 15. Avrete cos\u00ec pronti tutti i ripieni.\nUna volta che il riso si sar\u00e0 raffreddato completamente (ci vorranno almeno un paio di ore), potrete formare gli arancini, per aiutarvi nella formazione tenete vicino una ciotola colma di acqua cos\u00ec da potervi inumidirvi le mani. Prelevate un paio di cucchiai di riso per volta (circa 120 gr di riso), schiacciate il mucchietto al centro del mano formando una conca 16 e versateci all'interno un cucchiaino di ripieno al rag\u00f9 17, aggiungete qualche cubetto di caciocavallo 18.\nQuindi richiudete la base dell'arancino con il riso 19 e modellatelo dandogli una forma a punta 20: potete dare questa forma a tutti gli arancini farciti con il rag\u00f9. Mentre per il ripieno al prosciutto, farcite ciascun arancino (formato circa da 130 gr di riso) con dadini di prosciutto e mozzarella 21. Il ripieno con questo tipo di ripieno viene tradizionalmente detto \"al burro\".\ne modellateli dandogli una forma rotonda 22. Ora che avete tutti gli arancini pronti 23, preparate la pastella: in una ciotola versate la farina setacciata, un pizzico di sale e l'acqu a filo 24. Mescolate accuratamente con una frusta per evitare che si formino grumi.\nQuindi tuffate gli arancini, uno ad uno, nella pastella 25 avendo cura di ricoprirli interamente 26 e rotolateli nel pangrattato 27.\nIn un pentolino scaldate l'olio e portatelo alla temperatura di 170\u00b0, a quel punto friggete un arancino alla volta o massimo due 28 per non abbassare la temperatura dell'olio: quando saranno ben dorati potrete scolarli 29 ponendoli su un vassoio foderato con carta assorbente 30. Mi raccomando: gustate gli arancini di riso ben caldi!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/2/247/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Gnocchi di patate",
+            "duration": 60,
+            "type": "Primi",
+            "calories": "474",
+            "difficulty": "Facile",
+            "doses": "4 persone",
+            "ingredients": [
+                "Patate 1 kg",
+                "Farina 00 300 g",
+                "Uova medio 1",
+                "Sale fino q.b.",
+                "Patate 1 kg",
+                "Farina 00 350 g",
+                "Sale fino 15 g"
+            ],
+            "preparation": [
+                "Per preparare gli gnocchi di patate cominciate lessando queste ultime: in una pentola capiente sistemate le patate e coprite con abbondante acqua fredda 1. Dal momento in cui l\u2019acqua sar\u00e0 a bollore contate circa 30-40 minuti, a seconda della loro grandezza; fate la prova forchetta e se i rebbi entreranno senza difficolt\u00e0 nel mezzo allora potrete scolarle. Pelatele mentre sono ancora calde e subito dopo schiacciatele sulla farina che avrete versato sulla spianatoia 2. Aggiungete poi l\u2019uovo leggermente battuto insieme a un pizzico di sale 3\ne impastate il tutto con le mani 4 fino ad ottenere un impasto morbido ma compatto 5. Ricordate che lavorandoli troppo, gli gnocchi diventeranno duri durante la cottura, quindi limitatevi ad impastare il necessario. Prelevate una parte di impasto e stendetelo con le punte delle dita per ottenere dei bigoli, cio\u00e8 dei filoni, spessi 2 centimetri 6; per farlo aiutatevi infarinando la spianatoia, di tanto in tanto, con della semola. Nel frattempo, coprite l'impasto rimanente con un canovaccio per evitare che si secchi.\nPoi tagliate i filoncini a tocchetti 7 e facendo una leggera pressione con il pollice trascinateli sul riga gnocchi per ottenere la classica forma 8. Se non avete il riga gnocchi, potete utilizzare una forchetta e trascinarli sui rebbi; anche in questo caso, utilizzate la farina di semola per evitare che si appiccichino. Mano a mano che preparate gli gnocchi di patate sistemateli su un vassoietto con un canovaccio leggermente infarinato, ben distanziati l'uno dall'altro 9. Se intendete cuocerli potrete versarli in acqua bollente e salata; non appena verranno a galla gli gnocchi si ritengono cotti e quindi pronti per essere scolati e conditi.\nSchiacciate le patate ancora calde sulla spianatoia con l\u2019aiuto di uno schiacciapatate, aggiungete la farina e il sale 1 e impastate con le mani 2 per ottenere un composto morbido ma compatto 3.\nPrelevate una porzione di impasto per volta e stendetela con la punta delle dita per formare dei filoncini dello spessore di 2 cm 4. Tagliate i filoncini a tocchetti 5 e passate ogni pezzetto di impasto su un rigagnocchi o sui rebbi di una forchetta, premendo leggermente con il pollice 6. Cuocete gli gnocchi senza uova in abbondante acqua bollente salata e scolateli non appena verranno a galla."
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/0/99/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Spaghetti all'Amatriciana",
+            "duration": 35,
+            "type": "Primi",
+            "calories": "721",
+            "difficulty": "Facile",
+            "doses": "4 persone",
+            "ingredients": [
+                "Spaghetti 320 g",
+                "Pomodori pelati 400 g",
+                "Guanciale di Amatrice 150 g",
+                "Pecorino romano da grattugiare 75 g",
+                "Sale fino q.b.",
+                "Olio extravergine d'oliva q.b.",
+                "Peperoncino fresco 1",
+                "Vino bianco 50 g"
+            ],
+            "preparation": [
+                "Per preparare gli spaghetti all\u2019amatriciana, per prima cosa mettete a bollire l'acqua per la cottura della pasta da salare poi a bollore. Potete quindi dedicarvi al condimento: prendete il guanciale, eliminate la cotenna 1 e tagliatelo a fette di circa 1 cm di spessore 2; riducete le fette a listarelle di circa mezzo cm 3.\nA questo punto scaldate un filo di olio in una padella, possibilmente d\u2019acciaio, e aggiungete il peperoncino intero 4 e il guanciale tagliato a listarelle 5; fatelo rosolare a fiamma bassa per 7-8 minuti fino a che il grasso non sar\u00e0 diventato trasparente e la carne croccante; mescolate spesso facendo attenzione a non bruciarlo. Quando il grasso si sar\u00e0 sciolto, sfumate con il vino bianco 6, alzate la fiamma e lasciate evaporare.\nTrasferite le listarelle di guanciale in un piatto 7 e tenetele da parte, versate nella stessa padella i pomodori pelati: sfilacciateli con le mani direttamente all\u2019interno del fondo di cottura 8, proseguite la cottura del sugo per circa 10 minuti. A questo punto l\u2019acqua nel tegame sar\u00e0 arrivata a bollore, quindi versate gli spaghetti 9 e cuoceteli al dente.\nNel frattempo regolate di sale 10, eliminate il peperoncino dal sugo 11, unite le listarelle di guanciale in padella 12 e mescolate per amalgamare.\nUna volta cotti gli spaghetti, scolateli e uniteli direttamente nella padella con il sugo 13. Saltate molto velocemente la pasta per amalgamarla bene al condimento, se gradite la pasta al dente potete spegnere il fuoco altrimenti versate poca acqua della pasta per proseguire la cottura. Per finire spolverizzate con il Pecorino grattugiato 14: i vostri spaghetti all\u2019Amatriciana sono pronti per essere serviti 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/219/21923/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Ravioli cinesi al vapore",
+            "duration": 55,
+            "type": "Primi",
+            "calories": "250",
+            "difficulty": "Media",
+            "doses": "6 persone",
+            "ingredients": [
+                "Farina 00 250 g",
+                "Acqua 150 ml",
+                "Sale fino 1 pizzico",
+                "Maiale macinato 150 g",
+                "Gamberi sgusciati 50 g",
+                "Carote 1",
+                "Cavolo cinese 100 g",
+                "Scalogno 1",
+                "Zenzero fresco 2 g",
+                "Erba cipollina q.b.",
+                "Salsa di soia 2 cucchiai"
+            ],
+            "preparation": [
+                "Per preparare i ravioli cinesi al vapore occorre iniziare preparando la pasta per i ravioli. Disponete la farina a fontana in una ciotola e aggiungete un pizzico di sale; incorporate l'acqua poco a poco 1. Mettete l'impasto su una spianatoia infarinata e iniziate a lavorarlo con le mani finch\u00e8 sar\u00e0 compatto e sodo. Avvolgetelo con della pellicola e lasciatelo riposare un'ora in un luogo fresco e asciutto 2. Nel frattempo dedicatevi alla preparazione del ripieno: tritate finemente il cavolo cinese che avrete precedentemente lavato 3\ne in un mixer tritate la carota con lo scalogno 4. Sminuzzate anche i gamberetti freschi e aggiungeteli in una ciotola insieme al macinato di maiale 5, incorporate poi il cavolo cinese, la carota e lo scalogno 6.\nGrattugiatevi sopra lo zenzero fresco 7, condite con due cucchiai di salsa di soia 8 e aggiungete dell'erba cipollina tritata 9. Amalgamate bene il tutto e lasciate riposare il ripieno mezz'ora in frigorifero affinch\u00e8 tutti gli ingredienti si insaporiscano.\nQuindi occupatevi della pasta. Trascorso il tempo di riposo necessario, stendete la pasta su una spianatoia infarinata 10, ricavatevi dei dischi di circa 7 cm, aiutandovi con un tagliapasta o con un bicchiere 11. Successivamente con un piccolo mattarello spianate ulteriormente i dischi di pasta ottenuti per renderli ancora pi\u00f9 fini. Disponete quindi un cucchiaio abbondante di ripieno al centro di ogni raviolo 12,\ninumidite il bordo dei dischi con dell'acqua 13 e chiudete il raviolo a mezzaluna premendo sui bordi per fare aderire la pasta. A questo punto prendete in mano il raviolo ed effettuate delle piccole pieghe da un'estremit\u00e0 all'altra 14. Ponete un cestelletto di bamb\u00f9 per la cottura a vapore in un wok riempito con circa 1,5 cm di acqua in ebollizione (se non l'avete va benissimo qualsiasi cestello per cottura a vapore), foderate il fondo con delle foglie di cavolo (cinese o cavolo verza) e ponetevi i ravioli (facendo attenzione che non si tocchino tra di loro) 15. Chiudete il coperchio del cestello e cuocete per circa 15 minuti, fino a quando la pasta dei ravioli inizier\u00e0 a diventare piuttosto trasparente. Prima di servire i ravioli cinesi al vapore irrorateli con della salsa di soia."
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/11/1191/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Spaghetti Cacio e Pepe",
+            "duration": 20,
+            "type": "Primi",
+            "calories": "491",
+            "difficulty": "Facile",
+            "doses": "4 persone",
+            "ingredients": [
+                "Spaghetti 320 g",
+                "Pepe nero in grani q.b.",
+                "Pecorino romano stagionatura media, da grattugiare 200 g",
+                "Sale fino q.b."
+            ],
+            "preparation": [
+                "Per preparare gli spaghetti cacio e pepe, come prima cosa occupatevi di grattugiare 200 g di Pecorino. Proseguite mettendo a bollire l'acqua in un tegame (mettetene circa la met\u00e0 di quanto ne usate di solito per cuocere la pasta, cos\u00ec sar\u00e0 pi\u00f9 ricca di amido) e quando bollir\u00e0 potete salare a piacere. Una volta salata, potete cuocere gli spaghetti 1. Nel frattempo, versate i grani di pepe interi su un tagliere 2, quindi schiacciateli pestando con un pestello per carne o un macinino 3. In questo modo si sprigioner\u00e0 maggiormente il profumo pungente del pepe.\nVersate met\u00e0 dose di pepe schiacciato in una padella ampia antiaderente 4, tostatelo a fuoco dolce mescolando con una paletta di legno 5, poi sfumate con paio di mestoli di acqua di cottura della pasta 5. Le bollicine che vedrete comparire saranno dovute all'amido contenuto nell'acqua. Scolate quindi gli spaghetti quando saranno molto al dente (tenendo da parte l'acqua di cottura) e versateli direttamente nella padella con il pepe tostato 6; proseguiranno la cottura con il condimento.\nSmuovete la pasta continuamente con delle pinze da cucina per farla \"respirare\" 7 e aggiungete un mestolo di acqua o due al bisogno, per continuare la cottura risottando gli spaghetti 8. Continuate a versare un mestolo di acqua solo al bisogno (quando vedete che la padella \u00e8 quasi completamente asciutta) e a rimestare con le pinze da cucina. Nel frattempo che la pasta arriva a cottura, occupatevi della crema al Pecorino (non iniziate prima questa operazione perch\u00e8 la crema si rapprenderebbe troppo): versatene circa met\u00e0 dose di Pecorino grattugiato in una ciotola 9.\nAggiungete un mestolo di acqua di cottura della pasta sul Pecorino grattugiato 10. Mescolate con una frusta 11 in maniera energica e aggiungete ancora acqua al bisogno. Unite poi la dose restante di Pecorino, tenendone poco da parte per condire successivamente 12. Unite ancora un po' di acqua al bisogno: in questa fase dovrete calibrare bene dose di Pecorino e acqua per ottenere una cremina della giusta consistenzae senza grumi.\nTerminate la cottura della pasta, aggiungendo poca acqua calda ancora se necessario; prima di unire la crema di Pecorino, mescolate brevemente la crema ponendo la ciotola sopra il vapore del tegame con acqua calda, mescolate sempre con la frusta 13, cos\u00ec da riportare la crema ad una temperatura simile a quella della pasta se necessario 14. Spegnete il fuoco della padella con gli spaghetti e versate la crema di Pecorino 15.\nMentre versate la crema di Pecorino sugli spaghetti, muoveteli continuamente con la pinza da cucina 16, versate anche il Pecorino che avevate tenuto da parte 17, mescolate e saltate ancora la pasta quindi impiattate i vostri spaghetti cacio e pepe e insaporite con il restante pepe, gustate subito in tutta la loro cremosit\u00e0 18!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/219/21989/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Ravioli ricotta e spinaci",
+            "duration": 90,
+            "type": "Primi",
+            "calories": "257",
+            "difficulty": "Media",
+            "doses": "Basso",
+            "ingredients": [
+                "Farina 00 250 g",
+                "Uova ( circa 2 uova e 1 tuorlo) 124 g",
+                "Semola per spolverizzare q.b.",
+                "Spinaci 250 g",
+                "Ricotta vaccina 125 g",
+                "Parmigiano Reggiano DOP da grattugiare 50 g",
+                "Noce moscata q.b.",
+                "Sale fino q.b.",
+                "Pepe nero q.b."
+            ],
+            "preparation": [
+                "Per preparare i ravioli ricotta a spinaci iniziate dalla preparazione della sfoglia fresca all\u2019uovo. Prendete la farina (potete lasciarne circa 50 g da parte per aggiungerla al bisogno) e versatela in una ciotola 1 assieme alle uova sbattute 2. Impastate bene gli ingredienti con le mani per creare un composto omogeneo 3. Se l\u2019impasto dovesse risultare poco elastico aggiungete dell'acqua tiepida per rendere cos\u00ec la pasta pi\u00f9 morbida per poter essere tirata con il mattarello o con la macchina tira sfoglia. Se al contrario risultasse appiccicoso, potete aggiungere la farina tenuta da parte, man a mano.\nTrasferite l\u2019impasto su un piano di lavoro e lavoratelo energicamente, quando avrete ottenuto un impasto liscio e omogeneo, formate una sfera 4 che avvolgerete con pellicola alimentare trasparente: fate riposare cos\u00ec l\u2019impasto per 30 minuti al riparo dalla luce e da correnti d\u2019aria che potrebbero seccarlo. Mentre la pasta riposa dedicatevi al ripieno: prendete una padella antiaderente e dal fondo largo in cui verserete gli spinaci sciacquati 5, coprendoli con coperchio per farli appassire 6. Lasciateli cuocere fino a che saranno morbidi, ci vorranno un paio di minuti circa.\nQuando saranno ben ammorbiditi 7, fateli scolare per eliminare i liquidi in eccesso 8: teneteli da parte. Prendete una ciotola ampia e versate ricotta e Parmigiano 9.\nAromatizzate con della noce moscata 10 e, aiutandovi con delle fruste a mano, mescolate gli ingredienti per amalgamarli 11. Aggiustate di sale e pepe. Quando saranno amalgamati, sminuzzate gli spinaci in un mixer e aggiungeteli alla crema di ricotta 12. Amalgamate bene gli ingredienti per ottenere un composto omogeneo.\nTrasferite il composto in una sac-\u00e0-poche 13 e tenetelo da parte. A questo punto la sfoglia avr\u00e0 riposato. Prendetela, dividetela in due panetti. Uno lasciatelo avvolto nella pellicola perch\u00e8 non si secchi mentre, dopo averlo infarinato leggermente con semola rimacinata (che non si assorbir\u00e0 all'impasto), tirate l'altro con la macchina tira sfoglia passandola tra i rulli dallo spessore pi\u00f9 largo al penultimo pi\u00f9 stretto: dovrete ottenere una sfoglia rettangolare spessa circa 1 mm 14. Ripetete l'operazione con l'altro panetto. Stendete i due rettangoli di sfoglia in un piano di lavoro leggermente infarinato di farina di semola e create dei piccoli mucchietti di ripieno con la sac-\u00e0-poche 15.\nDisponeteli a circa 3 cm di distanza gli uni dagli altri 16, spruzzando dell\u2019acqua ai bordi della sfoglia 17 (se preferite potete anche spennellare i bordi con un pennello da cucina) in modo tale che, quando stenderete la seconda sfoglia sopra ad essa 18, questa rimarr\u00e0 pi\u00f9 facilmente attaccata. Abbiate cura di far fuoriuscire l\u2019aria tra un raviolo e l\u2019altro, pressando intorno al ripieno con le dita, in modo tale da evitare che in cottura si aprano facendo fuoriuscire il ripieno.\nQuando adagiate la seconda sfoglia fate combaciare i bordi con la prima 19. Poi con una rotella tagliapasta dentellata ricavate i ravioli delle dimensioni 4x4 cm 20: otterrete circa 24 ravioli che disporrete su un vassoio leggermente infarinato con semola rimacinata 21. I vostri ravioli ricotta e spinaci sono ora pronti! Potrete poi cuocerli in acqua bollente e condirli a piacimento, ad esempio con burro e salvia!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/16/1633/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Polpette al sugo",
+            "duration": 50,
+            "type": "Secondi",
+            "calories": "492",
+            "difficulty": "Molto facile",
+            "doses": "24 pezzi",
+            "ingredients": [
+                "Manzo (carne macinata) 220 g",
+                "Salsiccia 165 g",
+                "Pane raffermo mollica 30 g",
+                "Parmigiano Reggiano DOP grattugiato 25 g",
+                "Uova 1",
+                "Prezzemolo tritato 1 cucchiaio",
+                "Origano secco 1 pizzico",
+                "Noce moscata grattugiata 1 pizzico",
+                "Sale fino q.b.",
+                "Pepe nero q.b.",
+                "Olio extravergine d'oliva q.b.",
+                "Passata di pomodoro 350 g",
+                "Acqua 50 g",
+                "Sale fino 5 g",
+                "Origano secco q.b.",
+                "Pepe nero q.b."
+            ],
+            "preparation": [
+                "Per preparare le polpette al sugo iniziate con l\u2019impasto: tagliate la mollica in pezzi e versatela in un mixer dotato di lame 1 e tritate il tutto fin quando la mollica non sar\u00e0 ridotta in briciole 2. Tenete da parte la mollica e eliminate lo spago dalle salsicce 3,\nincidetele delicatamente nel senso della lunghezza 4 e infine privatele del budello 5. Con la lama di un coltello o con una forchetta schiacciate la carne 6,\ndopodich\u00e9 versatela in un recipiente insieme alla carne trita 7. Poi aggiungete l'origano, un pizzico di noce moscata grattugiata ed il prezzemolo tritato 8. Infine il Parmigiano grattugiato e la mollica che avete tritato precedentemente insieme all'uovo 9\ne impastate il tutto con le mani 10, aggiustando di sale e di pepe 11 e mescolando fin quando non avrete ottenuto un composto omogeneo 12.\nCon l\u2019impasto ottenuto andate a formare delle sfere del peso di 20 grammi l\u2019una 13, prelevando un pezzetto di impasto e amalgamandolo con entrambe le mani: con le nostre dosi dovrete ottenere 24 polpettine 14. Non appena tutte le polpette saranno pronte, fate scaldare l\u2019olio in una pentola antiaderente 15\ne, quando l'olio sar\u00e0 ben caldo, adagiate le polpette 16, lasciandole cuocere da entrambe i lati per un paio di minuti 17. Versate la polpa di pomodoro 18\nversate l'acqua, aggiustate di sale, aromatizzate con pepe 20 e proseguite la cottura abbassando la fiamma per 15-20 minuti. Una volta pronte, aromatizzate con origano secco e potrete gustare le vostre polpette al sugo ancora fumanti 21!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/166/16604/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Gateau di patate",
+            "duration": 100,
+            "type": "Secondi",
+            "calories": "317",
+            "difficulty": "Facile",
+            "doses": "6 persone",
+            "ingredients": [
+                "Patate a pasta gialla 500 g",
+                "Fiordilatte 100 g",
+                "Salame napoletano 50 g",
+                "Prosciutto cotto in una fetta spessa 50 g",
+                "Parmigiano Reggiano DOP (24 mesi) 2 cucchiai",
+                "Uova 2",
+                "Olio extravergine d'oliva q.b.",
+                "Pepe nero q.b.",
+                "Sale fino q.b.",
+                "Olio extravergine d'oliva q.b.",
+                "Pangrattato 20 g",
+                "Parmigiano Reggiano DOP 30 g"
+            ],
+            "preparation": [
+                "Per preparare il gateau di patate cominciate lessando queste ultime. Per farlo sciacquatele e versatele in una pentola capiente coprendo con abbondante acqua fredda 1. Trasferite la pentola sul fuoco e, non appena l\u2019acqua sar\u00e0 in ebollizione, contate circa 30-40 minuti, a seconda della grandezza delle patate. Fate la prova forchetta 2 per assicurarvi che siano effettivamente cotte: se i rebbi arrivano facilmente al centro dei tuberi allora sono pronti. Scolate le patate e cominciate a sbucciarle mentre sono ancora calde, aiutatevi con un coltellino per non scottarvi 3.\nInfine schiacciatele subito in un recipiente: le patate quando sono calde si disfano con pi\u00f9 semplicit\u00e0 e non presenteranno grumi 4. Nel frattempo tagliate la mozzarella a cubetti 5 e sistematela in un colino per strizzarla, in questo modo scoler\u00e0 del siero in eccesso 6. Potete in alternativa strizzarla aiutandovi con un canovaccio pulito.\nTagliate il salame tipo Napoli a cubetti di circa 1 cm 7, fate lo stesso anche con la fetta di prosciutto cotto 8. A questo punto riprendete le patate appena schiacciate e aggiungete le uova 9,\nuna spolverata di pepe 10, il sale, un filo d'olio 11 e il Parmigiano grattugiato 12.\nMescolate gli ingredienti (13-14), e quando il composto sar\u00e0 ben amalgamato potete unire il prosciutto e il salame tipo Napoli a cubetti 15.\npoi versate nella ciotola anche la mozzarella scolata 16 e amalgamate tutti gli ingredienti 17. A questo punto oliate una pirofila quadrata 20x20 cm 18\ne spolverizzate con il pangrattato 19. Muovete la teglia per assicurarvi che il pan grattato si distribuisca su tutta la superficie 20. Poi versate il composto aiutandovi con una spatola per livellarlo 21.\nSpolverizzate la superficie con il pangrattato e il Parmigiano 22, condite ancora con un filo d'olio 23 e cuocete in forno statico preriscaldato a 180\u00b0 per circa 30 minuti. Una volta pronto, il vostro gateau di patate sar\u00e0 fumante ed invitante per essere servito 24!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/165/16591/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Pollo alle mandorle",
+            "duration": 30,
+            "type": "Secondi",
+            "calories": "463",
+            "difficulty": "Facile",
+            "doses": "4 persone",
+            "ingredients": [
+                "Petto di pollo 500 g",
+                "Mandorle pelate 130 g",
+                "Zenzero fresco da grattugiare 15 g",
+                "Farina 00 q.b.",
+                "Sale fino q.b.",
+                "Cipolle 60 g",
+                "Olio di semi 25 g",
+                "Salsa di soia 60 g",
+                "Aglio 1 spicchio",
+                "Acqua 20 g"
+            ],
+            "preparation": [
+                "Per preparare il pollo alle mandorle, iniziate preparando gli aromi; sbucciate lo spicchio di aglio e affettatelo sottilmente 1, poi pelate lo zenzero e grattugiatelo 2 infine sbucciate e affettate la cipolla 3.\nPrivate i petti di pollo delle le parti di grasso pi\u00f9 evidenti con un coltellino. Quindi tagliate il petto a bocconcini di 1-2 centimetri 4. Ponete un colino sopra una ciotola, versate all'interno i bocconcini di pollo e infarinateli 5, scuotete il colino per eliminare la farina in eccesso. In una padella Wok, o una padella antiaderente dai bordi alti, riscaldate l'olio di semi,\npoi aggiungete l'aglio 7, lo zenzero grattugiato 8 e la cipolla affettata 9.\nLasciate dorare gli ingredienti per alcuni minuti a fuoco medio, mescolando spesso. Aggiungete al soffritto i bocconcini di pollo infarinati 10, quindi fate dorare anch'essi mescolando spesso. Solo quando presenteranno una leggera crosticina, versate la salsa di soia 11 e mescolate. Nella stessa brocchetta che avete usato per la soia, versate 20 g di acqua, per irrorare il pollo (in questo modo non sporcherete due contenitori) 12 e mescolate con un cucchiaio per amalgamare il tutto. Se il pollo tendesse ad attaccarsi, abbassate in fuoco e aggiungete ancora un po\u2019 di acqua calda.\nCuocete il pollo per circa 10 minuti, a fine cottura salate il pollo 13 quanto basta, tenendo in considerazione che la salsa di soia \u00e8 gi\u00e0 piuttosto sapida. Mentre il pollo cuoce, ponete in una padella antiaderente le mandorle pelate 14 e tostatele per 2-3 minuti 15. In alternativa potete tostare le mandorle in forno: distribuitele su una teglia rivestita con carta da forno e tostatele per pochi minuti a 180\u00b0 per dorarle.\nA questo punto, unite le mandorle tostate al pollo 16 e amalgamate delicatamente con un cucchiaio di legno per alcuni istanti. Spegnete quindi il fuoco 17 e il vostro pollo alle mandorle sar\u00e0 pronto per essere servito ben caldo 18."
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/4/404/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Polpettine di tonno e ricotta",
+            "duration": 30,
+            "type": "Secondi",
+            "calories": "650",
+            "difficulty": "Facile",
+            "doses": "20 pezzi",
+            "ingredients": [
+                "Tonno sott'olio sgocciolato 230 g",
+                "Ricotta vaccina 200 g",
+                "Acciughe (alici) filetti sott'olio 20 g",
+                "Capperi sotto sale 20 g",
+                "Pangrattato 50 g",
+                "Prezzemolo da tritare 8 g",
+                "Uova medie 2",
+                "Parmigiano Reggiano DOP 50 g",
+                "Sale fino q.b.",
+                "Pepe nero q.b.",
+                "Pangrattato 40 g",
+                "Olio di semi di arachide q.b."
+            ],
+            "preparation": [
+                "Per preparare le polpettine di tonno e ricotta iniziate dalla preparazione dell'impasto. Unite in una ciotola la ricotta, il parmigiano grattugiato 1, il tonno sbriciolato 2 e le acciughe sgocciolate 3.\nAggiungete i capperi (preventivamente sciacquati), il prezzemolo tritato, il pangrattato 4 e in ultimo le uova leggermente sbattute 5, quindi iniziate a mescolare il composto con una forchetta 6.\nMiscelate insieme tutti gli ingredienti 7, aggiungete il sale e il pepe e terminate di impastare con le mani fino ad avere un composto compatto ed omogeneo 8: se il composto dovesse risultare troppo morbido potete aggiungere ancora un po' di formaggio, in caso contrario potete ammorbidirlo con qualche goccia di latte. A questo punto inumidite leggermente le mani e prelevate delle piccole porzioni di impasto del peso di circa 30 grammi a cui darete la classica forma a polpettina, tonda e leggermente schiacciata 9.\nDopo aver formato tutte le polpette 10, passatele nel pangrattato 11 e scaldate l'olio di semi in un pentolino fino alla temperatura di 180\u00b0. Friggete poche polpettine alla volta 12: basteranno pochi istanti per farle diventare belle dorate.\nQuando le polpettine si saranno dorate, scolatele 13 e trasferitele su della carta assorbente da cucina per eliminare l'olio in eccesso 14. Servite le vostre polpettine di tonno e ricotta ancora calde 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/198/19827/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Spezzatino di manzo",
+            "duration": 160,
+            "type": "Secondi",
+            "calories": "529",
+            "difficulty": "Molto facile",
+            "doses": "4 persone",
+            "ingredients": [
+                "Carne bovina (cappello del prete) 1 kg",
+                "Brodo di carne 1 l",
+                "Cipolle 1",
+                "Carote 1",
+                "Sedano 1 costa",
+                "Vino rosso 1 bicchiere",
+                "Olio extravergine d'oliva 4 cucchiai",
+                "Burro 30 g",
+                "Farina 00 30 g",
+                "Rosmarino 1 rametto",
+                "Timo 1 rametto",
+                "Salvia 3 foglie",
+                "Pepe nero q.b.",
+                "Sale fino q.b."
+            ],
+            "preparation": [
+                "Per preparare lo spezzatino di manzo cominciate mettendo sul fuoco una pentola con il brodo di carne e lasciate in caldo. Intanto proseguite pulendo sedano, carota e cipolla e sminuzzate le verdure in modo da ottenere dei cubetti di 5-6 mm 1. Legate insieme timo, salvia e rosmarino con un pezzetto di spago da cucina 2. Infine tagliate la carne a cubotti della grandezza di 4-5 cm 3.\nIn una casseruola mettete a scaldare il burro con l\u2019olio 4. Non appena il fondo sar\u00e0 caldo aggiungete il trito di sedano, carota e cipolla e lasciate insaporire a fuoco dolce per una decina di minuti; al bisogno potete aggiungere pochissimo brodo caldo 5. Quando il trito \u00e8 ben appassito, aggiungete la carne 6,\nalzate la fiamma e lasciate sigillare per bene tutti i pezzi per una decina di minuti, regolate di sale e pepe, dopodich\u00e9 spolverizzate con la farina lasciandola tostare per un paio di minuti: fate molta attenzione perch\u00e9 potrebbe bruciare, quindi mescolate spesso 7. Sfumate con il vino rosso e lasciate evaporare completamente 8, poi aggiungete il mazzetto odoroso e coprite con il brodo di carne caldo 9.\nCoprite con il coperchio e lasciate cuocere a fuoco medio per almeno 2 ore, avendo cura di mescolare di tanto in tanto 10. A fine cottura rimuovete il mazzetto odoroso 11 e assicuratevi che lo spezzatino di manzo sia giusto di sale. A questo punto non vi resta che servire il vostro spezzatino di manzo 12!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/182/18210/foto_hd/hd650x433_wm.jpg"
+        },
+        
+        {
+            "title": "Torta tenerina",
+            "duration": 55,
+            "type": "Dessert",
+            "calories": "395",
+            "difficulty": "Facile",
+            "doses": "8 persone",
+            "ingredients": [
+                "Cioccolato fondente 200 g",
+                "Burro 100 g",
+                "Uova medie 4",
+                "Zucchero 150 g",
+                "Farina 00 50 g",
+                "Zucchero a velo q.b."
+            ],
+            "preparation": [
+                "Per preparare la torta tenerina iniziate a tritare finemente il cioccolato 1, poi trasferitelo in una bastardella posta in un tegame con acqua (possibilmente l'acqua non dovrebbe venire a contatto con il fondo della bastardella o pentolino in cui avete versato il cioccolato) e scioglietelo a bagnomaria, mescolando di continuo 2. Solo quando il cioccolato sar\u00e0 gi\u00e0 sciolto, ma non eccessivamente caldo unite il burro a pezzetti 3\ne lasciate sciogliere anche questo continuando a mescolare 4. Poich\u00e9 l\u2019esatta temperatura di fusione del cioccolato \u00e8 intorno ai 50\u00b0, il burro va aggiunto solo quando il cioccolato \u00e8 sciolto, facendo in modo che non superi il suo punto di fusione (che \u00e8 di circa 32\u00b0), ed evitando quindi che si separi. Lasciate intiepidire il composto di cioccolato e burro, mescolandolo di tanto in tanto, e nel frattempo separate i tuorli dagli albumi in due ciotole differenti e capienti. A questo punto aggiungete a questi ultimi met\u00e0 dello zucchero 5 e montateli fino ad ottenere un composto fermo e spumoso 6.\nTenete da parte gli albumi montati a neve e versate nei tuorli la parte restante di zucchero 7, poi montate il tutto a velocit\u00e0 moderata fino ad ottenere un composto chiaro e spumoso 8. A questo punto con le fruste ancora in azione versate a filo il composto di cioccolato e burro ormai tiepido 9,\ne continuate a sbattere fino a che non otterrete un composto uniforme 10. Aggiungete a questo punto gli albumi montati a neve in pi\u00f9 riprese: aggiungete inizialmente circa 1/3 degli albumi 11 mescolando con una spatola 12 o con una frusta.\nIncorporate poi gli albumi restanti questa volta mescolando delicatamente dal basso verso l'alto 13. Unite la farina a pioggia 14 e mescolate sempre con una spatola facendo dei movimenti delicati dal basso verso l'alto 15\nfino ad ottenere un composto liscio ed uniforme 16. A questo punto imburrate e infarinate uno stampo a cerniera da 23 cm (cos\u00ec sar\u00e0 pi\u00f9 facile sformare la torta tenerina) e versate al suo interno l'impasto appena preparato (17-18). Cuocete in forno statico preriscaldato a 180\u00b0 per 30-35 minuti (si sconsiglia l'utilizzo del forno ventilato che potrebbe cuocere troppo l'esterno della torta e troppo poco la parte interna).\nUna volta sfornata 19 lasciate intiepidire la vostra torta tenerina prima di sformarla 20 e di cospargerla di zucchero a velo 21."
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/165/16545/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Nutellotti",
+            "duration": 50,
+            "type": "Dessert",
+            "calories": "98",
+            "difficulty": "Facile",
+            "doses": "25 pezzi",
+            "ingredients": [
+                "Nutella 180 g",
+                "Farina 00 135 g",
+                "Uova (medio) 1",
+                "Nutella 125 g",
+                "Granella di nocciole 30 g"
+            ],
+            "preparation": [
+                "Per preparare i Nutellotti ponete 180 g di Nutella nella tazza di una planetaria dotata di fruste 1 insieme ad un uovo intero 2. Azionate le fruste per 2 minuti 3\nin modo da amalgamare bene tutti gli ingredienti 4, poi arrestate la planetaria e aggiungete la farina setacciandola 5. Mescolate il tutto con una spatola 6\nfino ad ottenere un impasto liscio ed omogeneo 7; create un panetto, che andrete a mettere in frigorifero a riposare per almeno 15-20 minuti coperto con la pellicola trasparente 8. Trascorso il tempo necessario, togliete il panetto dal frigorifero 9\ne con le mani formate delle palline del peso di 15 g ciascuna 10, che andrete a porre su una leccarda foderata con un foglio di carta da forno 11: con le nostre dosi dovrete ottenere 25 palline. Con le dita appiattite il centro di ciascun pezzo, in modo da creare una cavit\u00e0 12;\nterminata questa operazione 13, mettete la Nutella in una sac-\u00e0-poche dalla bocchetta stellata e farcite i nutellotti, facendo un piccolo ciuffetto al centro di ciscuno 14. Una volta farciti tutti i biscotti 15,\nterminate distribuendo la granella di nocciole 16. Cuocete in forno statico preriscaldato a 170\u00b0 per circa 10 minuti. Quando saranno pronti (i biscotti risulteranno piuttosto morbidi) 17, metteteli a raffreddare su di una gratella; infine potete servire e gustare i vostri Nutellotti 18!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/152/15295/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Brownies",
+            "duration": 50,
+            "type": "Dessert",
+            "calories": "902",
+            "difficulty": "Facile",
+            "doses": "6 persone",
+            "ingredients": [
+                "Cioccolato fondente 265 g",
+                "Uova (circa 4) 200 g",
+                "Nocciole intere spellate 175 g",
+                "Burro a temperatura ambiente 135 g",
+                "Farina 00 135 g",
+                "Zucchero 255 g",
+                "Sale fino 1 pizzico"
+            ],
+            "preparation": [
+                "Per preparare i brownies, cominciate tritando grossolanamente il cioccolato 1 e ponetelo a sciogliere a bagnomaria 2; fate attenzione che l'acqua del pentolino non entri in contatto con il cioccolato posto nella bastardella. Quando sar\u00e0 quasi fuso, aggiungete il burro morbido a tocchetti 3.\nMescolate accuratamente fino a far fondere anch\u2019esso 4, poi togliete dal fuoco e lasciate intiepidire, mescolando di tanto in tanto. Nel frattempo tostate per 8 minuti le nocciole in forno statico preriscaldato a 180\u00b0 5. Dopodich\u00e9 sfornatele e lasciatele intiepidire, in modo da non scottarvi, quindi tritatele molto grossolanamente 6 e tenetele da parte.\nPonete adesso le uova in una terrina, e, cominciando a sbatterle con le fruste elettriche, unite lo zucchero 7. Non \u00e8 necessario montare il composto: proseguite a sbattere solo fino a quando lo zucchero non si sar\u00e0 ben sciolto. Unite quindi il sale 8, e lasciate che anch\u2019esso si sciolga. Sempre con le fruste in azione, aggiungete a filo il composto di cioccolato e burro ormai tiepido 9.\nAppena anche il cioccolato si sar\u00e0 amalgamato al composto smettete di sbattere. Posizionate sulla ciotola un colino a maglie strette, e setacciatevi attraverso la farina 10. Amalgamate con una spatola fino a farla assorbire in maniera uniforme 11, quindi unite le nocciole ormai fredde 12 e amalgamate anch\u2019esse.\nImburrate e foderate con carta da forno una teglia rettangolare di 35X27 cm (oppure una teglia quadrata 30X30 cm) e versatevi l\u2019impasto 13, livellandolo con una spatola per distribuirlo in modo uniforme. Cuocete in forno statico preriscaldato a 180\u00b0 per 25 minuti 14, quindi sfornate e lasciate da parte fino al completo raffreddamento. A questo punto realizzate i vostri cubotti praticando 5 tagli orizzontali e 5 verticali ad una distanza identica per ottenere dei brownies dalle stesse dimensioni 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/7/780/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Crepe alla Nutella",
+            "duration": 70,
+            "type": "Dessert",
+            "calories": "285",
+            "difficulty": "Facile",
+            "doses": "8 pezzi",
+            "ingredients": [
+                "Uova medie 3",
+                "Farina 00 250 g",
+                "Latte intero 500 ml",
+                "Burro q.b.",
+                "Nutella q.b.",
+                "Zucchero a velo q.b."
+            ],
+            "preparation": [
+                "Per preparare le crepe alla Nutella iniziate dalla preparazione dell\u2019impasto di base. Prendete una ciotola capiente e dai bordi alti e versatevi le uova 1. Sbattete le uova con una forchetta ed unite il latte 2. Mescolate bene gli ingredienti con una forchetta 3.\nSetacciate la farina nella ciotola 4 e con le fruste mescolate energicamente per evitare la formazione di grumi 5. Continuate a mescolare fino ad ottenere un composto omogeneo, vellutato e fluido 6.\nPoi coprite la ciotola con pellicola alimentare trasparente e trasferite il composto a riposare per almeno 30 minuti in frigorifero 7. Trascorso il tempo prendete una crepiera (o in alternativa una padella antiaderente dal diametro tra i 18 ed i 22 cm), ponetela sul fuoco e ungetela con una noce di burro. Quando sar\u00e0 ben calda versate un mestolo di impasto necessario a ricoprire quasi tutta la superficie della padella 8: potete aiutarvi con l'apposito stendi pastella per crepes, per stenderla in maniera uniforme oppure inclinare e ruotare la padella leggermente; questa operazione deve essere fatta abbastanza velocemente, poich\u00e9 la pastella tender\u00e0 a cuocersi rapidamente. Fate cuocere per 1 minuto a fuoco medio-basso da un lato. Non appena sar\u00e0 leggermente dorata e con una paletta riuscirete a sollevare i bordi della crepe, giratela dall\u2019altro lato aiutandovi con la paletta 9.\nCuocete anche l'altro lato per 1 minuto circa, aspettando che prenda colore 10. Quando sar\u00e0 pronta, mettetela su un piatto da portata o su di un tagliere. Ripetete questo procedimento fino a finire l\u2019impasto e ad ottenere 8 crepes del diametro di 20 cm; impilate le crepe una sopra l\u2019altra mano a mano che saranno pronte fino al momento della farcitura 11. Poi prendete un cucchiaio di Nutella e stendetelo sulla superficie della crepe 12.\nQuindi prendete il bordo della crepe e fatelo combaciare con l\u2019altro 13. Ripiegate la crepe alla Nutella ancora a met\u00e0 in modo da ottenere un ventaglio 14 e ripetete l\u2019operazione per le restanti crepe. Spolverizzate con zucchero a velo e servite la vostra crepe alla Nutella ancora calda 15!"
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/172/17262/foto_hd/hd650x433_wm.jpg"
+        },
+        {
+            "title": "Crema pasticcera",
+            "duration": 23,
+            "type": "Dessert",
+            "calories": null,
+            "difficulty": "Facile",
+            "doses": "Basso",
+            "ingredients": [
+                "Latte intero 500 g",
+                "Zucchero 130 g",
+                "Tuorli (circa 5) 125 g",
+                "Amido di riso 40 g",
+                "Baccello di vaniglia 2",
+                "Scorza di limone \u00bd"
+            ],
+            "preparation": [
+                "Per preparare la crema pasticcera come prima cosa inserite in freezer una ciotola di vetro. A questo punto ricavate i semi dalla vaniglia 1 e tagliate i baccelli in pezzi 2. Versate il latte in un tegame e aggiungete sia i semi 3 che i baccelli della vaniglia.\nRicavate dal limone la scorza, prelevando solo la parte gialla, e unitela nel tegame 4. Accendete il fuoco e scaldate il tutto portando a bollore e mescolando di tanto in tanto. In un altro tegame versate i tuorli, lo zucchero e l'amido di riso 5. Utilizzando un frustino morbido mescolate per ottenere una consistenza cremosa e liscia 6.\nNon appena il latte sfiorer\u00e0 il bollore, trasferitelo all'interno dei tuorli in 3 volte filtrandolo con un colino 7 e mescolando sempre con la frusta 8. Trasferite di nuovo sul fuoco e mescolate in continuazione fino a che non si sar\u00e0 addensata 9.\nPer raffreddarla velocemente riprendete la ciotola dal freezer e versate la crema all'interno 10. Mescolate con una frusta molto velocemente, fino a che non avrete portato la crema a 50\u00b0, al di sotto del punto di cottura. Dovrete ottenere una crema liscia e molto lucida 11. A questo punto la crema pasticcera \u00e8 pronta 12, potrete utilizzarla o conservarla in frigorifero coprendola con pellicola."
+            ],
+            "imageLink": "https://www.giallozafferano.it/images/ricette/215/21565/foto_hd/hd650x433_wm.jpg"
         }
     ]
 }

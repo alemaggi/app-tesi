@@ -44,6 +44,16 @@ class _WrapperForIngredientsOrRecipesState
     );
   }
 
+  bool checkIfRecipeIsDoable(
+      List<dynamic> userIngredients, String recipeSingleIngredients) {
+    for (var k = 0; k < userIngredients.length; k++) {
+      if (recipeSingleIngredients.contains(userIngredients[k])) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   void initState() {
     _getUserInfo();
@@ -67,8 +77,8 @@ class _WrapperForIngredientsOrRecipesState
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                (userIngredients
-                                        .contains(widget.ingredients[index]))
+                                checkIfRecipeIsDoable(userIngredients,
+                                        widget.ingredients[index])
                                     ? Icon(
                                         Icons.check,
                                         size: 32,
@@ -77,13 +87,15 @@ class _WrapperForIngredientsOrRecipesState
                                         Icons.block,
                                         size: 32,
                                       ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 10),
+                                FittedBox(
+                                  fit: BoxFit.cover,
                                   child: Text(
                                     widget.ingredients[index],
                                     style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500),
+                                      fontSize:
+                                          22, //TODO: SISTEMARE STA COSA CHE NON È RESPONSIVE
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                 ),
                               ],

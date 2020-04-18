@@ -5,7 +5,7 @@ import csv
 from recipe_scrapers import scrape_me
 import json
 
-baseUrl = 'https://www.giallozafferano.it/ricette-cat/Antipasti/'
+baseUrl = 'https://www.giallozafferano.it/ricette-cat/Dolci-e-Desserts/'
 
 #lista contenente i link alle pagine con le singole ricette
 urlList = []
@@ -15,7 +15,7 @@ recipeLinks = []
 
 #genero gli url delle pagine (Per ora mi fermo a 4)
 for i in  range(2, 5):
-    tmpUrl = 'https://www.giallozafferano.it/ricette-cat/page'+ str(i) + '/Antipasti/'
+    tmpUrl = 'https://www.giallozafferano.it/ricette-cat/page'+ str(i) + '/Dolci-e-Desserts/'
     urlList.append(tmpUrl)
 
 #funzione per avere il sorgente di ogni pagina
@@ -30,7 +30,8 @@ def estrapola_a_class(source):
         for div in div_list:
             a = div.find('a').attrs['href']
             recipeLinks.append(a)
-            
+
+
 #Prendo le calorie di ogni ricetta
 def estrapola_calorie(source):
     soup = BeautifulSoup(source, 'html.parser')
@@ -61,23 +62,21 @@ for page_link in urlList:
 
 print("------------------------------------------------------------------------------------------")
 
-#Ora lo faccio con gli antipasti
 data = {}
 data['ricette'] = []
 for link in recipeLinks:
     scraper = scrape_me(link)
     info = estrapola_informazioni(estrapola_source(link))
     data['ricette'].append({
-        'title': scraper.title(),
-        'duration' : scraper.total_time(),
-        'type': 'Antipasto',
-        'calories': estrapola_calorie(estrapola_source(link)),
-        'difficulty': info[0],
-        'doses': info[3],
-        'ingredients': [scraper.ingredients()],
-        'prepration': [scraper.instructions()],
-        'imageLink': scraper.image(),
-    })
-
+            'title': scraper.title(),
+            'duration' : scraper.total_time(),
+            'type': 'Dessert',
+            'calories': estrapola_calorie(estrapola_source(link)),
+            'difficulty': info[0],
+            'doses': info[3],
+            'ingredients': scraper.ingredients(),
+            'preparation': [scraper.instructions()],
+            'imageLink': scraper.image(),
+        })
 with open('data.json', 'w') as outfile:
-    json.dump(data, outfile, indent=4)
+    json.dump(data, outfile, indent=4)    

@@ -79,7 +79,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('recipes')
-          .where('type', isEqualTo: 'Primo')
+          .where('type', isEqualTo: 'Primi')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
@@ -96,7 +96,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('recipes')
-          .where('type', isEqualTo: 'Secondo')
+          .where('type', isEqualTo: 'Secondi')
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData)
@@ -513,7 +513,7 @@ class QueryRecord {
 
   QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
       : title = map['title'],
-        duration = map['duration'],
+        duration = map['duration'].toString(),
         imageLink = map['imageLink'];
 
   QueryRecord.fromSnapshot(DocumentSnapshot snapshot)

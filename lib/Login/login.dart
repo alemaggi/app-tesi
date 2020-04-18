@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
 
   //Form key --> Serve per validare gli input e procedere con il login
   final _formKey = GlobalKey<FormState>();
+  final _controller = TextEditingController();
 
   //Per autenticazione
   AuthService _auth = AuthService();
@@ -51,7 +52,7 @@ class _LoginState extends State<Login> {
 
   String _email;
   String _password;
-  String error;
+  String error = ' ';
 
   bool showPassword = false;
 
@@ -72,7 +73,7 @@ class _LoginState extends State<Login> {
             children: <Widget>[
               Container(
                 width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.65,
+                height: MediaQuery.of(context).size.height * 0.6,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -116,8 +117,7 @@ class _LoginState extends State<Login> {
                                 children: <Widget>[
                                   TextFormField(
                                     keyboardType: TextInputType.emailAddress,
-                                    controller:
-                                        null, //TODO: Fare controller in caso sera se no togliere
+                                    controller: _controller,
                                     decoration: InputDecoration(
                                       hintText: "Email",
                                       prefixIcon: Icon(Icons.email),
@@ -166,12 +166,28 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Container(
+                            constraints:
+                                BoxConstraints(minWidth: 100, maxWidth: 500),
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            margin: EdgeInsets.only(
+                              top: 10,
+                            ),
+                            child: Text(
+                              error,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                          Container(
                             constraints: BoxConstraints(
                                 minWidth: 100, maxWidth: 500, maxHeight: 75),
                             width: MediaQuery.of(context).size.width * 0.8,
                             height: MediaQuery.of(context).size.width * 0.12,
                             margin: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.width * 0.08,
+                              top: 10,
                             ),
                             child: FlatButton(
                               child: Text(
@@ -182,6 +198,10 @@ class _LoginState extends State<Login> {
                                     fontWeight: FontWeight.bold),
                               ),
                               onPressed: () async {
+                                setState(() {
+                                  error =
+                                      ''; //Cosi togliamo eventuali errori precedenti
+                                });
                                 if (_formKey.currentState.validate()) {
                                   dynamic result =
                                       await _auth.signinWithEmailAndPassword(
@@ -189,7 +209,7 @@ class _LoginState extends State<Login> {
                                   if (result == null) {
                                     setState(() {
                                       error =
-                                          'Could not signin with those credential';
+                                          'ERROR: Could not signin with those credential';
                                     });
                                   }
                                 }
@@ -234,6 +254,9 @@ class _LoginState extends State<Login> {
                                         builder: (context) => Homepage()),
                                   );
                                 } else {
+                                  setState(() {
+                                    error = 'Error Sigin in with google';
+                                  });
                                   print("Error Sigin in with google");
                                 }
                               },

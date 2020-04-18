@@ -34,7 +34,7 @@ class _SignupState extends State<Signup> {
   String _email;
   String _password;
   String _confirmPassword;
-  String error = "";
+  String error = ' ';
 
   bool showPassword = false;
   bool showConfirmPassword = false;
@@ -155,6 +155,21 @@ class _SignupState extends State<Signup> {
             ),
           ),
           Container(
+            constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
+            width: MediaQuery.of(context).size.width * 0.8,
+            margin: EdgeInsets.only(
+              top: 10,
+            ),
+            child: Text(
+              error,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Container(
             constraints:
                 BoxConstraints(minWidth: 100, maxWidth: 500, maxHeight: 75),
             width: MediaQuery.of(context).size.width * 0.8,
@@ -171,6 +186,9 @@ class _SignupState extends State<Signup> {
                     fontWeight: FontWeight.bold),
               ),
               onPressed: () async {
+                setState(() {
+                  error = ''; //Cosi togliamo eventuali errori precedenti
+                });
                 if (_signupFormKey.currentState.validate()) {
                   if (_password == _confirmPassword) {
                     print(_email);
@@ -179,16 +197,24 @@ class _SignupState extends State<Signup> {
                         _email, _password);
                     if (result == null) {
                       setState(() {
-                        error = 'supply a valid email and password';
+                        setState(() {
+                          error = 'ERROR: Supply a valid email and password';
+                        });
                       });
                     } else {
                       _setNewUserIntoFirestore(_email, result.uid);
                       send_mail();
                     }
                   } else {
+                    setState(() {
+                      error = 'ERROR: Non matching password';
+                    });
                     print("Le password non metchano");
                   }
                 } else {
+                  setState(() {
+                    error = 'ERROR: Some fields are not valid';
+                  });
                   print("Some fields are not valid");
                 }
               },

@@ -87,6 +87,10 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _getUserFridge();
+
+    String a = "Prosciutto Cotto fresco di pasqua da 500g al metro cubo";
+    String b = "Prosciutto Cotto";
+    print("QUESTO È:" + a.contains(b).toString());
     _getUserInfo();
     super.initState();
   }
@@ -94,10 +98,14 @@ class _HomepageState extends State<Homepage> {
   bool checkIfRecipeIsDoable(
       List<dynamic> userIngredients, List<dynamic> recipeIngredients) {
     for (var i = 0; i < recipeIngredients.length; i++) {
-      if (!userIngredients.contains(recipeIngredients[i])) {
-        print("Non posso fare sta ricetta");
-        return false;
+      bool trovataCorrispondenza = false;
+      for (var k = 0; k < userIngredients.length; k++) {
+        if (recipeIngredients[i].contains(userIngredients[k])) {
+          trovataCorrispondenza = true;
+        }
       }
+      if (trovataCorrispondenza == false) return false;
+      print("Non posso fare sta ricetta");
     }
     print("Posso fare sta ricetta");
     return true;
@@ -106,10 +114,14 @@ class _HomepageState extends State<Homepage> {
   bool checkIfRecipeContainsAllergens(
       List<dynamic> userAllergenes, List<dynamic> recipeIngredients) {
     for (var i = 0; i < recipeIngredients.length; i++) {
-      if (userAllergenes.contains(recipeIngredients[i])) {
-        print("Non posso fare sta ricetta senza morire");
-        return false;
+      bool trovatoAllergene = false;
+      for (var k = 0; k < userAllergenes.length; k++) {
+        if (recipeIngredients[i].contains(userAllergenes[k])) {
+          trovatoAllergene = true;
+        }
       }
+      if (trovatoAllergene == false) return false;
+      print("Non posso fare sta ricetta senza morire");
     }
     return true;
   }
@@ -238,8 +250,8 @@ class _HomepageState extends State<Homepage> {
                                           allergens, queryRecord.ingredients) ==
                                       false))
                               ? IconButton(
-                                  icon: Icon(Icons.explicit,
-                                      color: Colors.yellow, size: 30),
+                                  icon: Icon(Icons.sentiment_very_dissatisfied,
+                                      color: Colors.red, size: 30),
                                   onPressed: () => showDialog(
                                     context: context,
                                     builder: (context) {
@@ -841,7 +853,7 @@ class QueryRecord {
 
   QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
       : title = map['title'],
-        duration = map['duration'],
+        duration = map['duration'].toString(),
         imageLink = map['imageLink'],
         ingredients = map['ingredients'];
 

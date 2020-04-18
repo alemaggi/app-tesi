@@ -39,7 +39,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
       (data) {
         setState(() {
           _title = data['title'];
-          _duration = data['duration'];
+          _duration = data['duration'].toString();
           _ingredients = data['ingredients'];
           _preparation = data['preparation'];
           _imageLink = data['imageLink'];
@@ -100,21 +100,25 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
-                          _title,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
+                        FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            _title,
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         IconButton(
-                            icon: Icon(
-                              Icons.share,
-                              size: 28,
-                            ),
-                            onPressed: () {
-                              share(context, _imageLink);
-                            }),
+                          icon: Icon(
+                            Icons.share,
+                            size: 28,
+                          ),
+                          onPressed: () {
+                            share(context, _imageLink);
+                          },
+                        ),
                       ],
                     ),
                     Container(
