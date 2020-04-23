@@ -208,33 +208,35 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                     color: Colors.redAccent,
                   ),
                 ),
+                Container(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      queryRecord.title,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          queryRecord.title,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.timer,
+                            size: 18,
                           ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.timer,
-                              size: 18,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 5),
-                              child: Text("Durata: " + queryRecord.duration),
-                            ),
-                          ],
-                        ),
-                      ],
+                          Container(
+                            margin: EdgeInsets.only(left: 5),
+                            child: Text("Durata: " + queryRecord.duration),
+                          ),
+                        ],
+                      ),
                     ),
                     IconButton(
                       icon: Icon(
@@ -364,39 +366,43 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                           color: Colors.redAccent,
                         ),
                       ),
+                      Container(
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            queryRecord.title,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                queryRecord.title,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.timer,
+                                  size: 18,
                                 ),
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.timer,
-                                    size: 18,
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 5),
-                                    child:
-                                        Text("Durata: " + queryRecord.duration),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                Container(
+                                  margin: EdgeInsets.only(left: 5),
+                                  child:
+                                      Text("Durata: " + queryRecord.duration),
+                                ),
+                              ],
+                            ),
                           ),
                           IconButton(
                             icon: Icon(
                               Icons.favorite,
-                              color: Colors.red,
+                              color: (favoriteRecipes.contains(documnetId))
+                                  ? Colors.red
+                                  : Color.fromRGBO(230, 219, 221, 100),
                               size: 30,
                             ),
                             onPressed: (favoriteRecipes.contains(documnetId))

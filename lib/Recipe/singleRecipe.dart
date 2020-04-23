@@ -26,6 +26,9 @@ List<dynamic> _preparation;
 String _imageLink;
 bool _isLoaded = false;
 bool _showIngredients = true;
+String _calories = "5"; //TODO: Prenderlo dal DB
+String _doses = "6"; //TODO: Prenderlo dal DB
+String _difficolta = "Facile"; //TODO: Prenderlo dal DB
 var user;
 
 class _SingleRecipeState extends State<SingleRecipe> {
@@ -100,8 +103,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        FittedBox(
-                          fit: BoxFit.contain,
+                        Flexible(
                           child: Text(
                             _title,
                             style: TextStyle(
@@ -138,27 +140,97 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     Container(
                       constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
                       margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.03),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.timer,
-                            color: Colors.black,
-                            size: 32,
+                          top: MediaQuery.of(context).size.width * 0.01),
+                      child: Table(
+                        border: TableBorder.all(width: 4, color: Colors.grey),
+                        children: [
+                          TableRow(
+                            children: [
+                              TableCell(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Icon(
+                                        Icons.timer,
+                                        color: Colors.black,
+                                        size: 25,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        _duration + " minuti",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              TableCell(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        "Calorie: " + _calories,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(
-                              width: MediaQuery.of(context).size.width * 0.01),
-                          Text(
-                            _duration + " minuti",
-                            style: TextStyle(
-                                fontSize: 26, fontWeight: FontWeight.w600),
+                          TableRow(
+                            children: [
+                              TableCell(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        "Dosi per " + _doses,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              TableCell(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(5),
+                                      child: Text(
+                                        "Difficoltà: " + _difficolta,
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         ],
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.1),
+                          top: MediaQuery.of(context).size.width * 0.05),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -215,11 +287,18 @@ class _SingleRecipeState extends State<SingleRecipe> {
                       ),
                     ),
                     Container(
-                      height: 300, //TODO: Togliere altezza hard coded
-                      child: WrapperForIngredientsOrRecipes(
-                          ingredients: _ingredients,
-                          preparation: _preparation,
-                          showIngredients: _showIngredients),
+                      height: MediaQuery.of(context).size.width * 0.02,
+                    ),
+                    Container(
+                      child: Expanded(
+                        child: WrapperForIngredientsOrRecipes(
+                            ingredients: _ingredients,
+                            preparation: _preparation,
+                            showIngredients: _showIngredients),
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.width * 0.02,
                     ),
                   ],
                 ),

@@ -35,10 +35,21 @@ class _HomepageState extends State<Homepage> {
   List<dynamic> ingredients;
   List<String> _listOfIngredientsToAdd = [];
   bool isLoaded = false;
+  bool _showFilterBox = false;
 
   List<dynamic> recipes;
   List<dynamic> allergens;
   bool showRecipeWithAllergens;
+
+  List<String> _possibleFilter = [
+    'Nessuno',
+    'Calorie Decrescenti',
+    'Difficoltà Crescente',
+    'Difficoltà Crescente'
+  ];
+
+  String _selectedFilterTmp;
+  String _selectedFilter = 'Nessuno';
 
   _getUserFridge() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -87,10 +98,6 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     _getUserFridge();
-
-    String a = "Prosciutto Cotto fresco di pasqua da 500g al metro cubo";
-    String b = "Prosciutto Cotto";
-    print("QUESTO È:" + a.contains(b).toString());
     _getUserInfo();
     super.initState();
   }
@@ -105,9 +112,9 @@ class _HomepageState extends State<Homepage> {
         }
       }
       if (trovataCorrispondenza == false) return false;
-      print("Non posso fare sta ricetta");
+      //print("Non posso fare sta ricetta");
     }
-    print("Posso fare sta ricetta");
+    //print("Posso fare sta ricetta");
     return true;
   }
 
@@ -144,16 +151,33 @@ class _HomepageState extends State<Homepage> {
 
   //Display delle ricette
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('recipes').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (_selectedFilter == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('recipes').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (_selectedFilter == 'Calorie Decrescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('calories', descending: true) //TODO: Non fua niente...
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   Widget _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
@@ -216,20 +240,23 @@ class _HomepageState extends State<Homepage> {
                           color: Colors.redAccent,
                         ),
                       ),
+                      FittedBox(
+                        fit: BoxFit.contain,
+                        child: Text(
+                          queryRecord.title,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text(
-                                queryRecord.title,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                ),
-                              ),
                               Row(
                                 children: <Widget>[
                                   Icon(
@@ -245,56 +272,67 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ],
                           ),
-                          (showRecipeWithAllergens == true &&
-                                  (checkIfRecipeContainsAllergens(
-                                          allergens, queryRecord.ingredients) ==
-                                      false))
-                              ? IconButton(
-                                  icon: Icon(Icons.sentiment_very_dissatisfied,
-                                      color: Colors.red, size: 30),
-                                  onPressed: () => showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return AllergensInfo();
-                                    },
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                (showRecipeWithAllergens == true &&
+                                        (checkIfRecipeContainsAllergens(
+                                                allergens,
+                                                queryRecord.ingredients) ==
+                                            false))
+                                    ? IconButton(
+                                        icon: Icon(
+                                            Icons.sentiment_very_dissatisfied,
+                                            color: Colors.red,
+                                            size: 30),
+                                        onPressed: () => showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AllergensInfo();
+                                          },
+                                        ),
+                                      )
+                                    : Container(),
+                                IconButton(
+                                  icon: Icon(
+                                    Icons.favorite,
+                                    color: (favoriteRecipes
+                                            .contains(documnetId))
+                                        ? Colors.red
+                                        : Color.fromRGBO(230, 219, 221, 100),
+                                    size: 30,
                                   ),
-                                )
-                              : Container(),
-                          IconButton(
-                            icon: Icon(
-                              Icons.favorite,
-                              color: (favoriteRecipes.contains(documnetId))
-                                  ? Colors.red
-                                  : Color.fromRGBO(230, 219, 221, 100),
-                              size: 30,
+                                  onPressed:
+                                      (favoriteRecipes.contains(documnetId))
+                                          ? () async {
+                                              var list = List<String>();
+                                              list.add(documnetId);
+                                              final db = Firestore.instance;
+                                              await db
+                                                  .collection('users')
+                                                  .document(user.uid)
+                                                  .updateData({
+                                                "favoriteRecipes":
+                                                    FieldValue.arrayRemove(list)
+                                              });
+                                              initState(); //TODO: Soluzione brutta e temporanea
+                                            }
+                                          : () async {
+                                              var list = List<String>();
+                                              list.add(documnetId);
+                                              final db = Firestore.instance;
+                                              await db
+                                                  .collection('users')
+                                                  .document(user.uid)
+                                                  .updateData({
+                                                "favoriteRecipes":
+                                                    FieldValue.arrayUnion(list)
+                                              });
+                                              initState(); //TODO: Soluzione brutta e temporanea
+                                            },
+                                ),
+                              ],
                             ),
-                            onPressed: (favoriteRecipes.contains(documnetId))
-                                ? () async {
-                                    var list = List<String>();
-                                    list.add(documnetId);
-                                    final db = Firestore.instance;
-                                    await db
-                                        .collection('users')
-                                        .document(user.uid)
-                                        .updateData({
-                                      "favoriteRecipes":
-                                          FieldValue.arrayRemove(list)
-                                    });
-                                    initState(); //TODO: Soluzione brutta e temporanea
-                                  }
-                                : () async {
-                                    var list = List<String>();
-                                    list.add(documnetId);
-                                    final db = Firestore.instance;
-                                    await db
-                                        .collection('users')
-                                        .document(user.uid)
-                                        .updateData({
-                                      "favoriteRecipes":
-                                          FieldValue.arrayUnion(list)
-                                    });
-                                    initState(); //TODO: Soluzione brutta e temporanea
-                                  },
                           ),
                         ],
                       ),
@@ -350,6 +388,17 @@ class _HomepageState extends State<Homepage> {
           icon: _searchIcon,
           onPressed: _searchPressed,
         ),
+        IconButton(
+          icon: Icon(
+            Icons.filter_list,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              _showFilterBox = !_showFilterBox;
+            });
+          },
+        ),
       ],
     );
   }
@@ -386,8 +435,98 @@ class _HomepageState extends State<Homepage> {
         onRefresh: _refreshRecipes,
         child: ExpandableCardPage(
           page: isLoaded
-              ? Container(
-                  child: _buildBody(context),
+              ? Stack(
+                  children: <Widget>[
+                    Container(
+                      child: _buildBody(context),
+                    ),
+                    _showFilterBox
+                        ? Container(
+                            height: 100,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Color.fromRGBO(255, 0, 87, 1),
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                bottomRight: Radius.circular(20),
+                              ),
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _showFilterBox = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        "DISMISS",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _selectedFilter = _selectedFilterTmp;
+                                          print("FINAL: " + _selectedFilter);
+                                          _showFilterBox = false;
+                                        });
+                                      },
+                                      child: Text(
+                                        "CONFIRM",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: DropdownButton(
+                                    underline: Container(
+                                      height: 1,
+                                      color: Colors.white,
+                                    ),
+                                    icon: Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Colors.white,
+                                    ),
+                                    iconSize: 32,
+                                    isExpanded: true,
+                                    value: _selectedFilterTmp,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        _selectedFilterTmp = newValue;
+                                        print("TMP: " + _selectedFilterTmp);
+                                      });
+                                    },
+                                    items: _possibleFilter.map((location) {
+                                      return DropdownMenuItem(
+                                        child: Center(
+                                          child: new Text(
+                                            location,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ),
+                                        value: location,
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                  ],
                 )
               : Center(
                   child: Container(
