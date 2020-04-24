@@ -26,7 +26,7 @@ List<dynamic> _preparation;
 String _imageLink;
 bool _isLoaded = false;
 bool _showIngredients = true;
-String _calories = "5"; //TODO: Prenderlo dal DB
+int _calories;
 String _doses = "6"; //TODO: Prenderlo dal DB
 String _difficolta = "Facile"; //TODO: Prenderlo dal DB
 var user;
@@ -45,6 +45,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
           _duration = data['duration'].toString();
           _ingredients = data['ingredients'];
           _preparation = data['preparation'];
+          _calories = data['calories'];
           _imageLink = data['imageLink'];
           _isLoaded = true;
         });
@@ -177,7 +178,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                                     Padding(
                                       padding: EdgeInsets.all(5),
                                       child: Text(
-                                        "Calorie: " + _calories,
+                                        "Calorie: " + _calories.toString(),
                                         style: TextStyle(
                                             fontSize: 20,
                                             fontWeight: FontWeight.w600),

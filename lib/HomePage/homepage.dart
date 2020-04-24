@@ -43,12 +43,12 @@ class _HomepageState extends State<Homepage> {
 
   List<String> _possibleFilter = [
     'Nessuno',
-    'Calorie Decrescenti',
-    'Difficoltà Crescente',
-    'Difficoltà Crescente'
+    'Calorie Crescenti',
+    'Crescente Difficoltà',
+    'Decrescente Difficoltà',
   ];
 
-  String _selectedFilterTmp;
+  String _selectedFilterTmp = 'Nessuno';
   String _selectedFilter = 'Nessuno';
 
   _getUserFridge() async {
@@ -163,11 +163,41 @@ class _HomepageState extends State<Homepage> {
         },
       );
     }
-    if (_selectedFilter == 'Calorie Decrescenti') {
+    if (_selectedFilter == 'Calorie Crescenti') {
       return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection('recipes')
-            .orderBy('calories', descending: true) //TODO: Non fua niente...
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (_selectedFilter == 'Difficoltà Crescente') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (_selectedFilter == 'Decrescente') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
@@ -491,11 +521,11 @@ class _HomepageState extends State<Homepage> {
                                   child: DropdownButton(
                                     underline: Container(
                                       height: 1,
-                                      color: Colors.white,
+                                      color: Colors.black87,
                                     ),
                                     icon: Icon(
                                       Icons.arrow_drop_down,
-                                      color: Colors.white,
+                                      color: Colors.black87,
                                     ),
                                     iconSize: 32,
                                     isExpanded: true,
@@ -503,7 +533,7 @@ class _HomepageState extends State<Homepage> {
                                     onChanged: (newValue) {
                                       setState(() {
                                         _selectedFilterTmp = newValue;
-                                        print("TMP: " + _selectedFilterTmp);
+                                        print("-->" + _selectedFilterTmp);
                                       });
                                     },
                                     items: _possibleFilter.map((location) {
@@ -511,10 +541,7 @@ class _HomepageState extends State<Homepage> {
                                         child: Center(
                                           child: new Text(
                                             location,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.black,
-                                            ),
+                                            style: TextStyle(fontSize: 18),
                                           ),
                                         ),
                                         value: location,
@@ -986,6 +1013,7 @@ class QueryRecord {
   final String title;
   final String imageLink;
   final String duration;
+  final int calories;
   final List<dynamic> ingredients;
 
   final DocumentReference reference;
@@ -993,6 +1021,7 @@ class QueryRecord {
   QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
       : title = map['title'],
         duration = map['duration'].toString(),
+        calories = map['calories'],
         imageLink = map['imageLink'],
         ingredients = map['ingredients'];
 

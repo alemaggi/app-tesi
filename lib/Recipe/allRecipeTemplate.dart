@@ -16,6 +16,17 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
   //I primi tre vediamo se farli o no
   bool soloPreferiti = false;
 
+  bool showFilterBox = false;
+  List<String> _possibleFilter = [
+    'Nessuno',
+    'Calorie Crescenti',
+    'Crescente Difficoltà',
+    'Decrescente Difficoltà',
+  ];
+
+  String _selectedFilterTmp = 'Nessuno';
+  String _selectedFilter = 'Nessuno';
+
   var typeOfRecipeSelected =
       0; //0 = Nessuno, 1 = Antipasti, 2 = Primi, 3 = Secondi, 4 = Dolci
 
@@ -61,6 +72,15 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
             Navigator.pop(context);
           },
         ),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.filter_list, color: Colors.white),
+              onPressed: () {
+                setState(() {
+                  showFilterBox = !showFilterBox;
+                });
+              })
+        ],
         title: Text(
           "Tutte Le Ricette",
           style: TextStyle(fontSize: 24),
@@ -222,6 +242,87 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
               ],
             ),
             OnlyOneCategoryRecipe(categoryToShow: typeOfRecipeSelected),
+            showFilterBox
+                ? Container(
+                    height: 130,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Color.fromRGBO(255, 0, 87, 1),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  showFilterBox = false;
+                                });
+                              },
+                              child: Text(
+                                "DISMISS",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  _selectedFilter = _selectedFilterTmp;
+                                  print("FINAL: " + _selectedFilter);
+                                  showFilterBox = false;
+                                });
+                              },
+                              child: Text(
+                                "CONFIRM",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: DropdownButton(
+                            underline: Container(
+                              height: 1,
+                              color: Colors.black87,
+                            ),
+                            icon: Icon(
+                              Icons.arrow_drop_down,
+                              color: Colors.black87,
+                            ),
+                            iconSize: 32,
+                            isExpanded: true,
+                            value: _selectedFilterTmp,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedFilterTmp = newValue;
+                                print("-->" + _selectedFilterTmp);
+                              });
+                            },
+                            items: _possibleFilter.map((location) {
+                              return DropdownMenuItem(
+                                child: Center(
+                                  child: new Text(
+                                    location,
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ),
+                                value: location,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
