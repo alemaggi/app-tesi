@@ -43,7 +43,7 @@ class _MyFridgeState extends State<MyFridge> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -99,7 +99,7 @@ class _MyFridgeState extends State<MyFridge> {
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
-                              color: Colors.red,
+                              color: Color.fromRGBO(233, 0, 45, 1),
                               onPressed: () async {
                                 var list = List<String>();
                                 list.add(ingredients[index]);
@@ -129,7 +129,7 @@ class _MyFridgeState extends State<MyFridge> {
                 child: CircularProgressIndicator(
                   strokeWidth: 6.0,
                   valueColor: AlwaysStoppedAnimation(
-                    Color.fromRGBO(255, 0, 87, 1),
+                    Color.fromRGBO(233, 0, 45, 1),
                   ),
                 ),
               ),

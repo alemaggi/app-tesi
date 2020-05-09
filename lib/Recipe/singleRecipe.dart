@@ -77,7 +77,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -135,7 +135,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                           image: NetworkImage(_imageLink),
                         ),
                         borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                        color: Colors.redAccent,
+                        color: Color.fromRGBO(233, 0, 45, 1),
                       ),
                     ),
                     Container(
@@ -239,7 +239,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                             borderSide: BorderSide(
                                 width: 2.0,
                                 color: _showIngredients
-                                    ? Color.fromRGBO(255, 0, 87, 1)
+                                    ? Color.fromRGBO(233, 0, 45, 1)
                                     : Colors.black),
                             child: Text(
                               'Ingredienti',
@@ -247,7 +247,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                                 fontSize: 22,
                                 fontWeight: FontWeight.w600,
                                 color: _showIngredients
-                                    ? Color.fromRGBO(255, 0, 87, 1)
+                                    ? Color.fromRGBO(233, 0, 45, 1)
                                     : Colors.black,
                               ),
                             ),
@@ -264,7 +264,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                               width: 2.0,
                               color: _showIngredients
                                   ? Colors.black
-                                  : Color.fromRGBO(255, 0, 87, 1),
+                                  : Color.fromRGBO(233, 0, 45, 1),
                             ),
                             child: Text(
                               'Preparazione',
@@ -273,7 +273,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                                 fontWeight: FontWeight.w600,
                                 color: _showIngredients
                                     ? Colors.black
-                                    : Color.fromRGBO(255, 0, 87, 1),
+                                    : Color.fromRGBO(233, 0, 45, 1),
                               ),
                             ),
                             onPressed: (() {
@@ -313,7 +313,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
                 child: CircularProgressIndicator(
                   strokeWidth: 6.0,
                   valueColor: AlwaysStoppedAnimation(
-                    Color.fromRGBO(255, 0, 87, 1),
+                    Color.fromRGBO(233, 0, 45, 1),
                   ),
                 ),
               ),
@@ -324,7 +324,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
         child: Icon(
           Icons.favorite,
           color: (widget.favoriteRecipes.contains(widget.documentId))
-              ? Colors.red
+              ? Color.fromRGBO(233, 0, 45, 1)
               : Color.fromRGBO(230, 219, 221, 100),
           size: 36,
         ),

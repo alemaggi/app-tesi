@@ -83,7 +83,6 @@ class _SignupState extends State<Signup> {
                 children: <Widget>[
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
-                    controller: null, //TODO: Fare controller
                     decoration: InputDecoration(
                       hintText: "Email",
                       prefixIcon: Icon(Icons.email),
@@ -92,7 +91,8 @@ class _SignupState extends State<Signup> {
                         val.isEmpty ? 'Enter a valid email' : null,
                     onChanged: (val) {
                       setState(() {
-                        _email = val.trim();
+                        String tmp = val.toLowerCase();
+                        _email = tmp.trim();
                       });
                     },
                   ),
@@ -164,7 +164,7 @@ class _SignupState extends State<Signup> {
               error,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.red,
+                color: Color.fromRGBO(233, 0, 45, 1),
                 fontSize: 14,
               ),
             ),
@@ -181,7 +181,7 @@ class _SignupState extends State<Signup> {
               child: Text(
                 "Sign Up",
                 style: TextStyle(
-                    color: Color.fromRGBO(255, 0, 87, 1),
+                    color: Color.fromRGBO(233, 0, 45, 1),
                     fontSize: 26,
                     fontWeight: FontWeight.bold),
               ),
@@ -221,7 +221,7 @@ class _SignupState extends State<Signup> {
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(10.0),
                 side: BorderSide(
-                  color: Color.fromRGBO(255, 0, 87, 1),
+                  color: Color.fromRGBO(233, 0, 45, 1),
                   width: 3,
                 ),
               ),

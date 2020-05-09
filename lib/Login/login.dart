@@ -5,8 +5,6 @@ import 'package:app_tesi/Signup/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -15,13 +13,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   _setNewUserIntoFirestoreWhenUsingGoogleLogin(
       String userEmail, String uid) async {
-    //Devo controlloare se l'utete ha già effettuato un accesso quindi controllo se ho la sua emial in 'user'
+    //Devo controlloare se l'utete ha già effettuato un accesso quindi controllo se ho la sua email in 'user'
     Firestore.instance
         .collection('users')
         .where('email', isEqualTo: userEmail)
         .snapshots()
         .listen((data) {
-      if (data != null) {
+      if (data == null) {
         Firestore.instance.runTransaction((transaction) async {
           await transaction
               .set(Firestore.instance.collection("users").document(uid), {
@@ -31,7 +29,8 @@ class _LoginState extends State<Login> {
             'profilePicUrl':
                 'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
             'myFridge': [],
-            'allegens': [],
+            'allergens': [],
+            'favoriteRecipes': [],
             'showRecipeWithAllergens': true,
           });
         });
@@ -62,10 +61,18 @@ class _LoginState extends State<Login> {
       body: Stack(
         children: <Widget>[
           Container(
-            color: Color.fromRGBO(255, 0, 87, 1),
+            color: Color.fromRGBO(233, 0, 45, 1),
             height: MediaQuery.of(context).size.height * 0.5,
             child: Center(
-              child: Container(color: Colors.white, width: 200, height: 200),
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.width * 0.6,
+                child: Image(
+                  image: AssetImage("assets/Logo.png"),
+                ),
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.width * 0.1),
+              ),
             ),
           ),
           Column(
@@ -136,8 +143,6 @@ class _LoginState extends State<Login> {
                                   ),
                                   TextFormField(
                                     keyboardType: TextInputType.text,
-                                    controller:
-                                        null, //TODO: Fare controller in caso sera se no togliere
                                     obscureText: showPassword ? false : true,
                                     decoration: InputDecoration(
                                       suffixIcon: IconButton(
@@ -176,7 +181,7 @@ class _LoginState extends State<Login> {
                               error,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Colors.red,
+                                color: Color.fromRGBO(233, 0, 45, 1),
                                 fontSize: 14,
                               ),
                             ),
@@ -193,7 +198,7 @@ class _LoginState extends State<Login> {
                               child: Text(
                                 "Sign In",
                                 style: TextStyle(
-                                    color: Color.fromRGBO(255, 0, 87, 1),
+                                    color: Color.fromRGBO(233, 0, 45, 1),
                                     fontSize: 26,
                                     fontWeight: FontWeight.bold),
                               ),
@@ -217,7 +222,7 @@ class _LoginState extends State<Login> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(10.0),
                                 side: BorderSide(
-                                  color: Color.fromRGBO(255, 0, 87, 1),
+                                  color: Color.fromRGBO(233, 0, 45, 1),
                                   width: 3,
                                 ),
                               ),
@@ -265,8 +270,9 @@ class _LoginState extends State<Login> {
                               ),
                               highlightElevation: 0,
                               borderSide: BorderSide(
-                                  width: 3,
-                                  color: Color.fromRGBO(255, 0, 87, 1)),
+                                width: 3,
+                                color: Color.fromRGBO(233, 0, 45, 1),
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
                                 child: Row(
@@ -283,7 +289,7 @@ class _LoginState extends State<Login> {
                                         'Sign in with Google',
                                         style: TextStyle(
                                           fontSize: 20,
-                                          color: Color.fromRGBO(255, 0, 87, 1),
+                                          color: Color.fromRGBO(233, 0, 45, 1),
                                         ),
                                       ),
                                     )
@@ -301,7 +307,7 @@ class _LoginState extends State<Login> {
                               top: MediaQuery.of(context).size.width * 0.03,
                             ),
                             child: FlatButton(
-                              color: Color.fromRGBO(255, 0, 87, 1),
+                              color: Color.fromRGBO(233, 0, 45, 1),
                               child: Text(
                                 "Create an Account",
                                 style: TextStyle(

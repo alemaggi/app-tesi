@@ -56,6 +56,7 @@ class _EditProfileState extends State<EditProfile> {
   //Per il caricamento dell' immagine del profilo
   File _image;
   String _uploadedFileURL;
+  bool isUploaded = false;
 
   //Faccio l'update di nome e cognome
   _updateUserInfo(String userID) async {
@@ -85,6 +86,7 @@ class _EditProfileState extends State<EditProfile> {
       setState(() {
         _uploadedFileURL = fileURL;
         print(_uploadedFileURL);
+        isUploaded = true;
       });
     });
   }
@@ -93,7 +95,7 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
         title: Text(
           "Edit Profile",
           style: TextStyle(fontSize: 24),
@@ -196,7 +198,7 @@ class _EditProfileState extends State<EditProfile> {
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 22),
                               ),
-                              color: Color.fromRGBO(255, 0, 87, 1),
+                              color: Color.fromRGBO(233, 0, 45, 1),
                             ),
                           ],
                         )
@@ -217,11 +219,11 @@ class _EditProfileState extends State<EditProfile> {
                                   TextStyle(color: Colors.white, fontSize: 22),
                             ),
                             onPressed: chooseFile,
-                            color: Color.fromRGBO(255, 0, 87, 1),
+                            color: Color.fromRGBO(233, 0, 45, 1),
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
                               side: BorderSide(
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                                 width: 3,
                               ),
                             ),
@@ -239,35 +241,38 @@ class _EditProfileState extends State<EditProfile> {
               margin: EdgeInsets.only(
                 top: MediaQuery.of(context).size.width * 0.1,
               ),
-              child: FlatButton(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 0, 87, 1),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold),
-                ),
-                onPressed: () async {
-                  FirebaseUser user = await FirebaseAuth.instance.currentUser();
-                  var userID = user.uid;
-                  if (userID != null) {
-                    _updateUserInfo(userID);
-                  }
-                  setState(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Profile()),
-                    );
-                  });
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(10.0),
-                  side: BorderSide(
-                    color: Color.fromRGBO(255, 0, 87, 1),
-                    width: 3,
-                  ),
-                ),
-              ),
+              child: isUploaded
+                  ? FlatButton(
+                      child: Text(
+                        "Submit",
+                        style: TextStyle(
+                            color: Color.fromRGBO(233, 0, 45, 1),
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onPressed: () async {
+                        FirebaseUser user =
+                            await FirebaseAuth.instance.currentUser();
+                        var userID = user.uid;
+                        if (userID != null) {
+                          _updateUserInfo(userID);
+                        }
+                        setState(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Profile()),
+                          );
+                        });
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        side: BorderSide(
+                          color: Color.fromRGBO(233, 0, 45, 1),
+                          width: 3,
+                        ),
+                      ),
+                    )
+                  : Container(),
             ),
           ],
         ),

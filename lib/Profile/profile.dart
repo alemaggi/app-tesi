@@ -1,3 +1,4 @@
+import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:app_tesi/Profile/addAllergens.dart';
 import 'package:app_tesi/Profile/editProfile.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
         title: Text(
           "Profile",
           style: TextStyle(fontSize: 24),
@@ -66,7 +67,10 @@ class _ProfileState extends State<Profile> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Homepage()),
+              );
             }),
         actions: <Widget>[
           IconButton(
@@ -173,8 +177,8 @@ class _ProfileState extends State<Profile> {
                                 .document(user.uid)
                                 .updateData({"showRecipeWithAllergens": value});
                           },
-                          activeTrackColor: Color.fromRGBO(255, 0, 87, 100),
-                          activeColor: Color.fromRGBO(255, 0, 87, 1),
+                          activeTrackColor: Color.fromRGBO(233, 0, 60, 1),
+                          activeColor: Color.fromRGBO(233, 0, 45, 1),
                         ),
                       ],
                     ),
@@ -228,7 +232,7 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     IconButton(
                                       icon: Icon(Icons.delete),
-                                      color: Colors.red,
+                                      color: Color.fromRGBO(233, 0, 45, 1),
                                       onPressed: () async {
                                         var list = List<String>();
                                         list.add(_allergens[index]);
@@ -263,7 +267,7 @@ class _ProfileState extends State<Profile> {
                 child: CircularProgressIndicator(
                   strokeWidth: 6.0,
                   valueColor: AlwaysStoppedAnimation(
-                    Color.fromRGBO(255, 0, 87, 1),
+                    Color.fromRGBO(233, 0, 45, 1),
                   ),
                 ),
               ),
@@ -273,7 +277,7 @@ class _ProfileState extends State<Profile> {
         elevation: 6,
         child: Icon(
           Icons.add,
-          color: Color.fromRGBO(255, 0, 87, 1),
+          color: Color.fromRGBO(233, 0, 45, 1),
           size: 36,
         ),
         onPressed: () {

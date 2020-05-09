@@ -68,8 +68,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   children: <Widget>[
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
-                      controller:
-                          null, //TODO: Fare controller in caso sera se no togliere
                       decoration: InputDecoration(
                         hintText: "Enter Email Address",
                         hintStyle: TextStyle(fontSize: 24),
@@ -98,7 +96,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 top: MediaQuery.of(context).size.width * 0.1,
               ),
               child: FlatButton(
-                color: Color.fromRGBO(255, 0, 87, 1),
+                color: Color.fromRGBO(233, 0, 45, 1),
                 child: Text(
                   "Send",
                   style: TextStyle(

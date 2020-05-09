@@ -79,16 +79,21 @@ class _WrapperForIngredientsOrRecipesState
                               children: <Widget>[
                                 checkIfRecipeIsDoable(userIngredients,
                                         widget.ingredients[index])
-                                    ? Icon(
-                                        Icons.check,
-                                        size: 32,
+                                    ? Container(
+                                        margin: EdgeInsets.only(right: 5),
+                                        child: Icon(
+                                          Icons.check,
+                                          size: 30,
+                                        ),
                                       )
-                                    : Icon(
-                                        Icons.block,
-                                        size: 32,
+                                    : Container(
+                                        margin: EdgeInsets.only(right: 5),
+                                        child: Icon(
+                                          Icons.block,
+                                          size: 30,
+                                        ),
                                       ),
-                                FittedBox(
-                                  fit: BoxFit.cover,
+                                Expanded(
                                   child: Text(
                                     widget.ingredients[index],
                                     style: TextStyle(

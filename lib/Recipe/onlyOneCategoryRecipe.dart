@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 class OnlyOneCategoryRecipe extends StatefulWidget {
   final int categoryToShow;
+  String filterSelected;
 
-  OnlyOneCategoryRecipe({Key key, @required this.categoryToShow})
+  OnlyOneCategoryRecipe(
+      {Key key, @required this.categoryToShow, @required this.filterSelected})
       : super(key: key);
   @override
   _OnlyOneCategoryRecipeState createState() => _OnlyOneCategoryRecipeState();
@@ -45,99 +47,492 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
 
   //ALL RECIPES
   Widget _buildBody(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('recipes').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('recipes').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   //STARTED
   Widget _buildBodyStarter(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
-          .collection('recipes')
-          .where('type', isEqualTo: 'Antipasto')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Antipasto')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Antipasto')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Antipasto')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Antipasto')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Antipasto')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   //FIRST
   Widget _buildBodyFirst(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
-          .collection('recipes')
-          .where('type', isEqualTo: 'Primi')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Primi')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Primi')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Primi')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Primi')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Primi')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   //SECONDS
   Widget _buildBodySecond(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
-          .collection('recipes')
-          .where('type', isEqualTo: 'Secondi')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Secondi')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Secondi')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Secondi')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Secondi')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Secondi')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   //DESSERT
   Widget _buildBodyDessert(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance
-          .collection('recipes')
-          .where('type', isEqualTo: 'Dessert')
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-          );
-        return _buildList(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Dessert')
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Dessert')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Dessert')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Dessert')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .where('type', isEqualTo: 'Dessert')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   //FAVORITES
   Widget _buildBodyFavorite(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('recipes').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData)
-          return LinearProgressIndicator(
-            backgroundColor: Colors.transparent,
-            value: 0,
-          );
-        return _buildListOnlyFavorites(context, snapshot.data.documents);
-      },
-    );
+    if (widget.filterSelected == 'Nessuno') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection('recipes').snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildListOnlyFavorites(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Calorie Crescenti') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('calories', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildListOnlyFavorites(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Crescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildListOnlyFavorites(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Decrescente Difficoltà') {
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildListOnlyFavorites(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (widget.filterSelected == 'Tempo di Preparazione') {
+      print("-->" + widget.filterSelected);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('duration', descending: false)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildListOnlyFavorites(context, snapshot.data.documents);
+        },
+      );
+    }
   }
 
   Widget _buildListOnlyFavorites(
@@ -205,7 +600,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                       image: NetworkImage(queryRecord.imageLink),
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                    color: Colors.redAccent,
+                    color: Color.fromRGBO(233, 0, 45, 1),
                   ),
                 ),
                 Container(
@@ -242,7 +637,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                       icon: Icon(
                         Icons.favorite,
                         color: (favoriteRecipes.contains(documnetId))
-                            ? Colors.red
+                            ? Color.fromRGBO(233, 0, 45, 1)
                             : Color.fromRGBO(230, 219, 221, 100),
                         size: 30,
                       ),
@@ -279,7 +674,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                   children: <Widget>[
                     Container(
                       child: FlatButton(
-                        color: Color.fromRGBO(255, 0, 87, 1),
+                        color: Color.fromRGBO(233, 0, 45, 1),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -363,7 +758,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                             image: NetworkImage(queryRecord.imageLink),
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          color: Colors.redAccent,
+                          color: Color.fromRGBO(233, 0, 45, 1),
                         ),
                       ),
                       Container(
@@ -401,7 +796,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                             icon: Icon(
                               Icons.favorite,
                               color: (favoriteRecipes.contains(documnetId))
-                                  ? Colors.red
+                                  ? Color.fromRGBO(233, 0, 45, 1)
                                   : Color.fromRGBO(230, 219, 221, 100),
                               size: 30,
                             ),
@@ -440,7 +835,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                         children: <Widget>[
                           Container(
                             child: FlatButton(
-                              color: Color.fromRGBO(255, 0, 87, 1),
+                              color: Color.fromRGBO(233, 0, 45, 1),
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -502,7 +897,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
               child: CircularProgressIndicator(
                 strokeWidth: 6.0,
                 valueColor: AlwaysStoppedAnimation(
-                  Color.fromRGBO(255, 0, 87, 1),
+                  Color.fromRGBO(233, 0, 45, 1),
                 ),
               ),
             ),

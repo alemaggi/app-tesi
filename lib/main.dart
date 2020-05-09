@@ -5,7 +5,9 @@ import 'Models/user.dart';
 import 'Services/auth.dart';
 import 'Wrapper/wrapperForFirstPage.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -15,8 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme:
-            ThemeData(primarySwatch: Colors.red), //TODO: Sistemare sto colore
+        theme: ThemeData(primarySwatch: Colors.red),
         home: WrapperForFirstPage(),
       ),
     );

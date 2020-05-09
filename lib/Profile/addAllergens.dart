@@ -1,3 +1,4 @@
+import 'package:app_tesi/Profile/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -26,7 +27,7 @@ class _AddAllergensState extends State<AddAllergens> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+      backgroundColor: Color.fromRGBO(233, 0, 45, 1),
       content: Container(
         height: MediaQuery.of(context).size.height * 0.8,
         width: MediaQuery.of(context).size.width * 0.8,
@@ -168,7 +169,7 @@ class _AddAllergensState extends State<AddAllergens> {
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0),
                         side: BorderSide(
-                          color: Color.fromRGBO(255, 0, 87, 1),
+                          color: Color.fromRGBO(233, 0, 45, 1),
                           width: 3,
                         ),
                       ),
@@ -176,7 +177,7 @@ class _AddAllergensState extends State<AddAllergens> {
                         "Add Element To List",
                         style: TextStyle(
                           fontSize: 24,
-                          color: Color.fromRGBO(255, 0, 87, 1),
+                          color: Color.fromRGBO(233, 0, 45, 1),
                         ),
                       ),
                     ),
@@ -194,7 +195,7 @@ class _AddAllergensState extends State<AddAllergens> {
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
                               side: BorderSide(
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                                 width: 3,
                               ),
                             ),
@@ -221,6 +222,7 @@ class _AddAllergensState extends State<AddAllergens> {
                                 });
                                 setState(() {
                                   _listOfIngredientsToAdd.clear();
+                                  Navigator.pop(context);
                                 });
                               }
                             },
@@ -228,7 +230,7 @@ class _AddAllergensState extends State<AddAllergens> {
                               "Submit",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                               ),
                             ),
                           ),

@@ -20,8 +20,11 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   AutoCompleteTextField searchTextField;
+  AutoCompleteTextField searchTextFieldTwo;
   TextEditingController controller = new TextEditingController();
+  TextEditingController controllerTwo = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<Alimento>> keyTwo = new GlobalKey();
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
   List names = new List();
@@ -29,23 +32,26 @@ class _HomepageState extends State<Homepage> {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('Le ricette che puoi fare subito');
   final _addFoodToFridgeKey = GlobalKey<FormState>();
+
   String _nomeAlimentoDaAggiungereAlF;
   var user;
   List<dynamic> favoriteRecipes;
-  List<dynamic> ingredients;
+  List<dynamic> ingredients; //Serve anche per fare un check che gli ingredienti
   List<String> _listOfIngredientsToAdd = [];
   bool isLoaded = false;
+
   bool _showFilterBox = false;
 
   List<dynamic> recipes;
   List<dynamic> allergens;
-  bool showRecipeWithAllergens;
+  bool showRecipeWithAllergens = false;
 
   List<String> _possibleFilter = [
     'Nessuno',
     'Calorie Crescenti',
     'Crescente Difficoltà',
     'Decrescente Difficoltà',
+    'Tempo di Preparazione',
   ];
 
   String _selectedFilterTmp = 'Nessuno';
@@ -53,6 +59,7 @@ class _HomepageState extends State<Homepage> {
 
   _getUserFridge() async {
     user = await FirebaseAuth.instance.currentUser();
+    print("EMAIL" + user.email);
     var userQuery = Firestore.instance
         .collection('users')
         .where('email', isEqualTo: user.email)
@@ -60,15 +67,13 @@ class _HomepageState extends State<Homepage> {
     userQuery.getDocuments().then(
       (data) {
         if (data.documents.length > 0) {
-          print(user.email);
           setState(() {
             ingredients = data.documents[0].data['myFridge'];
             allergens = data.documents[0].data['allergens'];
             showRecipeWithAllergens =
                 data.documents[0].data['showRecipeWithAllergens'];
-            print(ingredients);
-            print(allergens);
-            isLoaded = true;
+            print("INGREDIENTI" + ingredients.toString());
+            print("ALLERGENI" + allergens.toString());
           });
         }
       },
@@ -88,7 +93,6 @@ class _HomepageState extends State<Homepage> {
           setState(() {
             favoriteRecipes = data.documents[0].data['favoriteRecipes'];
             print("Preferiti: " + favoriteRecipes.toString());
-            isLoaded = true;
           });
         }
       },
@@ -99,59 +103,97 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     _getUserFridge();
     _getUserInfo();
+    setState(() {
+      isLoaded = true;
+    });
     super.initState();
   }
 
   bool checkIfRecipeIsDoable(
       List<dynamic> userIngredients, List<dynamic> recipeIngredients) {
-    for (var i = 0; i < recipeIngredients.length; i++) {
-      bool trovataCorrispondenza = false;
-      for (var k = 0; k < userIngredients.length; k++) {
-        if (recipeIngredients[i].contains(userIngredients[k])) {
-          trovataCorrispondenza = true;
+    if (userIngredients != null && recipeIngredients != null) {
+      for (var i = 0; i < recipeIngredients.length; i++) {
+        bool trovataCorrispondenza = false;
+        for (var k = 0; k < userIngredients.length; k++) {
+          if (recipeIngredients[i].contains(userIngredients[k])) {
+            trovataCorrispondenza = true;
+          }
         }
+        if (trovataCorrispondenza == false) return false;
+        //print("Non posso fare sta ricetta");
       }
-      if (trovataCorrispondenza == false) return false;
-      //print("Non posso fare sta ricetta");
-    }
-    //print("Posso fare sta ricetta");
-    return true;
+      //print("Posso fare sta ricetta");
+      return true;
+    } else
+      return false;
   }
 
   bool checkIfRecipeContainsAllergens(
       List<dynamic> userAllergenes, List<dynamic> recipeIngredients) {
-    for (var i = 0; i < recipeIngredients.length; i++) {
-      bool trovatoAllergene = false;
-      for (var k = 0; k < userAllergenes.length; k++) {
-        if (recipeIngredients[i].contains(userAllergenes[k])) {
-          trovatoAllergene = true;
+    if (userAllergenes != null && recipeIngredients != null) {
+      print("Allergeni: " + userAllergenes.toString());
+      print("Ingredienti: " + recipeIngredients.toString());
+      for (var i = 0; i < recipeIngredients.length; i++) {
+        bool trovatoAllergene = false;
+        for (var k = 0; k < userAllergenes.length; k++) {
+          print("Negli allergeni sto confrontadno: " +
+              recipeIngredients[i] +
+              "e: " +
+              userAllergenes[k] +
+              ". Il valore di trovatoAllergene è: " +
+              trovatoAllergene.toString());
+          if (recipeIngredients[i].contains(userAllergenes[k])) {
+            print("Trovato allergene ed è: " + userAllergenes[k]);
+            trovatoAllergene = true;
+          }
+        }
+        if (trovatoAllergene == true) {
+          print("----> Non posso fare sta ricetta senza morire");
+          return true; //Quindi contiene un allergene
         }
       }
-      if (trovatoAllergene == false) return false;
-      print("Non posso fare sta ricetta senza morire");
-    }
-    return true;
+      print("----> Posso fare sta ricetta senza morire");
+      return false; //La ricetta non contiene nessuno degli allergeni
+    } else
+      return false;
   }
 
   bool checkIfRecipeCanBeOutputted(List<dynamic> userIngredients,
       List<dynamic> recipeIngredients, List<dynamic> userAllergenes) {
     if (showRecipeWithAllergens == true) {
+      //Vuol dire che voglio vedere le ricette anche che mi fanno morire
+      print("showRecipeWithAllergens = " +
+          showRecipeWithAllergens.toString() +
+          "e checkIfRecipeIsDoable ritorna" +
+          checkIfRecipeIsDoable(userIngredients, recipeIngredients).toString());
+      //Quindi controllo solo se ho gli ingredienti per farla
       return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
     }
     //Se non voglio vedere le ricette che mi farebbero morire
     else {
+      print("showRecipeWithAllergens = " +
+          showRecipeWithAllergens.toString() +
+          "e checkIfRecipeContainsAllergens ritorna: " +
+          checkIfRecipeContainsAllergens(allergens, recipeIngredients)
+              .toString());
       //Controllo se sta ricetta la posso fare senza morire
-      if (checkIfRecipeContainsAllergens(allergens, recipeIngredients)) {
+      if (checkIfRecipeContainsAllergens(allergens, recipeIngredients) ==
+          false) {
+        //Se entro qui dentro vuol dire che sta ricetta non mi uccide
+
         //Se posso farla senza morire guardo se ho gli ingredienti per farla
         return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
-      } else
+      } else {
+        print("Fallito checkIfRecipeContainsAllergens");
         return false;
+      }
     }
   }
 
   //Display delle ricette
   Widget _buildBody(BuildContext context) {
     if (_selectedFilter == 'Nessuno') {
+      print("-->" + _selectedFilter);
       return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection('recipes').snapshots(),
         builder: (context, snapshot) {
@@ -164,6 +206,7 @@ class _HomepageState extends State<Homepage> {
       );
     }
     if (_selectedFilter == 'Calorie Crescenti') {
+      print("-->" + _selectedFilter);
       return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection('recipes')
@@ -178,7 +221,8 @@ class _HomepageState extends State<Homepage> {
         },
       );
     }
-    if (_selectedFilter == 'Difficoltà Crescente') {
+    if (_selectedFilter == 'Crescente Difficoltà') {
+      print("-->" + _selectedFilter);
       return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection('recipes')
@@ -193,11 +237,28 @@ class _HomepageState extends State<Homepage> {
         },
       );
     }
-    if (_selectedFilter == 'Decrescente') {
+    if (_selectedFilter == 'Decrescente Difficoltà') {
+      print("-->" + _selectedFilter);
       return StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection('recipes')
             .orderBy('difficultyNumber', descending: true)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData)
+            return LinearProgressIndicator(
+              backgroundColor: Colors.transparent,
+            );
+          return _buildList(context, snapshot.data.documents);
+        },
+      );
+    }
+    if (_selectedFilter == 'Tempo di Preparazione') {
+      print("-->" + _selectedFilter);
+      return StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance
+            .collection('recipes')
+            .orderBy('duration', descending: false)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
@@ -267,7 +328,7 @@ class _HomepageState extends State<Homepage> {
                             image: NetworkImage(queryRecord.imageLink),
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                          color: Colors.redAccent,
+                          color: Color.fromRGBO(233, 0, 45, 1),
                         ),
                       ),
                       FittedBox(
@@ -309,11 +370,12 @@ class _HomepageState extends State<Homepage> {
                                         (checkIfRecipeContainsAllergens(
                                                 allergens,
                                                 queryRecord.ingredients) ==
-                                            false))
+                                            true))
                                     ? IconButton(
                                         icon: Icon(
                                             Icons.sentiment_very_dissatisfied,
-                                            color: Colors.red,
+                                            color:
+                                                Color.fromRGBO(233, 0, 45, 1),
                                             size: 30),
                                         onPressed: () => showDialog(
                                           context: context,
@@ -328,7 +390,7 @@ class _HomepageState extends State<Homepage> {
                                     Icons.favorite,
                                     color: (favoriteRecipes
                                             .contains(documnetId))
-                                        ? Colors.red
+                                        ? Color.fromRGBO(233, 0, 45, 1)
                                         : Color.fromRGBO(230, 219, 221, 100),
                                     size: 30,
                                   ),
@@ -371,7 +433,7 @@ class _HomepageState extends State<Homepage> {
                         children: <Widget>[
                           Container(
                             child: FlatButton(
-                              color: Color.fromRGBO(255, 0, 87, 1),
+                              color: Color.fromRGBO(233, 0, 45, 1),
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -410,14 +472,10 @@ class _HomepageState extends State<Homepage> {
 
   Widget _buildBar(BuildContext context) {
     return AppBar(
-      backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+      backgroundColor: Color.fromRGBO(233, 0, 45, 1),
       centerTitle: true,
       title: _appBarTitle,
       actions: <Widget>[
-        IconButton(
-          icon: _searchIcon,
-          onPressed: _searchPressed,
-        ),
         IconButton(
           icon: Icon(
             Icons.filter_list,
@@ -452,7 +510,9 @@ class _HomepageState extends State<Homepage> {
   }
 
   Future<void> _refreshRecipes() async {
-    initState();
+    setState(() {
+      initState();
+    });
   }
 
   @override
@@ -464,18 +524,21 @@ class _HomepageState extends State<Homepage> {
       body: RefreshIndicator(
         onRefresh: _refreshRecipes,
         child: ExpandableCardPage(
-          page: isLoaded
+          page: (isLoaded == true)
               ? Stack(
                   children: <Widget>[
                     Container(
                       child: _buildBody(context),
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height * 0.11,
+                      ),
                     ),
                     _showFilterBox
                         ? Container(
-                            height: 100,
+                            height: 125,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: Color.fromRGBO(255, 0, 87, 1),
+                              color: Color.fromRGBO(233, 0, 45, 1),
                               borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(20),
                                 bottomRight: Radius.circular(20),
@@ -503,7 +566,6 @@ class _HomepageState extends State<Homepage> {
                                       onPressed: () {
                                         setState(() {
                                           _selectedFilter = _selectedFilterTmp;
-                                          print("FINAL: " + _selectedFilter);
                                           _showFilterBox = false;
                                         });
                                       },
@@ -533,7 +595,6 @@ class _HomepageState extends State<Homepage> {
                                     onChanged: (newValue) {
                                       setState(() {
                                         _selectedFilterTmp = newValue;
-                                        print("-->" + _selectedFilterTmp);
                                       });
                                     },
                                     items: _possibleFilter.map((location) {
@@ -563,13 +624,13 @@ class _HomepageState extends State<Homepage> {
                     child: CircularProgressIndicator(
                       strokeWidth: 6.0,
                       valueColor: AlwaysStoppedAnimation(
-                        Color.fromRGBO(255, 0, 87, 1),
+                        Color.fromRGBO(233, 0, 45, 1),
                       ),
                     ),
                   ),
                 ),
           expandableCard: ExpandableCard(
-            backgroundColor: Color.fromRGBO(255, 0, 87, 1),
+            backgroundColor: Color.fromRGBO(233, 0, 45, 1),
             minHeight: MediaQuery.of(context).size.height * 0.18,
             maxHeight: MediaQuery.of(context).size.height * 0.85,
             hasRoundedCorners: true,
@@ -716,7 +777,7 @@ class _HomepageState extends State<Homepage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
                               side: BorderSide(
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                                 width: 3,
                               ),
                             ),
@@ -724,7 +785,7 @@ class _HomepageState extends State<Homepage> {
                               "Add Element To List",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                               ),
                             ),
                           ),
@@ -749,7 +810,7 @@ class _HomepageState extends State<Homepage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
                               side: BorderSide(
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                                 width: 3,
                               ),
                             ),
@@ -757,7 +818,7 @@ class _HomepageState extends State<Homepage> {
                               "Use OCR",
                               style: TextStyle(
                                 fontSize: 24,
-                                color: Color.fromRGBO(255, 0, 87, 1),
+                                color: Color.fromRGBO(233, 0, 45, 1),
                               ),
                             ),
                           ),
@@ -777,7 +838,7 @@ class _HomepageState extends State<Homepage> {
                                     borderRadius:
                                         new BorderRadius.circular(10.0),
                                     side: BorderSide(
-                                      color: Color.fromRGBO(255, 0, 87, 1),
+                                      color: Color.fromRGBO(233, 0, 45, 1),
                                       width: 3,
                                     ),
                                   ),
@@ -798,16 +859,39 @@ class _HomepageState extends State<Homepage> {
                                       }).toList();
                                       print(output);
                                       print(user.uid);
-                                      Firestore.instance
-                                          .collection('users')
-                                          .document(user.uid)
-                                          .updateData({
-                                        "myFridge":
-                                            FieldValue.arrayUnion(output)
-                                      });
-                                      setState(() {
-                                        _listOfIngredientsToAdd.clear();
-                                      });
+                                      if (ingredients != null) {
+                                        //Controllo che gli elementi aggiunti non siano gia presenti nel frigo
+                                        for (int i = 0;
+                                            i < output.length;
+                                            i++) {
+                                          if (ingredients.contains(output[i])) {
+                                            output.removeAt(i);
+                                          }
+                                        }
+                                        print(output);
+                                        Firestore.instance
+                                            .collection('users')
+                                            .document(user.uid)
+                                            .updateData({
+                                          "myFridge":
+                                              FieldValue.arrayUnion(output)
+                                        });
+                                        setState(() {
+                                          _listOfIngredientsToAdd.clear();
+                                        });
+                                      } else {
+                                        //Se il DB non contiene ingredienti li posso aggiungere senza problemi
+                                        Firestore.instance
+                                            .collection('users')
+                                            .document(user.uid)
+                                            .updateData({
+                                          "myFridge":
+                                              FieldValue.arrayUnion(output)
+                                        });
+                                        setState(() {
+                                          _listOfIngredientsToAdd.clear();
+                                        });
+                                      }
                                       //TODO: Far chiudere la card quando viene premuto il bottone
                                     }
                                   },
@@ -815,7 +899,7 @@ class _HomepageState extends State<Homepage> {
                                     "Submit",
                                     style: TextStyle(
                                       fontSize: 24,
-                                      color: Color.fromRGBO(255, 0, 87, 1),
+                                      color: Color.fromRGBO(233, 0, 45, 1),
                                     ),
                                   ),
                                 ),
@@ -859,6 +943,7 @@ class _NavDrawerState extends State<NavDrawer> {
         .collection('users')
         .where('email', isEqualTo: user.email)
         .limit(1);
+    print(user.email);
     userQuery.getDocuments().then(
       (data) {
         if (data.documents.length > 0) {
@@ -890,7 +975,7 @@ class _NavDrawerState extends State<NavDrawer> {
               children: <Widget>[
                 UserAccountsDrawerHeader(
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 0, 87, 1),
+                    color: Color.fromRGBO(233, 0, 45, 1),
                   ),
                   currentAccountPicture: CircleAvatar(
                     backgroundImage: NetworkImage(_url),
@@ -987,7 +1072,17 @@ class _NavDrawerState extends State<NavDrawer> {
                 ListTile(
                   title: Text('LogOut'),
                   onTap: () async {
-                    _auth.signOut();
+                    Future.delayed(
+                        Duration.zero,
+                        () => setState(() async {
+                              await _auth.signOut();
+                            }));
+                    /*
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                    */
                   },
                 ),
               ],
@@ -1001,7 +1096,7 @@ class _NavDrawerState extends State<NavDrawer> {
               child: CircularProgressIndicator(
                 strokeWidth: 6.0,
                 valueColor: AlwaysStoppedAnimation(
-                  Color.fromRGBO(255, 0, 87, 1),
+                  Color.fromRGBO(233, 0, 45, 1),
                 ),
               ),
             ),
@@ -1013,7 +1108,7 @@ class QueryRecord {
   final String title;
   final String imageLink;
   final String duration;
-  final int calories;
+
   final List<dynamic> ingredients;
 
   final DocumentReference reference;
@@ -1021,7 +1116,6 @@ class QueryRecord {
   QueryRecord.fromMap(Map<String, dynamic> map, {this.reference})
       : title = map['title'],
         duration = map['duration'].toString(),
-        calories = map['calories'],
         imageLink = map['imageLink'],
         ingredients = map['ingredients'];
 
@@ -1078,7 +1172,7 @@ class AllergensInfo extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(bottom: 20),
               child: FlatButton(
-                color: Color.fromRGBO(255, 0, 87, 1),
+                color: Color.fromRGBO(233, 0, 45, 1),
                 onPressed: () {
                   Navigator.pop(context);
                 },
