@@ -1031,6 +1031,6 @@ List<String> ingrCheckList = new List<String>();
 void loadElementstoCheckList() {
   for (int i = 0; i < foodList.length; i++) {
     ingrCheckList.add(foodList[i].nome);
-    print("added" + foodList[i].nome);
+    //print("added" + foodList[i].nome);
   }
 }

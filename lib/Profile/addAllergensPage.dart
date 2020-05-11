@@ -1,17 +1,17 @@
 import 'package:app_tesi/Profile/profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:math' as math;
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import './../HomePage/food.dart';
 
-class AddAllergens extends StatefulWidget {
+class AddAllergenesPage extends StatefulWidget {
   @override
-  _AddAllergensState createState() => _AddAllergensState();
+  _AddAllergenesPageState createState() => _AddAllergenesPageState();
 }
 
-class _AddAllergensState extends State<AddAllergens> {
+class _AddAllergenesPageState extends State<AddAllergenesPage> {
   AutoCompleteTextField searchTextField;
   TextEditingController controller = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
@@ -26,23 +26,14 @@ class _AddAllergensState extends State<AddAllergens> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: Color.fromRGBO(233, 0, 45, 1),
-      content: Container(
-        height: MediaQuery.of(context).size.width * 0.8,
-        width: MediaQuery.of(context).size.width * 0.8,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Aggiungi Allergeni"),
+        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
+      ),
+      body: Container(
         child: Column(
           children: <Widget>[
-            Container(
-              child: Text(
-                "Aggiungi Allergeni",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               height: 100,
@@ -62,13 +53,14 @@ class _AddAllergensState extends State<AddAllergens> {
                                 child: Text(
                               _listOfIngredientsToAdd[index].toString(),
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 26.0),
+                                  color: Color.fromRGBO(233, 0, 45, 1),
+                                  fontSize: 26.0),
                             )),
                           ),
                           IconButton(
                               icon: Icon(
                                 Icons.delete,
-                                color: Colors.white,
+                                color: Color.fromRGBO(233, 0, 45, 1),
                               ),
                               onPressed: () {
                                 setState(() {
@@ -93,7 +85,7 @@ class _AddAllergensState extends State<AddAllergens> {
                       searchTextField = AutoCompleteTextField<Alimento>(
                         suggestionsAmount: 4,
                         style: new TextStyle(
-                          color: Colors.white,
+                          color: Color.fromRGBO(233, 0, 45, 1),
                           fontSize: 24.0,
                         ),
                         submitOnSuggestionTap: true,
@@ -105,7 +97,7 @@ class _AddAllergensState extends State<AddAllergens> {
                           hintText: 'Inserisci un alimento',
                           hintStyle: TextStyle(
                             fontSize: 22,
-                            color: Colors.white,
+                            color: Color.fromRGBO(233, 0, 45, 1),
                           ),
                         ),
                         itemBuilder: (context, item) {
@@ -222,7 +214,11 @@ class _AddAllergensState extends State<AddAllergens> {
                                 });
                                 setState(() {
                                   _listOfIngredientsToAdd.clear();
-                                  Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profile()),
+                                  );
                                 });
                               }
                             },

@@ -20,11 +20,8 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   AutoCompleteTextField searchTextField;
-  AutoCompleteTextField searchTextFieldTwo;
   TextEditingController controller = new TextEditingController();
-  TextEditingController controllerTwo = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
-  GlobalKey<AutoCompleteTextFieldState<Alimento>> keyTwo = new GlobalKey();
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
   List names = new List();

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app_tesi/Profile/profile.dart';
+import 'package:app_tesi/Services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   String _name;
   String _surname;
+  String _email;
+
+  String error = ' ';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,11 +40,12 @@ class _EditProfileState extends State<EditProfile> {
             setState(() {
               _name = data.documents[0].data['name'];
               _surname = data.documents[0].data['surname'];
+              _email = data.documents[0].data['email'];
               //TODO: Mettere l'immagine del profilo che possa anche non essere modificata dall' utente (Se vogliamo)
             });
           } else {
-            _name = null;
-            _surname = null;
+            _name = 'Anonimo';
+            _surname = 'Anonimo';
           }
         }
       },
@@ -57,6 +62,14 @@ class _EditProfileState extends State<EditProfile> {
   File _image;
   String _uploadedFileURL;
   bool isUploaded = false;
+  bool isUploadButtonBeenPressed = false;
+  bool changePassword = false;
+  bool uploadNewPic = false;
+  String _oldPassword;
+  String _newPasswordOne;
+  String _newPasswordTwo;
+  bool changeProfilePic = false;
+  AuthService _auth = AuthService();
 
   //Faccio l'update di nome e cognome
   _updateUserInfo(String userID) async {
@@ -64,6 +77,13 @@ class _EditProfileState extends State<EditProfile> {
       'name': _name,
       'surname': _surname,
       'profilePicUrl': _uploadedFileURL,
+    });
+  }
+
+  _updateUserInfoWithoutPicture(String userID) async {
+    await Firestore.instance.collection('users').document(userID).updateData({
+      'name': _name,
+      'surname': _surname,
     });
   }
 
@@ -87,8 +107,27 @@ class _EditProfileState extends State<EditProfile> {
         _uploadedFileURL = fileURL;
         print(_uploadedFileURL);
         isUploaded = true;
+        isUploadButtonBeenPressed = true;
       });
     });
+  }
+
+  bool updatePassword() {
+    if (checkPasswordWithRepeatPassword(_newPasswordOne, _newPasswordTwo)) {
+      _auth.changePassword(_newPasswordOne);
+      return true;
+    } else {
+      setState(() {
+        error = "Le password non metchano";
+        print(error);
+      });
+      return false;
+    }
+  }
+
+  bool checkPasswordWithRepeatPassword(String pwdOne, String pwdTwo) {
+    print(pwdOne == pwdTwo);
+    return (pwdOne == pwdTwo);
   }
 
   @override
@@ -123,7 +162,7 @@ class _EditProfileState extends State<EditProfile> {
                     "Edit Your Profile",
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 32,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -151,7 +190,7 @@ class _EditProfileState extends State<EditProfile> {
                       },
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.width * 0.05,
+                      height: MediaQuery.of(context).size.width * 0.02,
                     ),
                     TextFormField(
                       keyboardType: TextInputType.text,
@@ -167,81 +206,206 @@ class _EditProfileState extends State<EditProfile> {
                         });
                       },
                     ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.width * 0.01,
+                          bottom: MediaQuery.of(context).size.width * 0.01),
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Flexible(
+                            child: Text(
+                              "Cambia Password",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                          Switch(
+                            value: changePassword,
+                            onChanged: (value) {
+                              setState(() {
+                                changePassword = value;
+                              });
+                            },
+                            activeTrackColor: Color.fromRGBO(233, 0, 60, 1),
+                            activeColor: Color.fromRGBO(233, 0, 45, 1),
+                          ),
+                        ],
+                      ),
+                    ),
+                    changePassword
+                        ? Container(
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  "Per effettuare il cambio di Password devi aver eseguito il login da poco. Se cosi non fosse esegui il logout e accedi nuovamente",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  controller: null, //TODO: Fare controller
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    hintText: 'New Password',
+                                  ),
+                                  validator: (val) => val.isEmpty
+                                      ? 'Enter your new password'
+                                      : null,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _newPasswordOne = val;
+                                    });
+                                  },
+                                ),
+                                Container(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                                TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  controller: null, //TODO: Fare controller
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    hintText: 'Confirm new Password',
+                                  ),
+                                  validator: (val) => val.isEmpty
+                                      ? 'Confirm your new password'
+                                      : null,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _newPasswordTwo = val;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
             ),
-            //TEST
-            Center(
-              child: Column(
+            Container(
+              constraints: BoxConstraints(minWidth: 100, maxWidth: 500),
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Text(
+                error,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color.fromRGBO(233, 0, 45, 1),
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.width * 0.05,
-                    ),
+                  Flexible(
                     child: Text(
-                      'Selected Image',
-                      style: TextStyle(fontSize: 18),
+                      "Cambia Immagine del profilo",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                   ),
-                  _image != null
-                      ? Column(
-                          children: <Widget>[
-                            Image.asset(
-                              _image.path,
-                              height: 150,
-                            ),
-                            FlatButton(
-                              onPressed: uploadFile,
-                              child: Text(
-                                "Upload Image",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 22),
-                              ),
-                              color: Color.fromRGBO(233, 0, 45, 1),
-                            ),
-                          ],
-                        )
-                      : Container(
-                          child: Text("No image selected"),
-                        ),
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: MediaQuery.of(context).size.width * 0.05,
-                    ),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.width * 0.12,
-                    child: _image == null
-                        ? FlatButton(
-                            child: Text(
-                              'Choose File',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 22),
-                            ),
-                            onPressed: chooseFile,
-                            color: Color.fromRGBO(233, 0, 45, 1),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(10.0),
-                              side: BorderSide(
-                                color: Color.fromRGBO(233, 0, 45, 1),
-                                width: 3,
-                              ),
-                            ),
-                          )
-                        : Container(),
+                  Switch(
+                    value: changeProfilePic,
+                    onChanged: (value) {
+                      setState(() {
+                        if (!value && !isUploadButtonBeenPressed) {
+                          setState(() {
+                            _image = null;
+                            changeProfilePic = value;
+                          });
+                        }
+                        if (!isUploadButtonBeenPressed)
+                          changeProfilePic = value;
+                      });
+                    },
+                    activeTrackColor: Color.fromRGBO(233, 0, 60, 1),
+                    activeColor: Color.fromRGBO(233, 0, 45, 1),
                   ),
                 ],
               ),
             ),
+            //TEST
+            changeProfilePic
+                ? Center(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.width * 0.05,
+                          ),
+                          child: Text(
+                            'Selected Image',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        _image != null
+                            ? Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    _image.path,
+                                    height: 150,
+                                  ),
+                                  !isUploadButtonBeenPressed
+                                      ? FlatButton(
+                                          onPressed: uploadFile,
+                                          child: Text(
+                                            "Upload Image",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22),
+                                          ),
+                                          color: Color.fromRGBO(233, 0, 45, 1),
+                                        )
+                                      : Container(),
+                                ],
+                              )
+                            : Container(
+                                child: Text("No image selected"),
+                              ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width * 0.12,
+                          margin: EdgeInsets.only(bottom: 15, top: 15),
+                          child: _image == null
+                              ? FlatButton(
+                                  child: Text(
+                                    'Choose File',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 22),
+                                  ),
+                                  onPressed: chooseFile,
+                                  color: Color.fromRGBO(233, 0, 45, 1),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                        new BorderRadius.circular(10.0),
+                                    side: BorderSide(
+                                      color: Color.fromRGBO(233, 0, 45, 1),
+                                      width: 3,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
 
             //FINE TEST
             Container(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.width * 0.12,
-              margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.width * 0.1,
-              ),
-              child: isUploaded
+              child: ((!changePassword && !changeProfilePic) ||
+                      (changePassword && !changeProfilePic) ||
+                      isUploaded)
                   ? FlatButton(
                       child: Text(
                         "Submit",
@@ -251,18 +415,61 @@ class _EditProfileState extends State<EditProfile> {
                             fontWeight: FontWeight.bold),
                       ),
                       onPressed: () async {
-                        FirebaseUser user =
-                            await FirebaseAuth.instance.currentUser();
-                        var userID = user.uid;
-                        if (userID != null) {
-                          _updateUserInfo(userID);
+                        if (_formKey.currentState.validate()) {
+                          FirebaseUser user =
+                              await FirebaseAuth.instance.currentUser();
+                          var userID = user.uid;
+                          if (!changePassword &&
+                              !changeProfilePic &&
+                              userID != null) {
+                            _updateUserInfoWithoutPicture(userID);
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Profile()),
+                              );
+                            });
+                          }
+                          if (!changePassword &&
+                              changeProfilePic &&
+                              userID != null) {
+                            _updateUserInfo(userID);
+                            setState(() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Profile()),
+                              );
+                            });
+                          }
+                          if (changePassword &&
+                              !changeProfilePic &&
+                              userID != null) {
+                            if (updatePassword()) {
+                              _updateUserInfoWithoutPicture(userID);
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile()),
+                                );
+                              });
+                            }
+                          }
+                          if (changePassword && changeProfilePic) {
+                            if (updatePassword()) {
+                              _updateUserInfo(userID);
+                              setState(() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Profile()),
+                                );
+                              });
+                            }
+                          }
                         }
-                        setState(() {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Profile()),
-                          );
-                        });
                       },
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0),

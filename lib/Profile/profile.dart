@@ -1,9 +1,15 @@
 import 'package:app_tesi/HomePage/homepage.dart';
+import 'package:app_tesi/Profile/addAllergensPage.dart';
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+
 import 'package:app_tesi/Profile/addAllergens.dart';
 import 'package:app_tesi/Profile/editProfile.dart';
-import 'package:flutter/material.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+//void main() => runApp(ProfilePageDesign());
 
 class Profile extends StatefulWidget {
   @override
@@ -11,10 +17,10 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  var _url;
-  String _name;
-  String _surname;
-  String _email;
+  static var _url;
+  static String _name;
+  static String _surname;
+  static String _email;
   List<dynamic> _allergens;
   bool isLoaded = false;
   var user;
@@ -55,101 +61,46 @@ class _ProfileState extends State<Profile> {
     initState();
   }
 
+  TextStyle _style() {
+    return TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(233, 0, 45, 1),
-        title: Text(
-          "Profile",
-          style: TextStyle(fontSize: 24),
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Homepage()),
-              );
-            }),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation1, animation2) {
-                    return EditProfile();
-                  },
-                  transitionsBuilder: (context, animation1, animation2, child) {
-                    return FadeTransition(
-                      opacity: animation1,
-                      child: child,
-                    );
-                  },
-                  transitionDuration: Duration(milliseconds: 20),
-                ),
-              );
-            },
-          )
-        ],
-      ),
-      body: isLoaded
-          ? Center(
+    return isLoaded
+        ? Scaffold(
+            appBar: CustomAppBar(
+              url: _url,
+              name: _name,
+              surname: _surname,
+            ),
+            body: Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.05,
-                        bottom: MediaQuery.of(context).size.width * 0.02),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "Your Profile",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).size.width * 0.05),
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.width * 0.4,
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(_url),
-                    ),
-                  ),
                   Text(
-                    _name + " " + _surname,
-                    style: TextStyle(fontSize: 22),
+                    "Email",
+                    style: _style(),
+                  ),
+                  SizedBox(
+                    height: 2,
                   ),
                   Text(
                     _email,
-                    style: TextStyle(fontSize: 22),
+                    style: TextStyle(fontSize: 18),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.width * 0.05),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Intolleranze & Allergie",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 16,
                   ),
+                  Divider(
+                    color: Colors.grey,
+                  ),
+                  Text(
+                    "Intolleranze & Allergie: ",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  //Provas
                   Container(
                     margin: EdgeInsets.only(
                         top: MediaQuery.of(context).size.width * 0.01,
@@ -160,7 +111,7 @@ class _ProfileState extends State<Profile> {
                       children: <Widget>[
                         Flexible(
                           child: Text(
-                            "Mostra ricette che contengono i miei allergeni",
+                            "Mostra ricette con ingredienti allergici",
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),
@@ -193,14 +144,14 @@ class _ProfileState extends State<Profile> {
                           itemCount: _allergens.length,
                           itemBuilder: (BuildContext ctxt, int index) {
                             return Padding(
-                              padding: const EdgeInsets.all(4.0),
+                              padding: const EdgeInsets.all(2.0),
                               child: Container(
                                 decoration: new BoxDecoration(
                                   borderRadius: new BorderRadius.only(
-                                    topLeft: const Radius.circular(10.0),
-                                    topRight: const Radius.circular(10.0),
-                                    bottomLeft: const Radius.circular(10.0),
-                                    bottomRight: const Radius.circular(10.0),
+                                    topLeft: const Radius.circular(7.0),
+                                    topRight: const Radius.circular(7.0),
+                                    bottomLeft: const Radius.circular(7.0),
+                                    bottomRight: const Radius.circular(7.0),
                                   ),
                                   boxShadow: [
                                     BoxShadow(
@@ -258,8 +209,28 @@ class _ProfileState extends State<Profile> {
                   ),
                 ],
               ),
-            )
-          : Center(
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.white,
+              elevation: 5,
+              child: Icon(
+                Icons.add,
+                color: Color.fromRGBO(233, 0, 45, 1),
+                size: 36,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AddAllergenesPage()),
+                );
+              },
+            ),
+          )
+        : Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.white,
+            child: Center(
               child: Container(
                 height: 100,
                 width: 100,
@@ -272,23 +243,181 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        elevation: 6,
-        child: Icon(
-          Icons.add,
-          color: Color.fromRGBO(233, 0, 45, 1),
-          size: 36,
-        ),
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) {
-              return AddAllergens();
-            },
           );
-        },
-      ),
-    );
+  }
+}
+
+class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
+  final String url;
+  final String name;
+  final String surname;
+  CustomAppBar(
+      {Key key,
+      @required this.url,
+      @required this.name,
+      @required this.surname})
+      : super(key: key);
+
+  Size get preferredSize => Size(double.infinity, 340);
+  HomePages createState() => HomePages();
+}
+
+class HomePages extends State<CustomAppBar> {
+  Size get preferredSize => Size(double.infinity, 340);
+
+  var user;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipPath(
+        clipper: MyClipper(),
+        child: Container(
+          padding: EdgeInsets.only(top: 20),
+          decoration:
+              BoxDecoration(color: Color.fromRGBO(233, 0, 45, 1), boxShadow: [
+            BoxShadow(
+                color: Color.fromRGBO(233, 0, 45, 1),
+                blurRadius: 20,
+                offset: Offset(0, 0))
+          ]),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 26,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Homepage()),
+                      );
+                    },
+                  ),
+                  Container(
+                    width: 10,
+                  ),
+                  Text(
+                    "Profilo utente",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Container(
+                          width: 125,
+                          height: 125,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(widget.url),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          widget.name + " " + widget.surname,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    Container(
+                      height: 220.0,
+                      width: 220.0,
+                      child: Image(
+                        image: AssetImage(
+                          "assets/Logo.png",
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) {
+                            return EditProfile();
+                          },
+                          transitionsBuilder:
+                              (context, animation1, animation2, child) {
+                            return FadeTransition(
+                              opacity: animation1,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 20),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                      child: Transform.rotate(
+                        angle: (math.pi * 0),
+                        child: Container(
+                          width: 110,
+                          height: 32,
+                          child: Center(
+                            child: Text("Edit Profile"),
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 20)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+}
+
+//Per la linea ''spezzata''
+class MyClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path p = Path();
+    p.lineTo(0, size.height - 70);
+    p.lineTo(size.width, size.height);
+    p.lineTo(size.width, 0);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
   }
 }
