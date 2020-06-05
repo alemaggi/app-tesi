@@ -136,7 +136,7 @@ class _EditProfileState extends State<EditProfile> {
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(233, 0, 45, 1),
         title: Text(
-          "Edit Profile",
+          "Modifica Profilo",
           style: TextStyle(fontSize: 24),
         ),
         leading: IconButton(
@@ -159,7 +159,7 @@ class _EditProfileState extends State<EditProfile> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Edit Your Profile",
+                    "Modifica il tuo Profilo",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 26,
@@ -179,10 +179,10 @@ class _EditProfileState extends State<EditProfile> {
                       keyboardType: TextInputType.text,
                       controller: null, //TODO: Fare controller
                       decoration: InputDecoration(
-                        hintText: (_name != null) ? _name : 'Your Name',
+                        hintText: (_name != null) ? _name : 'Il tuo Nome',
                       ),
                       validator: (val) =>
-                          val == null ? 'Enter your name' : null,
+                          val == null ? 'Inserisci il tuo nome' : null,
                       onChanged: (val) {
                         setState(() {
                           _name = val;
@@ -196,10 +196,10 @@ class _EditProfileState extends State<EditProfile> {
                       keyboardType: TextInputType.text,
                       controller: null, //TODO: Fare controller
                       decoration: InputDecoration(
-                        hintText: (_name != null) ? _surname : 'Your Surname',
+                        hintText: (_name != null) ? _surname : 'Il tuo Cognome',
                       ),
                       validator: (val) =>
-                          val == null ? 'Enter your surname' : null,
+                          val == null ? 'Inserisci il tuo cognome' : null,
                       onChanged: (val) {
                         setState(() {
                           _surname = val;
@@ -249,10 +249,10 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: null, //TODO: Fare controller
                                   obscureText: true,
                                   decoration: InputDecoration(
-                                    hintText: 'New Password',
+                                    hintText: 'Nuova Password',
                                   ),
                                   validator: (val) => val.isEmpty
-                                      ? 'Enter your new password'
+                                      ? 'Inserisci la tua nuova password'
                                       : null,
                                   onChanged: (val) {
                                     setState(() {
@@ -269,10 +269,10 @@ class _EditProfileState extends State<EditProfile> {
                                   controller: null, //TODO: Fare controller
                                   obscureText: true,
                                   decoration: InputDecoration(
-                                    hintText: 'Confirm new Password',
+                                    hintText: 'Conferma nuova Password',
                                   ),
                                   validator: (val) => val.isEmpty
-                                      ? 'Confirm your new password'
+                                      ? 'Conferna la tua nuova password'
                                       : null,
                                   onChanged: (val) {
                                     setState(() {
@@ -342,7 +342,7 @@ class _EditProfileState extends State<EditProfile> {
                             top: MediaQuery.of(context).size.width * 0.05,
                           ),
                           child: Text(
-                            'Selected Image',
+                            'Seleziona Immagine',
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
@@ -357,7 +357,7 @@ class _EditProfileState extends State<EditProfile> {
                                       ? FlatButton(
                                           onPressed: uploadFile,
                                           child: Text(
-                                            "Upload Image",
+                                            "Carica Immagine",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22),
@@ -368,7 +368,7 @@ class _EditProfileState extends State<EditProfile> {
                                 ],
                               )
                             : Container(
-                                child: Text("No image selected"),
+                                child: Text("Nessuna immagine selezionata"),
                               ),
                         Container(
                           width: MediaQuery.of(context).size.width * 0.8,
@@ -377,7 +377,7 @@ class _EditProfileState extends State<EditProfile> {
                           child: _image == null
                               ? FlatButton(
                                   child: Text(
-                                    'Choose File',
+                                    'Scegli File',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 22),
                                   ),
@@ -408,7 +408,7 @@ class _EditProfileState extends State<EditProfile> {
                       isUploaded)
                   ? FlatButton(
                       child: Text(
-                        "Submit",
+                        "Conferma",
                         style: TextStyle(
                             color: Color.fromRGBO(233, 0, 45, 1),
                             fontSize: 22,

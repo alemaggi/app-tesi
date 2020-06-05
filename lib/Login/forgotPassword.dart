@@ -69,14 +69,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        hintText: "Enter Email Address",
+                        hintText: "Inserisci un Indirizzo Email",
                         hintStyle: TextStyle(fontSize: 24),
                       ),
                       style: TextStyle(
                         fontSize: 24,
                       ),
                       textAlign: TextAlign.center,
-                      validator: (val) => val.isEmpty ? 'Enter an email' : null,
+                      validator: (val) =>
+                          val.isEmpty ? 'Inserisci un email' : null,
                       onChanged: (val) {
                         setState(() {
                           _email = val.trim();
@@ -98,7 +99,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               child: FlatButton(
                 color: Color.fromRGBO(233, 0, 45, 1),
                 child: Text(
-                  "Send",
+                  "Invia",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 26,
@@ -122,7 +123,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 );
               },
               child: Text(
-                "Go Back",
+                "Torna Indietro",
                 style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16,

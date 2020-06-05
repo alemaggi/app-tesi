@@ -35,6 +35,7 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
 
   //Questo mi serve per avere la lista delle ricette preferite
   List<dynamic> favoriteRecipes;
+  List<dynamic> userIngredients;
   bool isLoaded = false;
   var user;
 
@@ -50,7 +51,9 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
           print(user.email);
           setState(() {
             favoriteRecipes = data.documents[0].data['favoriteRecipes'];
+            userIngredients = data.documents[0].data['myFridge'];
             print(favoriteRecipes);
+            print(userIngredients.toString());
             isLoaded = true;
           });
         }
@@ -440,10 +443,10 @@ class _AllRecipeTemplateState extends State<AllRecipeTemplate> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => SingleRecipe(
-                                        documentId: id,
-                                        title: tit,
-                                        favoriteRecipes: fav,
-                                      ),
+                                          documentId: id,
+                                          title: tit,
+                                          favoriteRecipes: fav,
+                                          userIngredients: userIngredients),
                                     ),
                                   );
                                 },

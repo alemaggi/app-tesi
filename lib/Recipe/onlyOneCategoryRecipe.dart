@@ -17,6 +17,7 @@ class OnlyOneCategoryRecipe extends StatefulWidget {
 class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
   bool isLoaded = false;
   List<dynamic> favoriteRecipes;
+  List<dynamic> userIngredients;
   var user;
 
   _getUserInfo() async {
@@ -31,6 +32,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
           print(user.email);
           setState(() {
             favoriteRecipes = data.documents[0].data['favoriteRecipes'];
+            userIngredients = data.documents[0].data['myFridge'];
             print(favoriteRecipes);
             isLoaded = true;
           });
@@ -683,6 +685,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                                 documentId: documnetId,
                                 title: queryRecord.title,
                                 favoriteRecipes: favoriteRecipes,
+                                userIngredients: userIngredients,
                               ),
                             ),
                           );
@@ -844,6 +847,7 @@ class _OnlyOneCategoryRecipeState extends State<OnlyOneCategoryRecipe> {
                                       documentId: documnetId,
                                       title: queryRecord.title,
                                       favoriteRecipes: favoriteRecipes,
+                                      userIngredients: userIngredients,
                                     ),
                                   ),
                                 );

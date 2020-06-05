@@ -3,6 +3,7 @@ import 'package:app_tesi/HomePage/ocrReader.dart';
 import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Recipe/allRecipeTemplate.dart';
 import 'package:app_tesi/Recipe/singleRecipe.dart';
+import 'package:app_tesi/Wrapper/wrapperForFirstPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,11 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   AutoCompleteTextField searchTextField;
+  AutoCompleteTextField searchTextFieldTwo;
   TextEditingController controller = new TextEditingController();
+  TextEditingController controllerTwo = new TextEditingController();
   GlobalKey<AutoCompleteTextFieldState<Alimento>> key = new GlobalKey();
+  GlobalKey<AutoCompleteTextFieldState<Alimento>> keyTwo = new GlobalKey();
   final TextEditingController _filter = new TextEditingController();
   final dio = new Dio();
   List names = new List();
@@ -29,13 +33,18 @@ class _HomepageState extends State<Homepage> {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('Le ricette che puoi fare subito');
   final _addFoodToFridgeKey = GlobalKey<FormState>();
-
+  var notAddedList = List<String>();
   String _nomeAlimentoDaAggiungereAlF;
   var user;
   List<dynamic> favoriteRecipes;
   List<dynamic> ingredients; //Serve anche per fare un check che gli ingredienti
   List<String> _listOfIngredientsToAdd = [];
   bool isLoaded = false;
+  bool actionComplete = false;
+  bool addedWithoutDupes = true;
+  int counter = 0;
+  bool hoAlmenoUnaRicetta = false;
+  List<dynamic> recipeList = [];
 
   bool _showFilterBox = false;
 
@@ -164,6 +173,9 @@ class _HomepageState extends State<Homepage> {
           "e checkIfRecipeIsDoable ritorna" +
           checkIfRecipeIsDoable(userIngredients, recipeIngredients).toString());
       //Quindi controllo solo se ho gli ingredienti per farla
+      if (checkIfRecipeIsDoable(userIngredients, recipeIngredients)) {
+        recipeList.add(1);
+      }
       return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
     }
     //Se non voglio vedere le ricette che mi farebbero morire
@@ -177,8 +189,10 @@ class _HomepageState extends State<Homepage> {
       if (checkIfRecipeContainsAllergens(allergens, recipeIngredients) ==
           false) {
         //Se entro qui dentro vuol dire che sta ricetta non mi uccide
-
         //Se posso farla senza morire guardo se ho gli ingredienti per farla
+        if (checkIfRecipeIsDoable(userIngredients, recipeIngredients)) {
+          recipeList.add(1);
+        }
         return checkIfRecipeIsDoable(userIngredients, recipeIngredients);
       } else {
         print("Fallito checkIfRecipeContainsAllergens");
@@ -439,6 +453,7 @@ class _HomepageState extends State<Homepage> {
                                       documentId: documnetId,
                                       title: queryRecord.title,
                                       favoriteRecipes: favoriteRecipes,
+                                      userIngredients: ingredients,
                                     ),
                                   ),
                                 );
@@ -524,6 +539,18 @@ class _HomepageState extends State<Homepage> {
           page: (isLoaded == true)
               ? Stack(
                   children: <Widget>[
+                    (ingredients != null &&
+                            ((ingredients.length == 1 &&
+                                    ingredients[0] == "Acqua") ||
+                                ingredients.isEmpty))
+                        ? Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.width,
+                            child: Image(
+                              image: AssetImage("assets/emptyFridge.png"),
+                            ),
+                          )
+                        : Container(),
                     Container(
                       child: _buildBody(context),
                       margin: EdgeInsets.only(
@@ -554,7 +581,7 @@ class _HomepageState extends State<Homepage> {
                                         });
                                       },
                                       child: Text(
-                                        "DISMISS",
+                                        "ANNULLA",
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 18),
                                       ),
@@ -567,7 +594,7 @@ class _HomepageState extends State<Homepage> {
                                         });
                                       },
                                       child: Text(
-                                        "CONFIRM",
+                                        "CONFERMA",
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 18),
                                       ),
@@ -779,7 +806,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                             child: Text(
-                              "Add Element To List",
+                              "Aggiungi alimento alla lista",
                               style: TextStyle(
                                 fontSize: 24,
                                 color: Color.fromRGBO(233, 0, 45, 1),
@@ -812,7 +839,7 @@ class _HomepageState extends State<Homepage> {
                               ),
                             ),
                             child: Text(
-                              "Use OCR",
+                              "Usa l' OCR",
                               style: TextStyle(
                                 fontSize: 24,
                                 color: Color.fromRGBO(233, 0, 45, 1),
@@ -843,7 +870,6 @@ class _HomepageState extends State<Homepage> {
                                   onPressed: () async {
                                     if (_listOfIngredientsToAdd.isNotEmpty) {
                                       var list = List<String>();
-
                                       List<String> output = Iterable.generate(
                                               math.max(
                                                   list.length,
@@ -854,18 +880,28 @@ class _HomepageState extends State<Homepage> {
                                         if (i < _listOfIngredientsToAdd.length)
                                           yield _listOfIngredientsToAdd[i];
                                       }).toList();
+                                      print("Prima :");
                                       print(output);
-                                      print(user.uid);
                                       if (ingredients != null) {
                                         //Controllo che gli elementi aggiunti non siano gia presenti nel frigo
                                         for (int i = 0;
                                             i < output.length;
                                             i++) {
                                           if (ingredients.contains(output[i])) {
-                                            output.removeAt(i);
+                                            print("Trovato : " + output[i]);
+                                            notAddedList.add(output[i]);
                                           }
                                         }
-                                        print(output);
+                                        for (String item in notAddedList)
+                                          output.remove(item);
+                                        print(ingredients);
+                                        print("Lista cose da non aggiungere :");
+                                        print(notAddedList);
+                                        if (notAddedList.length == 0) {
+                                          addedWithoutDupes = true;
+                                        } else {
+                                          addedWithoutDupes = false;
+                                        }
                                         Firestore.instance
                                             .collection('users')
                                             .document(user.uid)
@@ -874,6 +910,8 @@ class _HomepageState extends State<Homepage> {
                                               FieldValue.arrayUnion(output)
                                         });
                                         setState(() {
+                                          actionComplete = true;
+                                          _getUserInfo();
                                           _listOfIngredientsToAdd.clear();
                                         });
                                       } else {
@@ -886,6 +924,7 @@ class _HomepageState extends State<Homepage> {
                                               FieldValue.arrayUnion(output)
                                         });
                                         setState(() {
+                                          actionComplete = true;
                                           _listOfIngredientsToAdd.clear();
                                         });
                                       }
@@ -893,7 +932,7 @@ class _HomepageState extends State<Homepage> {
                                     }
                                   },
                                   child: Text(
-                                    "Submit",
+                                    "Conferma",
                                     style: TextStyle(
                                       fontSize: 24,
                                       color: Color.fromRGBO(233, 0, 45, 1),
@@ -904,6 +943,27 @@ class _HomepageState extends State<Homepage> {
                             : Container(
                                 height: 0,
                               ),
+                        (actionComplete)
+                            ? AlertDialog(
+                                contentPadding: EdgeInsets.all(10.0),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                backgroundColor: Colors.white,
+                                content: uploadMessage(),
+                                actions: [
+                                  FlatButton(
+                                    child: Text("Ok"),
+                                    onPressed: () {
+                                      notAddedList.clear();
+                                      actionComplete = false;
+                                      _getUserFridge();
+                                      setState(() {});
+                                    },
+                                  )
+                                ],
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -914,6 +974,28 @@ class _HomepageState extends State<Homepage> {
         ),
       ),
     );
+  }
+
+  Widget uploadMessage() {
+    print(addedWithoutDupes);
+    if (!addedWithoutDupes) {
+      return Column(children: <Widget>[
+        Text(
+          "I seguenti alimenti non sono stati aggiunti perchè già presenti nel tuo frigo :",
+          style: TextStyle(fontSize: 16),
+        ),
+        for (var item in notAddedList) Text(item)
+      ]);
+    } else {
+      return Column(
+        children: <Widget>[
+          Text(
+            "Tutti gli ingredienti sono stati aggiunti al tuo frigo",
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      );
+    }
   }
 }
 
@@ -1004,7 +1086,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   },
                 ),
                 ListTile(
-                  title: Text('Profile'),
+                  title: Text('Profilo'),
                   onTap: () => {
                     Navigator.push(
                       context,
@@ -1025,7 +1107,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   },
                 ),
                 ListTile(
-                  title: Text('Il Mio Frigorifero'),
+                  title: Text('Il mio frigorifero'),
                   onTap: () => {
                     Navigator.push(
                       context,
@@ -1067,19 +1149,39 @@ class _NavDrawerState extends State<NavDrawer> {
                   },
                 ),
                 ListTile(
-                  title: Text('LogOut'),
-                  onTap: () async {
-                    Future.delayed(
-                        Duration.zero,
-                        () => setState(() async {
-                              await _auth.signOut();
-                            }));
-                    /*
+                  title: Text('La mia lista della spesa'),
+                  onTap: () => {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                    */
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return MyFridge();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
+                      ),
+                    ),
+                  },
+                ),
+                ListTile(
+                  title: Text('LogOut'),
+                  onTap: () async {
+                    await _auth.signOut();
+                    setState(() async {
+                      user = await FirebaseAuth.instance.currentUser();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WrapperForFirstPage(),
+                        ),
+                      );
+                    });
                   },
                 ),
               ],

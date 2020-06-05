@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
         .where('email', isEqualTo: userEmail)
         .snapshots()
         .listen((data) {
-      if (data == null) {
+      if (data == null || data.documents.length == 0) {
         Firestore.instance.runTransaction((transaction) async {
           await transaction
               .set(Firestore.instance.collection("users").document(uid), {
@@ -28,7 +28,9 @@ class _LoginState extends State<Login> {
             'surname': 'Anonimo',
             'profilePicUrl':
                 'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
-            'myFridge': [],
+            'myFridge': [
+              'Acqua',
+            ],
             'allergens': [],
             'favoriteRecipes': [],
             'showRecipeWithAllergens': true,
@@ -104,7 +106,7 @@ class _LoginState extends State<Login> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  "Welcome",
+                                  "Benvenuto",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 32,
@@ -129,8 +131,9 @@ class _LoginState extends State<Login> {
                                       hintText: "Email",
                                       prefixIcon: Icon(Icons.email),
                                     ),
-                                    validator: (val) =>
-                                        val.isEmpty ? 'Enter an email' : null,
+                                    validator: (val) => val.isEmpty
+                                        ? 'Inserisci la tua email'
+                                        : null,
                                     onChanged: (val) {
                                       setState(() {
                                         _email = val.trim();
@@ -158,7 +161,7 @@ class _LoginState extends State<Login> {
                                       prefixIcon: Icon(Icons.lock),
                                     ),
                                     validator: (val) => val.length < 6
-                                        ? 'Enter a valid password'
+                                        ? 'Inserisci una password valida'
                                         : null,
                                     onChanged: (val) {
                                       setState(() {
@@ -214,7 +217,7 @@ class _LoginState extends State<Login> {
                                   if (result == null) {
                                     setState(() {
                                       error =
-                                          'ERROR: Could not signin with those credential';
+                                          'ERROR: Non ho potuto eseguire il login con queste credenziali';
                                     });
                                   }
                                 }
@@ -238,7 +241,7 @@ class _LoginState extends State<Login> {
                               );
                             },
                             child: Text(
-                              "Forgot Password?",
+                              "Password Dimenticata?",
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -260,7 +263,7 @@ class _LoginState extends State<Login> {
                                   );
                                 } else {
                                   setState(() {
-                                    error = 'Error Sigin in with google';
+                                    error = 'Error Sigin in con google';
                                   });
                                   print("Error Sigin in with google");
                                 }
@@ -286,7 +289,7 @@ class _LoginState extends State<Login> {
                                     Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text(
-                                        'Sign in with Google',
+                                        'Sign in con Google',
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Color.fromRGBO(233, 0, 45, 1),
@@ -309,7 +312,7 @@ class _LoginState extends State<Login> {
                             child: FlatButton(
                               color: Color.fromRGBO(233, 0, 45, 1),
                               child: Text(
-                                "Create an Account",
+                                "Crea un Account",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 26,

@@ -1,3 +1,4 @@
+import 'package:app_tesi/ShoppingList/addToShoppingList.dart';
 import 'package:app_tesi/Wrapper/wrapperForIngredientsOrRecipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,12 +9,14 @@ class SingleRecipe extends StatefulWidget {
   final String documentId;
   final String title;
   final List<dynamic> favoriteRecipes;
+  final List<dynamic> userIngredients;
 
   SingleRecipe(
       {Key key,
       @required this.documentId,
       @required this.title,
-      @required this.favoriteRecipes})
+      @required this.favoriteRecipes,
+      @required this.userIngredients})
       : super(key: key);
   @override
   _SingleRecipeState createState() => _SingleRecipeState();
@@ -30,6 +33,8 @@ int _calories;
 String _doses = "6"; //TODO: Prenderlo dal DB
 String _difficolta = "Facile"; //TODO: Prenderlo dal DB
 var user;
+
+List<dynamic> shoppingList = [];
 
 class _SingleRecipeState extends State<SingleRecipe> {
   _getRecipe() async {
@@ -48,6 +53,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
           _calories = data['calories'];
           _imageLink = data['imageLink'];
           _isLoaded = true;
+          getIngredientsMissing(_ingredients, widget.userIngredients);
         });
 
         print(_title);
@@ -56,6 +62,25 @@ class _SingleRecipeState extends State<SingleRecipe> {
         print(_preparation);
       },
     );
+  }
+
+  void getIngredientsMissing(
+      List<dynamic> recipeIngredients, List<dynamic> userIngredients) {
+    for (int i = 0; i < recipeIngredients.length; i++) {
+      //if the ingredient is not in the user list can be added to the shopping list
+      bool trovato = false;
+      for (int k = 0; k < userIngredients.length; k++) {
+        if (recipeIngredients[i].contains(userIngredients[k])) {
+          trovato = true;
+        }
+      }
+      if (!trovato) {
+        shoppingList.add(recipeIngredients[i]);
+      }
+    }
+    print("INGREDIENTS LIST --> " + recipeIngredients.toString());
+    print("USER INGREDIENTS LIST --> " + userIngredients.toString());
+    print("SHOPPING LIST --> " + shoppingList.toString());
   }
 
   @override
@@ -83,6 +108,7 @@ class _SingleRecipeState extends State<SingleRecipe> {
           onPressed: () {
             //TODO: Sistemare problema quando si apre la pagina
             _showIngredients = true;
+            shoppingList.clear();
             Navigator.pop(context);
           },
         ),
@@ -301,6 +327,32 @@ class _SingleRecipeState extends State<SingleRecipe> {
                     Container(
                       height: MediaQuery.of(context).size.width * 0.02,
                     ),
+                    shoppingList.isNotEmpty
+                        ? OutlineButton(
+                            borderSide:
+                                BorderSide(width: 3.0, color: Colors.black),
+                            padding: EdgeInsets.all(2),
+                            child: Text(
+                              'Aggiungi ingredienti mancanti alla lista della spesa',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AddToShoppingList(
+                                    shoppingList: shoppingList,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        : Container(),
                   ],
                 ),
               ),

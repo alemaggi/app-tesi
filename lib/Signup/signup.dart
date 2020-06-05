@@ -20,7 +20,9 @@ class _SignupState extends State<Signup> {
         'surname': 'Anonimo',
         'profilePicUrl':
             'https://firebasestorage.googleapis.com/v0/b/app-tesi-16e05.appspot.com/o/profilePic%2FgenericProfilePic.png?alt=media&token=d5710a15-35a7-42ff-9999-5c977f9325a9',
-        'myFridge': [],
+        'myFridge': [
+          'Acqua',
+        ],
         'allergens': [],
         'favoriteRecipes': [],
         'showRecipeWithAllergens': false,
@@ -64,7 +66,7 @@ class _SignupState extends State<Signup> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "Create Account",
+                  "Crea Account",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 32,
@@ -88,7 +90,7 @@ class _SignupState extends State<Signup> {
                       prefixIcon: Icon(Icons.email),
                     ),
                     validator: (val) =>
-                        val.isEmpty ? 'Enter a valid email' : null,
+                        val.isEmpty ? 'Inserisci una email valida' : null,
                     onChanged: (val) {
                       setState(() {
                         String tmp = val.toLowerCase();
@@ -116,7 +118,7 @@ class _SignupState extends State<Signup> {
                       prefixIcon: Icon(Icons.lock),
                     ),
                     validator: (val) =>
-                        val.length < 6 ? 'Enter a valid password' : null,
+                        val.length < 6 ? 'Inserisci una password valida' : null,
                     onChanged: (val) {
                       setState(() {
                         _password = val;
@@ -139,7 +141,7 @@ class _SignupState extends State<Signup> {
                               showConfirmPassword = !showConfirmPassword;
                             });
                           }),
-                      hintText: "Confirm Password",
+                      hintText: "Conferma Password",
                       prefixIcon: Icon(Icons.lock),
                     ),
                     validator: (val) =>
@@ -245,7 +247,7 @@ class _SignupState extends State<Signup> {
                   MaterialPageRoute(builder: (context) => Login()),
                 );
               },
-              child: Text("I already have an account"),
+              child: Text("Ho già un account account"),
             ),
           ),
         ],
@@ -255,8 +257,8 @@ class _SignupState extends State<Signup> {
 
 //Funzione send_mail quando uno si registra:
   void send_mail() async {
-    String username = "sauceforyou2019@gmail.com"; //Your Email;
-    String password = "spinaxomis"; //Your Email's password;
+    String username = "easy.cook.msa@gmail.com"; //Your Email;
+    String password = "Morrodocet2020"; //Your Email's password;
 
     final smtpServer = gmail(username, password);
     // Creating the Gmail server

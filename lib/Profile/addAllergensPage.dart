@@ -166,7 +166,7 @@ class _AddAllergenesPageState extends State<AddAllergenesPage> {
                         ),
                       ),
                       child: Text(
-                        "Add Element To List",
+                        "Aggiungi alimento alla lista",
                         style: TextStyle(
                           fontSize: 24,
                           color: Color.fromRGBO(233, 0, 45, 1),
@@ -223,7 +223,7 @@ class _AddAllergenesPageState extends State<AddAllergenesPage> {
                               }
                             },
                             child: Text(
-                              "Submit",
+                              "Conferma",
                               style: TextStyle(
                                 fontSize: 24,
                                 color: Color.fromRGBO(233, 0, 45, 1),

@@ -266,141 +266,143 @@ class HomePages extends State<CustomAppBar> {
   Size get preferredSize => Size(double.infinity, 340);
 
   var user;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return ClipPath(
-        clipper: MyClipper(),
-        child: Container(
-          padding: EdgeInsets.only(top: 20),
-          decoration:
-              BoxDecoration(color: Color.fromRGBO(233, 0, 45, 1), boxShadow: [
-            BoxShadow(
-                color: Color.fromRGBO(233, 0, 45, 1),
-                blurRadius: 20,
-                offset: Offset(0, 0))
-          ]),
-          child: Column(
-            children: <Widget>[
-              Row(
+      clipper: MyClipper(),
+      child: Container(
+        padding: EdgeInsets.only(top: 20),
+        decoration:
+            BoxDecoration(color: Color.fromRGBO(233, 0, 45, 1), boxShadow: [
+          BoxShadow(
+              color: Color.fromRGBO(233, 0, 45, 1),
+              blurRadius: 20,
+              offset: Offset(0, 0))
+        ]),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                    size: 26,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Homepage()),
+                    );
+                  },
+                ),
+                Container(
+                  width: 10,
+                ),
+                Text(
+                  "Profilo utente",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 26,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Homepage()),
-                      );
-                    },
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        width: 125,
+                        height: 125,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(widget.url),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        widget.name + " " + widget.surname,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                   Container(
-                    width: 10,
-                  ),
-                  Text(
-                    "Profilo utente",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                    height: 220.0,
+                    width: 220.0,
+                    child: Image(
+                      image: AssetImage(
+                        "assets/Logo.png",
+                      ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          width: 125,
-                          height: 125,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(widget.url),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          widget.name + " " + widget.surname,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    Container(
-                      height: 220.0,
-                      width: 220.0,
-                      child: Image(
-                        image: AssetImage(
-                          "assets/Logo.png",
-                        ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) {
+                          return EditProfile();
+                        },
+                        transitionsBuilder:
+                            (context, animation1, animation2, child) {
+                          return FadeTransition(
+                            opacity: animation1,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 20),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        PageRouteBuilder(
-                          pageBuilder: (context, animation1, animation2) {
-                            return EditProfile();
-                          },
-                          transitionsBuilder:
-                              (context, animation1, animation2, child) {
-                            return FadeTransition(
-                              opacity: animation1,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: Duration(milliseconds: 20),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                    child: Transform.rotate(
+                      angle: (math.pi * 0),
+                      child: Container(
+                        width: 130,
+                        height: 32,
+                        child: Center(
+                          child: Text("Modifica Profilo"),
                         ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                      child: Transform.rotate(
-                        angle: (math.pi * 0),
-                        child: Container(
-                          width: 110,
-                          height: 32,
-                          child: Center(
-                            child: Text("Edit Profile"),
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            boxShadow: [
-                              BoxShadow(color: Colors.black12, blurRadius: 20)
-                            ],
-                          ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          boxShadow: [
+                            BoxShadow(color: Colors.black12, blurRadius: 20)
+                          ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
-        ));
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
 

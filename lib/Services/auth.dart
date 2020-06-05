@@ -77,6 +77,7 @@ class AuthService {
   Future signout() async {
     print("Dovrei uscire");
     try {
+      print("Signout: ------>  " + _auth.signOut().toString());
       return _auth.signOut();
     } catch (e) {
       print(e.toString());
@@ -104,3 +105,5 @@ class AuthService {
     });
   }
 }
+
+var authService = AuthService();

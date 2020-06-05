@@ -19,7 +19,10 @@ class _OcrReaderState extends State<OcrReader> {
   bool isImageLoaded = false;
   bool isLoaded = false;
   var user;
-  List<dynamic> userFridge = [];
+  List<dynamic> ingredients = [];
+  var notAddedList = List<String>();
+  bool addedWithoutDupes = true;
+  bool actionComplete = false;
 
   _getUserFridge() async {
     user = await FirebaseAuth.instance.currentUser();
@@ -32,7 +35,7 @@ class _OcrReaderState extends State<OcrReader> {
         if (data.documents.length > 0) {
           print(user.email);
           setState(() {
-            userFridge = data.documents[0].data['myFridge'];
+            ingredients = data.documents[0].data['myFridge'];
             isLoaded = true;
           });
         }
@@ -285,29 +288,52 @@ class _OcrReaderState extends State<OcrReader> {
                                 }).toList();
                                 print(output);
                                 //Controllo che gli elementi aggiunti non siano gia presenti nel frigo
-                                for (int i = 0; i < output.length; i++) {
-                                  if (userFridge.contains(output[i])) {
-                                    output.removeAt(i);
+                                if (ingredients != null) {
+                                  for (int i = 0; i < output.length; i++) {
+                                    if (ingredients.contains(output[i])) {
+                                      notAddedList.add(output[i]);
+                                    }
                                   }
-                                }
-                                print(output);
-                                Firestore.instance
-                                    .collection('users')
-                                    .document(user.uid)
-                                    .updateData({
-                                  "myFridge": FieldValue.arrayUnion(output)
-                                });
-                                setState(
-                                  () {
+                                  for (String item in notAddedList) {
+                                    output.remove(item);
+                                  }
+                                  print("Lista cose da non aggiungere :");
+                                  print(notAddedList);
+                                  if (notAddedList.length == 0) {
+                                    addedWithoutDupes = true;
+                                  } else {
+                                    addedWithoutDupes = false;
+                                  }
+                                  Firestore.instance
+                                      .collection('users')
+                                      .document(user.uid)
+                                      .updateData({
+                                    "myFridge": FieldValue.arrayUnion(output)
+                                  });
+                                  setState(() {
+                                    actionComplete = true;
+                                    _getUserFridge();
                                     _listOfIngredientsToAdd.clear();
-                                  },
-                                );
+                                  });
+                                } else {
+                                  //Se il DB non contiene ingredienti li posso aggiungere senza problemi
+                                  Firestore.instance
+                                      .collection('users')
+                                      .document(user.uid)
+                                      .updateData({
+                                    "myFridge": FieldValue.arrayUnion(output)
+                                  });
+                                  setState(() {
+                                    actionComplete = true;
+                                    _listOfIngredientsToAdd.clear();
+                                  });
+                                }
                               }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Homepage()),
-                              );
+                              //Navigator.push(
+                              //  context,
+                              //  MaterialPageRoute(
+                              //      builder: (context) => Homepage()),
+                              //);
                             },
                             shape: RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(10.0),
@@ -315,6 +341,26 @@ class _OcrReaderState extends State<OcrReader> {
                           ),
                         )
                       : Container(),
+                  (actionComplete)
+                      ? AlertDialog(
+                          contentPadding: EdgeInsets.all(10.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.white,
+                          content: uploadMessage(),
+                          actions: [
+                            FlatButton(
+                              child: Text("Ok"),
+                              onPressed: () {
+                                notAddedList.clear();
+                                actionComplete = false;
+                                setState(() {});
+                              },
+                            )
+                          ],
+                        )
+                      : Container()
                 ],
               ),
             )
@@ -332,5 +378,21 @@ class _OcrReaderState extends State<OcrReader> {
               ),
             ),
     );
+  }
+
+  Widget uploadMessage() {
+    print(addedWithoutDupes);
+    if (!addedWithoutDupes) {
+      return Column(children: <Widget>[
+        Text(
+          "I seguenti alimenti non sono stati aggiunti perchè già presenti nel tuo frigo :",
+        ),
+        for (var item in notAddedList) Text(item)
+      ]);
+    } else {
+      return Column(children: <Widget>[
+        Text("Tutti gli ingredienti sono stati aggiunti al tuo frigo")
+      ]);
+    }
   }
 }
