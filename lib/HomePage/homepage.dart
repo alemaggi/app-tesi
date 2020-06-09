@@ -3,6 +3,7 @@ import 'package:app_tesi/HomePage/ocrReader.dart';
 import 'package:app_tesi/Profile/profile.dart';
 import 'package:app_tesi/Recipe/allRecipeTemplate.dart';
 import 'package:app_tesi/Recipe/singleRecipe.dart';
+import 'package:app_tesi/ShoppingList/shoppingList.dart';
 import 'package:app_tesi/Wrapper/wrapperForFirstPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -1155,7 +1156,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       context,
                       PageRouteBuilder(
                         pageBuilder: (context, animation1, animation2) {
-                          return MyFridge();
+                          return ShoppingList();
                         },
                         transitionsBuilder:
                             (context, animation1, animation2, child) {

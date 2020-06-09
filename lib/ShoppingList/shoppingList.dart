@@ -1,19 +1,21 @@
-import 'package:app_tesi/HomePage/homepage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:expandable_card/expandable_card.dart';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
-import 'package:app_tesi/HomePage/ocrReader.dart';
-import 'dart:math' as math;
 import 'package:app_tesi/HomePage/food.dart';
+import 'dart:math' as math;
 
-class MyFridge extends StatefulWidget {
+class ShoppingList extends StatefulWidget {
   @override
-  _MyFridgeState createState() => _MyFridgeState();
+  _ShoppingListState createState() => _ShoppingListState();
 }
 
-class _MyFridgeState extends State<MyFridge> {
+class _ShoppingListState extends State<ShoppingList> {
+  List<dynamic> ingredients;
+  bool isLoaded = false;
+  var user;
+
   AutoCompleteTextField searchTextField;
   AutoCompleteTextField searchTextFieldTwo;
   TextEditingController controller = new TextEditingController();
@@ -25,12 +27,6 @@ class _MyFridgeState extends State<MyFridge> {
   String _nomeAlimentoDaAggiungereAlF;
   bool addedWithoutDupes = true;
   bool actionComplete = false;
-
-  var user;
-
-  List<dynamic> ingredients;
-  List<Widget> list = new List<Widget>();
-  bool isLoaded = false;
   var notAddedList = List<String>();
 
   _getUserInfo() async {
@@ -44,7 +40,7 @@ class _MyFridgeState extends State<MyFridge> {
         if (data.documents.length > 0) {
           print(user.email);
           setState(() {
-            ingredients = data.documents[0].data['myFridge'];
+            ingredients = data.documents[0].data['shoppingList'];
             print(ingredients);
             isLoaded = true;
           });
@@ -67,97 +63,107 @@ class _MyFridgeState extends State<MyFridge> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.push(
-              context,
-              PageRouteBuilder(
-                pageBuilder: (context, animation1, animation2) {
-                  return Homepage();
-                },
-                transitionsBuilder: (context, animation1, animation2, child) {
-                  return FadeTransition(
-                    opacity: animation1,
-                    child: child,
-                  );
-                },
-                transitionDuration: Duration(milliseconds: 20),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
-        title: Text("Il Mio Frigorifero"),
+        title: Text("La mia lista della spesa"),
       ),
       body: ExpandableCardPage(
         page: (isLoaded == true)
-            ? Stack(children: <Widget>[
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 5),
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: ListView.builder(
-                      itemCount: ingredients.length,
-                      itemBuilder: (BuildContext ctxt, int index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Container(
-                            decoration: new BoxDecoration(
-                              borderRadius: new BorderRadius.only(
-                                topLeft: const Radius.circular(10.0),
-                                topRight: const Radius.circular(10.0),
-                                bottomLeft: const Radius.circular(10.0),
-                                bottomRight: const Radius.circular(10.0),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromRGBO(0, 0, 0, 200),
-                                  blurRadius:
-                                      5.0, // has the effect of softening the shadow
-                                  spreadRadius:
-                                      0.5, // has the effect of extending the shadow
-                                  offset: Offset(
-                                    2.0, // horizontal, move right 10
-                                    2.0, // vertical, move down 10
+            ? Stack(
+                children: <Widget>[
+                  Center(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          margin: EdgeInsets.only(top: 5),
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.75,
+                          child: ListView.builder(
+                            itemCount: ingredients.length,
+                            itemBuilder: (BuildContext ctxt, int index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(4),
+                                child: Container(
+                                  decoration: new BoxDecoration(
+                                    borderRadius: new BorderRadius.only(
+                                      topLeft: const Radius.circular(10.0),
+                                      topRight: const Radius.circular(10.0),
+                                      bottomLeft: const Radius.circular(10.0),
+                                      bottomRight: const Radius.circular(10.0),
+                                    ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Color.fromRGBO(0, 0, 0, 200),
+                                        blurRadius:
+                                            5.0, // has the effect of softening the shadow
+                                        spreadRadius:
+                                            0.5, // has the effect of extending the shadow
+                                        offset: Offset(
+                                          2.0, // horizontal, move right 10
+                                          2.0, // vertical, move down 10
+                                        ),
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                  ),
+                                  margin: EdgeInsets.only(top: 5, bottom: 5),
+                                  padding: EdgeInsets.all(5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Container(
+                                        margin: EdgeInsets.only(left: 10),
+                                        child: Text(
+                                          ingredients[index],
+                                          style: TextStyle(fontSize: 22),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.delete),
+                                        color: Color.fromRGBO(233, 0, 45, 1),
+                                        onPressed: () async {
+                                          var list = List<String>();
+                                          list.add(ingredients[index]);
+                                          final db = Firestore.instance;
+                                          await db
+                                              .collection('users')
+                                              .document(user.uid)
+                                              .updateData({
+                                            "shoppingList":
+                                                FieldValue.arrayRemove(list)
+                                          });
+                                          initState(); //TODO: Soluzione brutta e temporanea
+                                        },
+                                      )
+                                    ],
                                   ),
                                 ),
-                              ],
-                              color: Colors.white,
-                            ),
-                            margin: EdgeInsets.only(top: 5, bottom: 5),
-                            padding: EdgeInsets.all(5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  child: Text(
-                                    ingredients[index],
-                                    style: TextStyle(fontSize: 22),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  color: Color.fromRGBO(233, 0, 45, 1),
-                                  onPressed: () async {
-                                    var list = List<String>();
-                                    list.add(ingredients[index]);
-                                    final db = Firestore.instance;
-                                    await db
-                                        .collection('users')
-                                        .document(user.uid)
-                                        .updateData({
-                                      "myFridge": FieldValue.arrayRemove(list)
-                                    });
-                                    initState(); //TODO: Soluzione brutta e temporanea
-                                  },
-                                )
-                              ],
+                              );
+                            },
+                          ),
+                        ),
+                        OutlineButton(
+                          borderSide: BorderSide(
+                              width: 2.0, color: Color.fromRGBO(233, 0, 45, 1)),
+                          child: Text(
+                            'Aggiugni tutti gli alimenti della lista al frigo',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w600,
+                              color: Color.fromRGBO(233, 0, 45, 1),
                             ),
                           ),
-                        );
-                      },
+                          onPressed: () {
+                            //TODO: Da fare
+                          },
+                        ),
+                      ],
                     ),
-                  ),
-                )
-              ])
+                  )
+                ],
+              )
             : Center(
                 child: Container(
                   height: 100,
@@ -181,7 +187,7 @@ class _MyFridgeState extends State<MyFridge> {
               children: <Widget>[
                 Container(
                   child: Text(
-                    "Aggiungi elementi al tuo frigo",
+                    "Aggiungi elementi alla tua lista della spesa",
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 26,
@@ -324,40 +330,7 @@ class _MyFridgeState extends State<MyFridge> {
                             ),
                           ),
                           child: Text(
-                            "Add Element To List",
-                            style: TextStyle(
-                              fontSize: 24,
-                              color: Color.fromRGBO(233, 0, 45, 1),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        constraints:
-                            BoxConstraints(minWidth: 100, maxWidth: 500),
-                        margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.width * 0.1,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.12,
-                        child: FlatButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OcrReader()),
-                            );
-                          },
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(10.0),
-                            side: BorderSide(
-                              color: Color.fromRGBO(233, 0, 45, 1),
-                              width: 3,
-                            ),
-                          ),
-                          child: Text(
-                            "Use OCR",
+                            "Aggiungi alimento alla lista",
                             style: TextStyle(
                               fontSize: 24,
                               color: Color.fromRGBO(233, 0, 45, 1),
@@ -416,7 +389,7 @@ class _MyFridgeState extends State<MyFridge> {
                                           .collection('users')
                                           .document(user.uid)
                                           .updateData({
-                                        "myFridge":
+                                        "shoppingList":
                                             FieldValue.arrayUnion(output)
                                       });
                                       setState(() {
@@ -430,7 +403,7 @@ class _MyFridgeState extends State<MyFridge> {
                                           .collection('users')
                                           .document(user.uid)
                                           .updateData({
-                                        "myFridge":
+                                        "shoppingList":
                                             FieldValue.arrayUnion(output)
                                       });
                                       setState(() {
@@ -442,7 +415,7 @@ class _MyFridgeState extends State<MyFridge> {
                                   }
                                 },
                                 child: Text(
-                                  "Submit",
+                                  "Conferma",
                                   style: TextStyle(
                                     fontSize: 24,
                                     color: Color.fromRGBO(233, 0, 45, 1),
@@ -489,13 +462,14 @@ class _MyFridgeState extends State<MyFridge> {
     if (!addedWithoutDupes) {
       return Column(children: <Widget>[
         Text(
-          "I seguenti alimenti non sono stati aggiunti perchè già presenti nel tuo frigo :",
+          "I seguenti alimenti non sono stati aggiunti perchè già presenti nella lista della spesa :",
         ),
         for (var item in notAddedList) Text(item)
       ]);
     } else {
       return Column(children: <Widget>[
-        Text("Tutti gli ingredienti sono stati aggiunti al tuo frigo")
+        Text(
+            "Tutti gli ingredienti sono stati aggiunti alla tua lista della spesa")
       ]);
     }
   }

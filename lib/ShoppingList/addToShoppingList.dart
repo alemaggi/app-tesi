@@ -1,5 +1,10 @@
 import 'package:app_tesi/HomePage/food.dart';
+import 'package:app_tesi/HomePage/homepage.dart';
+import 'package:app_tesi/Recipe/singleRecipe.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddToShoppingList extends StatefulWidget {
   List<dynamic> shoppingList;
@@ -18,6 +23,9 @@ class _AddToShoppingListState extends State<AddToShoppingList> {
 
   List<dynamic> elementToAddToShoppingListTmp = [];
   List<dynamic> elementToAddToShoppingListFinal = [];
+  var notAddedList = List<String>();
+  bool addedWithoutDupes = true;
+  bool actionComplete = false;
 
   void filterIngredientBeforeAddingToTheDB(
       List<dynamic> shoppingList, List<dynamic> ingredientsList) {
@@ -76,7 +84,7 @@ class _AddToShoppingListState extends State<AddToShoppingList> {
               child: Container(
                 margin: EdgeInsets.only(top: 5),
                 width: MediaQuery.of(context).size.width * 0.8,
-                height: MediaQuery.of(context).size.height * 0.8,
+                height: MediaQuery.of(context).size.height * 0.7,
                 child: ListView.builder(
                   itemCount: elementToAddToShoppingListFinal.length,
                   itemBuilder: (BuildContext ctxt, int index) {
@@ -134,10 +142,127 @@ class _AddToShoppingListState extends State<AddToShoppingList> {
                   },
                 ),
               ),
-            )
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Stack(
+                children: <Widget>[
+                  Center(
+                    child: OutlineButton(
+                      borderSide: BorderSide(
+                          width: 2.0, color: Color.fromRGBO(233, 0, 45, 1)),
+                      child: Text(
+                        'Aggiungi alla listsa della spesa',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromRGBO(233, 0, 45, 1),
+                        ),
+                      ),
+                      onPressed: () async {
+                        var list = List<String>();
+
+                        List<dynamic> output = Iterable.generate(math.max(
+                                list.length,
+                                elementToAddToShoppingListFinal.length))
+                            .expand((i) sync* {
+                          if (i < list.length) yield list[i];
+                          if (i < elementToAddToShoppingListFinal.length)
+                            yield elementToAddToShoppingListFinal[i];
+                        }).toList();
+                        if (shoppingList != null) {
+                          //Controllo che gli elementi aggiunti non siano gia presenti nel frigo
+                          for (int i = 0; i < output.length; i++) {
+                            if (shoppingList.contains(output[i])) {
+                              notAddedList.add(output[i]);
+                            }
+                          }
+                          for (String item in notAddedList) {
+                            output.remove(item);
+                          }
+                          print("Lista cose da non aggiungere :");
+                          print(notAddedList);
+                          if (notAddedList.length == 0) {
+                            addedWithoutDupes = true;
+                          } else {
+                            addedWithoutDupes = false;
+                          }
+
+                          var user = await FirebaseAuth.instance.currentUser();
+                          Firestore.instance
+                              .collection('users')
+                              .document(user.uid)
+                              .updateData({
+                            "shoppingList": FieldValue.arrayUnion(output)
+                          });
+                          setState(() {
+                            actionComplete = true;
+                          });
+                        } else {
+                          //Se il DB non contiene ingredienti li posso aggiungere senza problemi
+                          var user = await FirebaseAuth.instance.currentUser();
+                          Firestore.instance
+                              .collection('users')
+                              .document(user.uid)
+                              .updateData({
+                            "shoppingList": FieldValue.arrayUnion(output)
+                          });
+                          setState(() {
+                            actionComplete = true;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  (actionComplete)
+                      ? AlertDialog(
+                          contentPadding: EdgeInsets.all(10.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          backgroundColor: Colors.white,
+                          content: uploadMessage(),
+                          actions: [
+                            FlatButton(
+                              child: Text("Ok"),
+                              onPressed: () {
+                                setState(() {
+                                  notAddedList.clear();
+                                  actionComplete = false;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Homepage()),
+                                  );
+                                });
+                              },
+                            )
+                          ],
+                        )
+                      : Container(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Widget uploadMessage() {
+    print(addedWithoutDupes);
+    if (!addedWithoutDupes) {
+      return Column(children: <Widget>[
+        Text(
+          "I seguenti alimenti non sono stati aggiunti perchè già presenti nella lista della spesa :",
+        ),
+        for (var item in notAddedList) Text(item)
+      ]);
+    } else {
+      return Column(children: <Widget>[
+        Text(
+            "Tutti gli ingredienti sono stati aggiunti alla tua lista della spesa")
+      ]);
+    }
   }
 }
