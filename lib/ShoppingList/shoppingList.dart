@@ -29,6 +29,8 @@ class _ShoppingListState extends State<ShoppingList> {
   bool actionComplete = false;
   var notAddedList = List<String>();
 
+  List<String> singleItemSelected = [];
+
   _getUserInfo() async {
     user = await FirebaseAuth.instance.currentUser();
     var userQuery = Firestore.instance
@@ -78,7 +80,7 @@ class _ShoppingListState extends State<ShoppingList> {
                         Container(
                           margin: EdgeInsets.only(top: 5),
                           width: MediaQuery.of(context).size.width * 0.8,
-                          height: MediaQuery.of(context).size.height * 0.75,
+                          height: MediaQuery.of(context).size.height * 0.7,
                           child: ListView.builder(
                             itemCount: ingredients.length,
                             itemBuilder: (BuildContext ctxt, int index) {
@@ -120,23 +122,63 @@ class _ShoppingListState extends State<ShoppingList> {
                                           style: TextStyle(fontSize: 22),
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete),
-                                        color: Color.fromRGBO(233, 0, 45, 1),
-                                        onPressed: () async {
-                                          var list = List<String>();
-                                          list.add(ingredients[index]);
-                                          final db = Firestore.instance;
-                                          await db
-                                              .collection('users')
-                                              .document(user.uid)
-                                              .updateData({
-                                            "shoppingList":
-                                                FieldValue.arrayRemove(list)
-                                          });
-                                          initState(); //TODO: Soluzione brutta e temporanea
-                                        },
-                                      )
+                                      Row(
+                                        children: <Widget>[
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            color:
+                                                Color.fromRGBO(233, 0, 45, 1),
+                                            onPressed: () async {
+                                              var list = List<String>();
+                                              list.add(ingredients[index]);
+                                              final db = Firestore.instance;
+                                              await db
+                                                  .collection('users')
+                                                  .document(user.uid)
+                                                  .updateData({
+                                                "shoppingList":
+                                                    FieldValue.arrayRemove(list)
+                                              });
+                                              initState(); //TODO: Soluzione brutta e temporanea
+                                            },
+                                          ),
+                                          InkWell(
+                                            child: Container(
+                                              margin: EdgeInsets.only(right: 5),
+                                              height: 15,
+                                              width: 15,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: (singleItemSelected
+                                                          .contains(ingredients[
+                                                              index]))
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                                ),
+                                                color: (singleItemSelected
+                                                        .contains(
+                                                            ingredients[index]))
+                                                    ? Colors.red
+                                                    : Colors.white,
+                                              ),
+                                            ),
+                                            onTap: () {
+                                              if (singleItemSelected.contains(
+                                                  ingredients[index])) {
+                                                setState(() {
+                                                  singleItemSelected.remove(
+                                                      ingredients[index]);
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  singleItemSelected
+                                                      .add(ingredients[index]);
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -144,21 +186,46 @@ class _ShoppingListState extends State<ShoppingList> {
                             },
                           ),
                         ),
-                        OutlineButton(
-                          borderSide: BorderSide(
-                              width: 2.0, color: Color.fromRGBO(233, 0, 45, 1)),
-                          child: Text(
-                            'Aggiugni tutti gli alimenti della lista al frigo',
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w600,
-                              color: Color.fromRGBO(233, 0, 45, 1),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: OutlineButton(
+                            borderSide: BorderSide(
+                                width: 2.0,
+                                color: Color.fromRGBO(233, 0, 45, 1)),
+                            child: Text(
+                              'Aggiugni tutti gli alimenti della lista al frigo',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color: Color.fromRGBO(233, 0, 45, 1),
+                              ),
                             ),
+                            onPressed: () {
+                              //TODO: Da fare
+                            },
                           ),
-                          onPressed: () {
-                            //TODO: Da fare
-                          },
                         ),
+                        (singleItemSelected.isNotEmpty)
+                            ? Container(
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                child: OutlineButton(
+                                  borderSide: BorderSide(
+                                      width: 2.0,
+                                      color: Color.fromRGBO(233, 0, 45, 1)),
+                                  child: Text(
+                                    'Aggiugni gli alimenti selezionati della lista al frigo',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color.fromRGBO(233, 0, 45, 1),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    //TODO: Da fare
+                                  },
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   )
@@ -220,15 +287,16 @@ class _ShoppingListState extends State<ShoppingList> {
                                 )),
                               ),
                               IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _listOfIngredientsToAdd.removeAt(index);
-                                    });
-                                  }),
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _listOfIngredientsToAdd.removeAt(index);
+                                  });
+                                },
+                              ),
                             ],
                           ),
                         ),
